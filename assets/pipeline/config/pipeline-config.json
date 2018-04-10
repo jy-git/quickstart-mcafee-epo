@@ -1,0 +1,16 @@
+{
+  "Parameters" : {
+    "BaseStack": "",
+    "ParentStack": "",
+    "PipelineMasterStackName": "",
+    "PipelineMasterStackTemplateName": "",
+    "PipelineMasterStackTemplateConfigName": "",
+    "PipelineCloudformationIAMRoleARN": "",
+    "AdminEmailAddress": "",
+    "ApproverEmailAddress": "",
+    "AutoApproval": "",
+    "RegionQSS3BucketName": "",
+    "QSS3BucketName": "",
+    "QSS3KeyPrefix": ""
+  }
+}
