@@ -88,7 +88,7 @@ Metadata:
       EPOConsolePort:
         default: Console Port
       EPOELBCertificateARN:
-        default: EPO Certificate ARN
+        default: Load Balancer Certificate ARN
       EPOAccessCidr:
         default: Access CIDR
       EPOInstanceType:
@@ -206,11 +206,12 @@ Parameters:
     MaxLength: 64
     Type: String
   EPOELBCertificateARN:
-    AllowedPattern: ^$|(arn:aws:acm:)([a-z0-9/:-])*([a-z0-9])$
+    AllowedPattern: ^$|(arn:aws:)([a-z0-9/:-])*([a-z0-9])$
     Default: ''
     Description: >-
-      [ Optional ] The AWS Certificate Manager certificate ARN associated with provided sub domain(must be associated with sub domain).
-      Certificate will be attached with ePO load balancer. e.g., arn:aws:acm:us-west-1:*:certificate/*.
+      [ Optional ] ARN of the certificate stored in  Amazon Certifcate Manager(ACM) or imported in AWS IAM.
+      Generally the certificate associated with the sub domain needs to be presented.
+      Certificate will be attached with ePO load balancer. e.g., arn:aws:*:us-west-1:*:certificate/*.
     MaxLength: 256
     Type: String
   EPOAccessCIDR:
@@ -324,7 +325,9 @@ Resources:
           "EPOServerDNS": {"Type": "String","Value": "epo.${SubDomainName}","Description": "ePO server dns."},
           "EPODatabaseName": {"Type": "String","Value": "${EPODatabaseName}","Description": "ePO database name."},
           "DBMasterUsername": {"Type": "String","Value": "${DBMasterUsername}","Description": "DB master user name."},
-          "DBMasterUserPassword": {"Type": "SecureString","Value": "${DBMasterUserPassword}","Description": "DB master user Password."}
+          "DBMasterUserPassword": {"Type": "SecureString","Value": "${DBMasterUserPassword}","Description": "DB master user Password."},
+          "OnPremiseDomainName": {"Type": "String","Value": "${OnPremiseDomainName}","Description": "On Premise domain name."},
+          "OnPremiseServerDNS": {"Type": "String","Value": "${OnPremiseServerDNS}","Description": "On Premise DNS server IP."}
         }
 
   # Sync ePO instance parameters lambda role
