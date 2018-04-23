@@ -1439,7 +1439,7 @@ Outputs:
      Fn::If:
         - cCreateVPCPeering
         - !Ref DBInstanceIdentifier
-        - !Sub ${ParentStack}-RDS
+        - !Sub ${ParentStack}-rds
   VPCID:
     Description: VPC ID
     Value: !Ref VPCID

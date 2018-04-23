@@ -258,7 +258,7 @@ Parameters:
   DBInstanceIdentifier:
     Default: ''
     MaxLength: 512
-    Description: 'Database instance identifier unique for this region.'
+    Description: Database instance identifier unique for this region.
     Type: String
   AHPort:
     Default: '443'
@@ -302,7 +302,8 @@ Parameters:
     Type: String
 
 Conditions:
-  cSkipePOELBCertificate: !Equals [ !Ref 'EPOELBCertificateARN', '' ]
+  cUseELB: !Equals [ !Ref 'EPOELBCertificateARN', '' ]
+  cUseALB: !Not [ !Equals [ !Ref 'EPOELBCertificateARN', '' ] ]
   cIsProduction: !Equals [ !Ref 'Environment', 'Production' ]
 
 Resources:
@@ -711,7 +712,7 @@ Resources:
             0setup:
               command: !Join
                 - ' '
-                - - !Sub cwa-config.bat epo ${AWS::Region}
+                - - !Sub cwa-config.bat epo ${AWS::Region} McAfee-ePO ${ParentStack}
                   - Fn::ImportValue: !Sub ${BaseStack}-ePOLogGroup
               cwd: c:\provision\scripts\
               waitAfterCompletion: '0'
@@ -798,53 +799,29 @@ Resources:
   # ePO AWS Load Balancer
   EPOLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Condition: cUseELB
     Properties:
       ConnectionSettings:
         IdleTimeout: 600
       CrossZone: true
-      HealthCheck: !If
-          - cSkipePOELBCertificate
-          - HealthyThreshold: '3'
-            Interval: '30'
-            Target: !Join
-              - ''
-              - - 'TCP:'
-                - !Ref EPOConsolePort
-            Timeout: '15'
-            UnhealthyThreshold: '2'
-          - HealthyThreshold: '3'
-            Interval: '30'
-            Target: 'HTTP:8080/'
-            Timeout: '15'
-            UnhealthyThreshold: '2'
+      HealthCheck:
+        HealthyThreshold: '3'
+        Interval: '30'
+        Target: !Join
+          - ''
+          - - 'TCP:'
+            - !Ref EPOConsolePort
+        Timeout: '15'
+        UnhealthyThreshold: '2'
       Instances:
         - !Ref EPOEC2Instance
-      LBCookieStickinessPolicy:
-        - CookieExpirationPeriod: '10'
-          PolicyName: JSESSIONSTICKY
-      Policies:
-        - PolicyName: EPOELBSecurityPolicy
-          PolicyType: SSLNegotiationPolicyType
-          Attributes:
-            - Name: Reference-Security-Policy
-              Value: ELBSecurityPolicy-TLS-1-1-2017-01
       Listeners:
-        - !If
-          - cSkipePOELBCertificate
-          - InstancePort: !Ref EPOConsolePort
-            InstanceProtocol: TCP
-            LoadBalancerPort: !Ref EPOConsolePort
-            PolicyNames: []
-            Protocol: TCP
-            SSLCertificateId: ''
-          - InstancePort: 8080
-            InstanceProtocol: HTTP
-            LoadBalancerPort: !Ref EPOConsolePort
-            PolicyNames:
-              - JSESSIONSTICKY
-              - EPOELBSecurityPolicy
-            Protocol: HTTPS
-            SSLCertificateId: !Ref EPOELBCertificateARN
+        - InstancePort: !Ref EPOConsolePort
+          InstanceProtocol: TCP
+          LoadBalancerPort: !Ref EPOConsolePort
+          PolicyNames: []
+          Protocol: TCP
+          SSLCertificateId: ''
       Scheme: internet-facing
       SecurityGroups:
         - !Ref EPOELBSecurityGroup
@@ -871,13 +848,104 @@ Resources:
         - Key: mcafee:cloudformation:stack-name
           Value: !Sub ${ParentStack}
 
+  # ePO AWS Application Load Balancer
+  EPOApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Condition: cUseALB
+    Properties:
+      LoadBalancerAttributes:
+        - Key: access_logs.s3.enabled
+          Value: true
+        - Key: access_logs.s3.bucket
+          Value:
+            Fn::ImportValue: !Sub ${BaseStack}-DataStore
+        - Key: access_logs.s3.prefix
+          Value: 'logs/elb/epo'
+        - Key: idle_timeout.timeout_seconds
+          Value: 600
+      SecurityGroups:
+        - !Ref EPOELBSecurityGroup
+      Subnets:
+        - Fn::ImportValue: !Sub ${BaseStack}-PublicSubnet1ID
+        - Fn::ImportValue: !Sub ${BaseStack}-PublicSubnet2ID
+      Type: application
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-EPOApplicationLoadBalancer
+        - Key: Owner
+          Value: !Ref AdminEmailAddress
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Product
+          Value: McAfee-ePO-ApplicationServer
+        - Key: Solution
+          Value: McAfee-ePO
+        - Key: mcafee:cloudformation:stack-name
+          Value: !Sub ${ParentStack}
+
+  # ePO Application Load Balancer Listener
+  EPOLoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Condition: cUseALB
+    Properties:
+      Certificates:
+        - CertificateArn: !Ref EPOELBCertificateARN
+      DefaultActions:
+        - TargetGroupArn: !Ref EPOTargetGroup
+          Type: forward
+      LoadBalancerArn: !Ref EPOApplicationLoadBalancer
+      Port: !Ref EPOConsolePort
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-TLS-1-1-2017-01
+
+  # ePO Application load balancer target group
+  EPOTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Condition: cUseALB
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPort: 8080
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 15
+      HealthyThresholdCount: 3
+      Matcher:
+        HttpCode: 200-399
+      Port: 8080
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: true
+        - Key: stickiness.type
+          Value: lb_cookie
+        - Key: stickiness.lb_cookie.duration_seconds
+          Value: 300
+      Targets:
+        - Id: !Ref EPOEC2Instance
+      UnhealthyThresholdCount: 2
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${BaseStack}-VPCID
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-EPOTargetGroup
+        - Key: Owner
+          Value: !Ref AdminEmailAddress
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Product
+          Value: McAfee-ePO-ApplicationServer
+        - Key: Solution
+          Value: McAfee-ePO
+        - Key: mcafee:cloudformation:stack-name
+          Value: !Sub ${ParentStack}
+
   # ePO Record Set
   EPOR53RecordSet:
     Type: AWS::Route53::RecordSet
     Properties:
       AliasTarget:
-        DNSName: !GetAtt EPOLoadBalancer.CanonicalHostedZoneName
-        HostedZoneId: !GetAtt EPOLoadBalancer.CanonicalHostedZoneNameID
+        DNSName: !If [cUseELB, !GetAtt EPOLoadBalancer.CanonicalHostedZoneName, !GetAtt EPOApplicationLoadBalancer.DNSName]
+        HostedZoneId: !If [cUseELB, !GetAtt EPOLoadBalancer.CanonicalHostedZoneNameID, !GetAtt EPOApplicationLoadBalancer.CanonicalHostedZoneID]
       Comment: External ePO DNS RecordSet.
       HostedZoneId:
         Fn::ImportValue: !Sub ${BaseStack}-R53PublicHostedZone
@@ -1217,21 +1285,27 @@ Outputs:
     Value: !Join
       - ''
       - - 'https://'
-        - !GetAtt [ EPOLoadBalancer, CanonicalHostedZoneName ]
+        - !If [cUseELB, !GetAtt EPOLoadBalancer.CanonicalHostedZoneName, !GetAtt EPOApplicationLoadBalancer.DNSName]
         - ':'
         - !Ref EPOConsolePort
   ePOConsolePort:
     Description: ePO Console Port
     Value: !Ref EPOConsolePort
-  EPOLoadBalancer:
+  ePOLoadbalancerName:
     Description: EPO Amazon Elastic Load Balancer
-    Value: !Ref EPOLoadBalancer
+    Value: !If [cUseELB, !Ref EPOLoadBalancer,   !GetAtt EPOApplicationLoadBalancer.LoadBalancerName]
   EPOLoadBalancerURL:
     Description: EPO Load Balancer URL
-    Value: !GetAtt [ EPOLoadBalancer, CanonicalHostedZoneName ]
+    Value: !If [cUseELB, !GetAtt EPOLoadBalancer.CanonicalHostedZoneName, !GetAtt EPOApplicationLoadBalancer.DNSName]
   EPOEC2Instance:
     Description: EPO EC2 instance Name
     Value: !Ref EPOEC2Instance
   EPOEC2NetworkInterface:
     Description: Static Private IP for ePO
     Value: !GetAtt [ EPOEC2NetworkInterface, PrimaryPrivateIpAddress ]
+  EPOEC2SystemStatusCheckARN:
+    Description: ARN of ePO system check alaram
+    Value: !GetAtt [ EPOEC2SystemStatusCheck, Arn ]
+  EPOEC2InstanceStatusCheckARN:
+    Description: ARN of ePO instance check alaram
+    Value: !GetAtt [ EPOEC2InstanceStatusCheck, Arn ]

@@ -158,7 +158,7 @@ Parameters:
     Type: String
     Description: DXL instance type, must be valid instance size for the region.
   DXLInstanceSize:
-    Default: '256'
+    Default: '64'
     Type: String
     Description: Allocated disk storage for DXL Instance.
   DXLBuildVersion:
@@ -347,19 +347,6 @@ Resources:
         - Key: mcafee:cloudformation:stack-name
           Value: !Sub ${ParentStack}
 
-  # DXL AWS Route53 Record Set
-  DXLR53RecordSet:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      AliasTarget:
-        DNSName: !GetAtt DXLLoadBalancer.CanonicalHostedZoneName
-        HostedZoneId: !GetAtt DXLLoadBalancer.CanonicalHostedZoneNameID
-      Comment: External DXL DNS RecordSet.
-      HostedZoneId:
-        Fn::ImportValue: !Sub ${BaseStack}-R53PublicHostedZone
-      Name:  !Sub 'dxl.${SubDomainName}'
-      Type: A
-
   # DXL EC2 instance role
   DXLEC2Role:
     Type: AWS::IAM::Role
@@ -515,12 +502,11 @@ Resources:
                 EPO_SECURE_PORT=${EPOConsolePort}
                 EPO_WAKEUP_PORT=8081
                 DXL_BROKER_PORT=8883
-                DXL_BROKER_URL=dxl.${SubDomainName}
                 DXL_ELB_PORT=${DXLPort}
                 PARAMETERS_PATH=/mcafee/${ParentStack}
 
                 # Start dxl Provisioining
-                /home/centos/provision/dxl-provision.py --epo-serverdns $EPO_SERVER --epo-port $EPO_PORT --epo-secure-port $EPO_SECURE_PORT --epo-wakeup-port $EPO_WAKEUP_PORT --dxl-broker-url $DXL_BROKER_URL --dxl-broker-port $DXL_BROKER_PORT --dxl-elb-port $DXL_ELB_PORT --parameters-path $PARAMETERS_PATH
+                /home/centos/provision/dxl-provision.py --epo-serverdns $EPO_SERVER --epo-port $EPO_PORT --epo-secure-port $EPO_SECURE_PORT --epo-wakeup-port $EPO_WAKEUP_PORT  --dxl-broker-port $DXL_BROKER_PORT --dxl-elb-port $DXL_ELB_PORT --parameters-path $PARAMETERS_PATH
 
               cwd: /home/centos/provision/
               waitAfterCompletion: '0'
@@ -557,6 +543,8 @@ Resources:
       LaunchConfigurationName: !Ref DXLLaunchConfig
       LoadBalancerNames:
         - !Ref DXLLoadBalancer
+      MetricsCollection:
+        - Granularity: 1Minute
       MaxSize: 10
       MinSize: !If [cHARequired, 2, 1]
       Tags:
@@ -620,7 +608,7 @@ Resources:
                 Action:
                   - autoscaling:UpdateAutoScalingGroup
                 Resource: !Sub 'arn:aws:autoscaling:${AWS::Region}:${AWS::AccountId}:autoScalingGroup:*:autoScalingGroupName/*'
-                
+
   # Update ASG metrics lambda
   DXLUpdateASGMetricsLambda:
     Type: AWS::Lambda::Function
@@ -966,9 +954,6 @@ Resources:
       AutoScalingGroupName: !Ref DXLAutoscalingGroup
 
 Outputs:
-  DXLUrl:
-    Description: AH AWS Route53 recordset
-    Value: !Ref DXLR53RecordSet
   DXLBrokerPort:
     Description: DXL Broker Communication Port
     Value: !Ref DXLPort
@@ -981,3 +966,6 @@ Outputs:
   DXLAutoscalingGroup:
     Description: DXL Auto Scaling Group
     Value: !Ref DXLAutoscalingGroup
+  DXLBrokerBusyAlarmARN:
+    Description: ARN of DXL busy alaram
+    Value: !GetAtt [ DXLBrokerBusyAlarm, Arn ]

@@ -121,7 +121,7 @@ Parameters:
     Type: String
     Description: Database engine for sql server.
   DBEngineVersion:
-    Default: '12.00.5546.0.v1'
+    Default: '14.00'
     Type: String
     Description: Database engine version for sql server, must correspond to engine type.
   DBInstanceSize:
@@ -224,7 +224,7 @@ Resources:
       BackupRetentionPeriod: !Ref DBBackupRetentionPeriod
       CopyTagsToSnapshot: true
       DBInstanceClass: !Ref DBInstanceSize
-      DBInstanceIdentifier: !If [cCreateInstanceId, '!Sub ${AWS::StackName}-RDS', !Ref DBInstanceIdentifier]
+      DBInstanceIdentifier: !If [cCreateInstanceId, '!Sub ${AWS::StackName}-rds', !Ref DBInstanceIdentifier]
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
       Engine: !Ref DBEngine
       EngineVersion: !Ref DBEngineVersion
@@ -257,7 +257,7 @@ Outputs:
     Value: !Ref AWS::StackName
   DBInstanceIdentifier:
     Description: Database instance identifier
-    Value: !If [cCreateInstanceId, !Sub '${AWS::StackName}-RDS', !Ref DBInstanceIdentifier]
+    Value: !If [cCreateInstanceId, !Sub '${AWS::StackName}-rds', !Ref DBInstanceIdentifier]
   DBEndpointURL:
     Description: AWS RDS Endpoint URL
     Value:  !GetAtt EPORDSDatabase.Endpoint.Address

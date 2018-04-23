@@ -6,6 +6,7 @@
     "SubDomainName": "",
     "Availability": "",
     "KeyPairName": "",
+    "AvailabilityZones": "",
     "VPCID": "",
     "PublicSubnet1ID": "",
     "PublicSubnet2ID": "",

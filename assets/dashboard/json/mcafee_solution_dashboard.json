@@ -1,0 +1,605 @@
+{
+    "widgets": [
+        {
+            "type": "text",
+            "x": 0,
+            "y": 0,
+            "width": 24,
+            "height": 1,
+            "properties": {
+                "markdown": "\n![](https://s3-us-west-2.amazonaws.com/mcafee-epo-hosted/quick-start/assets/dashboard/images/mcafee_epo_banner.png)\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\n[button:primary:Login](@epo_console_url@)\n### Quick Links\n* [ePO Management Console Login URL](@epo_console_url@)\n* [ePO Continuous Delivery Pipeline Monitoring URL](https://@region@.console.aws.amazon.com/codepipeline/home?region=@region@#/view/@stack_name@-pipeline)\n* [ePO Application/Infrastructure Logs in Realtime(CloudWatch) ](https://@region@.console.aws.amazon.com/cloudwatch/home?region=@region@#logStream:group=/mcafee/@stack_name@-epo;streamFilter=typeLogStreamPrefix)\n* [ePO Application/Infrastructure Logs Backup(S3)](https://s3.console.aws.amazon.com/s3/buckets/@datastore_bucket_name@/logs/epo/?region=@region@&tab=overview)\n* [Monitoring Dashboards](#dashboards:name=@stack_name@_@region@)\n* [ePO/AH Domain Records ](https://console.aws.amazon.com/route53/home?region=@region@#resource-record-sets:@public_hosted_zone_id@)\n\n### Resources\n* [ePO AWS Elastic Load Balancer](https://@region@.console.aws.amazon.com/ec2/v2/home?region=@region@#LoadBalancers:search=@epo_elb_name@;sort=loadBalancerName)\n* [Stack](@stack_url@)\n* [ePO EC2 Instances](https://@region@.console.aws.amazon.com/ec2/v2/home?region=@region@#Instances:search=@stack_name@-epo;sort=instanceType)\n\n### Documents\n* [ePO Product Documentation](https://www.mcafee.com/us/products/epolicy-orchestrator.aspx)\n* [ePO Knowledge Base](https://support.mcafee.com/ServicePortal/faces/knowledgecenter)\n"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 6,
+            "y": 1,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "title": "System Status Alarm",
+                "annotations": {
+                    "alarms": [
+                        "@epo_system_check_alarm_arn@"
+                    ]
+                },
+                "region": "@region@",
+                "view": "timeSeries",
+                "stacked": true
+            }
+        },
+        {
+            "type": "metric",
+            "x": 15,
+            "y": 1,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "title": "Instance Status Alarm",
+                "annotations": {
+                    "alarms": [
+                        "@epo_status_check_alarm_arn@"
+                    ]
+                },
+                "region": "@region@",
+                "view": "timeSeries",
+                "stacked": true
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 7,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/EC2", "CPUUtilization", "InstanceId", "@epo_instance_id@" ]
+                ],
+                "region": "@region@",
+                "title": "CPU Utilization",
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 100
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 7,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/EC2", "NetworkIn", "InstanceId", "@epo_instance_id@" ],
+                    [ ".", "NetworkOut", ".", ".", { "color": "#2ca02c" } ]
+                ],
+                "region": "@region@",
+                "title": "Network Utilization"
+            }
+        },
+        {
+           "type": "metric",
+           "x": 12,
+           "y": 13,
+           "width": 12,
+           "height": 6,
+           "properties": {
+               "view": "timeSeries",
+               "stacked": true,
+               "metrics": [
+                    [ "McAfee-ePO", "Memory Available Bytes", "Component", "epo", "StackName", "@stack_name@" ]
+                ],
+               "region": "@region@",
+               "title": "Memory Utilization",
+               "period": 300,
+               "yAxis": {
+                    "left": {
+                        "min": 0
+                    }
+              }
+           }
+       },
+       {
+           "type": "metric",
+           "x": 0,
+           "y": 13,
+           "width": 12,
+           "height": 6,
+           "properties": {
+               "view": "timeSeries",
+               "stacked": true,
+               "metrics": [
+                    [ "McAfee-ePO", "LogicalDisk % Free Space", "Component", "epo", "StackName", "@stack_name@", { "label": "Free Space(Percent)" } ],
+                    [ ".", "LogicalDisk Free Megabytes", ".", ".", ".", ".", { "color": "#2ca02c", "label": "Free Space(Megabytes)" } ]
+                ],
+               "region": "@region@",
+               "title": "Disk Utilization",
+               "period": 300
+           }
+       },
+       {
+            "type": "text",
+            "x": 0,
+            "y": 19,
+            "width": 24,
+            "height": 1,
+            "properties": {
+                "markdown": "\n![](https://s3-us-west-2.amazonaws.com/mcafee-epo-hosted/quick-start/assets/dashboard/images/mcafee_ah_banner.png)\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 0,
+            "y": 20,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\n### Quick Links\n* [AH Application/Infrastructure Logs in Realtime(CloudWatch)](https://@region@.console.aws.amazon.com/cloudwatch/home?region=@region@#logStream:group=/mcafee/@stack_name@-ah;streamFilter=typeLogStreamPrefix)\n* [AH Application/Infrastructure Logs Backup(S3)](https://s3.console.aws.amazon.com/s3/buckets/@datastore_bucket_name@/logs/ah/?region=@region@&tab=overview)\n* [Monitoring Dashboards](#dashboards:name=@stack_name@_@region@)\n\n### Resources\n* [AH AWS Elastic Load Balancer](https://@region@.console.aws.amazon.com/ec2/v2/home?region=@region@#LoadBalancers:search=@ah_elb_name@;sort=loadBalancerName)\n* [AWS AWS AutoScaling Group](https://@region@.console.aws.amazon.com/ec2/autoscaling/home?region=@region@#AutoScalingGroups:id=@ah_asg_name@;view=details)\n* [AH EC2 Instances](https://@region@.console.aws.amazon.com/ec2/v2/home?region=@region@#Instances:search=@stack_name@-ah;sort=instanceType)\n\n### Documents\n* [ePO Product Documentation](https://www.mcafee.com/us/products/epolicy-orchestrator.aspx)\n* [ePO Knowledge Base](https://support.mcafee.com/ServicePortal/faces/knowledgecenter)\n"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 6,
+            "y": 20,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "title": "Alarm-AutoScaling",
+                "annotations": {
+                    "alarms": [
+                        "@ah_scaling_alarm_arn@"
+                    ]
+                },
+                "region": "@region@",
+                "view": "timeSeries",
+                "stacked": true
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 20,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/AutoScaling", "GroupTotalInstances", "AutoScalingGroupName", "@ah_asg_name@", { "period": 300, "label": "TotalInstances", "color": "#7f7f7f", "id": "m2" } ],
+                    [ ".", "GroupInServiceInstances", ".", ".", { "period": 300, "label": "InService", "color": "#1f77b4", "id": "m1" } ],
+                    [ ".", "GroupMinSize", ".", ".", { "period": 300, "label": "Min", "color": "#2ca02c", "id": "m3" } ],
+                    [ ".", "GroupMaxSize", ".", ".", { "period": 300, "label": "Max", "id": "m4", "color": "#d62728" } ]
+                ],
+                "region": "@region@",
+                "title": "AutoScaling Group Details",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "min": 1
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 18,
+            "y": 20,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "McAfee-ePO", "apache_BusyWorkers", "AutoScalingGroupName", "epo-ah-autoscaling-group", "StackName", "@stack_name@", { "period": 300, "stat": "Average", "label": "ActiveConnections" } ],
+                    [ "...", { "period": 300, "stat": "Minimum", "label": "Min", "color": "#2ca02c" } ],
+                    [ "...", { "period": 300, "stat": "Maximum", "label": "Max", "color": "#d62728" } ]
+                ],
+                "region": "@region@",
+                "title": "Active Client Connections",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "min": 0
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 15,
+            "y": 26,
+            "width": 3,
+            "height": 6,
+            "properties": {
+                "view": "singleValue",
+                "stacked": true,
+                "metrics": [
+                    [ "McAfee-ePO", "apache_BusyWorkers", "AutoScalingGroupName", "epo-ah-autoscaling-group", "StackName", "@stack_name@", { "label": "Busy" } ],
+                    [ ".", "apache_IdleWorkers", ".", ".", ".", ".", { "label": "Idle", "color": "#2ca02c" } ]
+                ],
+                "region": "@region@",
+                "title": "Apache Workers"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 18,
+            "y": 26,
+            "width": 3,
+            "height": 6,
+            "properties": {
+                "view": "singleValue",
+                "metrics": [
+                    [ "AWS/ELB", "HealthyHostCount", "LoadBalancerName", "@ah_elb_name@", { "label": "Healthy", "color": "#2ca02c" } ],
+                    [ ".", "UnHealthyHostCount", ".", ".", { "label": "UnHealthy", "color": "#d62728" } ]
+                ],
+                "region": "@region@",
+                "title": "Host Count",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 21,
+            "y": 26,
+            "width": 3,
+            "height": 6,
+            "properties": {
+                "view": "singleValue",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/ELB", "Latency", "LoadBalancerName", "@ah_elb_name@", "AvailabilityZone", "@stack_az_1@", { "period": 2592000, "stat": "Average" } ],
+                    [ "...", "@stack_az_2@", { "period": 2592000, "color": "#9467bd" } ]
+                ],
+                "region": "@region@",
+                "title": "ELB Latency",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 26,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/ELB", "RequestCount", "LoadBalancerName", "@ah_elb_name@", "AvailabilityZone", "@stack_az_1@", { "stat": "Sum", "color": "#1f77b4", "period": 60 } ],
+                    [ "...", "@stack_az_2@", { "stat": "Sum", "color": "#9467bd", "period": 60 }  ]
+                ],
+                "region": "@region@",
+                "period": 300,
+                "title": "Request Count"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 9,
+            "y": 26,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/ELB", "BackendConnectionErrors", "LoadBalancerName", "@ah_elb_name@", { "label": "BackendConnectionErrors", "stat": "Sum", "color": "#d62728" } ]
+                ],
+                "region": "@region@",
+                "title": "Backend Connection Errors",
+                "period": 300
+            }
+        },
+        {
+            "type": "text",
+            "x": 0,
+            "y": 32,
+            "width": 24,
+            "height": 1,
+            "properties": {
+                "markdown": "\n![](https://s3-us-west-2.amazonaws.com/mcafee-epo-hosted/quick-start/assets/dashboard/images/mcafee_epo_database_banner.png)\n"
+            }
+        },
+        {
+            "type": "text",
+            "x": 0,
+            "y": 33,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "markdown": "\n### Quick Links\n* [AWS RDS Instance](https://@region@.console.aws.amazon.com/rds/home?region=@region@#dbinstance:id=@rds_instance_id@)\n* [Monitoring Dashboards](#dashboards:name=@stack_name@_@region@)\n* [AWS RDS SQL Server Documentation](https://aws.amazon.com/rds/sqlserver/)\n\n"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 6,
+            "y": 33,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "@rds_instance_id@", { "label": "CPUUtilization", "stat": "Average", "period": 300 } ]
+                ],
+                "region": "@region@",
+                "title": "CPU Utilization",
+                "period": 300,
+                "yAxis": {
+                    "left": {
+                        "min": 0,
+                        "max": 100
+                    }
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 15,
+            "y": 33,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/RDS", "NetworkReceiveThroughput", "DBInstanceIdentifier", "@rds_instance_id@", { "color": "#1f77b4" } ],
+                    [ ".", "NetworkTransmitThroughput", ".", ".", { "color": "#2ca02c" } ]
+                ],
+                "region": "@region@",
+                "title": "Network Utilization",
+                "period": 300
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 39,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", "@rds_instance_id@", { "color": "#1f77b4" } ],
+                    [ ".", "FreeStorageSpace", ".", ".", { "color": "#2ca02c" } ]
+                ],
+                "region": "@region@",
+                "period": 300,
+                "title": "Free Storage/Memory"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 6,
+            "y": 39,
+            "width": 9,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": true,
+                "metrics": [
+                    [ "AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "@rds_instance_id@", { "label": "DatabaseConnections", "stat": "Average", "yAxis": "left", "color": "#2ca02c" } ]
+                ],
+                "region": "@region@",
+                "yAxis": {
+                    "left": {
+                        "min": 0
+                    }
+                },
+                  "period": 300,
+                  "title": "Active DB Connections"
+              }
+          },
+          {
+              "type": "metric",
+              "x": 15,
+              "y": 39,
+              "width": 6,
+              "height": 6,
+              "properties": {
+                  "view": "timeSeries",
+                  "stacked": true,
+                  "metrics": [
+                      [ "AWS/RDS", "ReadLatency", "DBInstanceIdentifier", "@rds_instance_id@" ],
+                      [ ".", "WriteLatency", ".", ".", { "color": "#2ca02c" } ]
+                  ],
+                  "region": "@region@",
+                  "title": "DB Latency"
+              }
+          },
+          {
+              "type": "metric",
+              "x": 21,
+              "y": 39,
+              "width": 3,
+              "height": 6,
+              "properties": {
+                  "view": "singleValue",
+                  "stacked": true,
+                  "metrics": [
+                      [ "AWS/RDS", "WriteIOPS", "DBInstanceIdentifier", "@rds_instance_id@", { "stat": "Average", "period": 900 } ],
+                      [ ".", "ReadIOPS", ".", ".", { "color": "#2ca02c", "period": 900 } ]
+                  ],
+                  "region": "@region@",
+                  "title": "IOPS"
+              }
+          },
+          {
+              "type": "text",
+              "x": 0,
+              "y": 45,
+              "width": 24,
+              "height": 1,
+              "properties": {
+                  "markdown": "\n![](https://s3-us-west-2.amazonaws.com/mcafee-epo-hosted/quick-start/assets/dashboard/images/mcafee_dxl_banner.png)\n"
+              }
+          },
+          {
+              "type": "text",
+              "x": 0,
+              "y": 46,
+              "width": 6,
+              "height": 6,
+              "properties": {
+                  "markdown": "\n### Quick Links\n* [DXL Application/Infrastructure Logs in Realtime(CloudWatch)](https://@region@.console.aws.amazon.com/cloudwatch/home?region=@region@#logStream:group=/mcafee/@stack_name@-dxl;streamFilter=typeLogStreamPrefix)\n* [DXL Application/Infrastructure Logs Backup(S3)](https://s3.console.aws.amazon.com/s3/buckets/@datastore_bucket_name@/logs/dxl/?region=@region@&tab=overview)\n* [Monitoring Dashboards](#dashboards:name=@stack_name@_@region@)\n\n### Resources\n* [DXL AWS Elastic Load Balancer](https://@region@.console.aws.amazon.com/ec2/v2/home?region=@region@#LoadBalancers:search=@dxl_elb_name@;sort=loadBalancerName)\n* [DXL AWS AutoScaling Group](https://@region@.console.aws.amazon.com/ec2/autoscaling/home?region=@region@#AutoScalingGroups:id=@dxl_asg_name@;view=details)\n* [DXL EC2 Instances](https://@region@.console.aws.amazon.com/ec2/v2/home?region=@region@#Instances:search=@stack_name@-dxl;sort=instanceType)\n\n### Documents\n* [DXL Product Documentation](https://www.mcafee.com/us/solutions/data-exchange-layer.aspx)\n* [Open DXL Platform](https://www.opendxl.com)\n* [DXL Knowledge Base](https://support.mcafee.com/ServicePortal/faces/knowledgecenter)\n"
+              }
+          },
+          {
+              "type": "metric",
+              "x": 6,
+              "y": 46,
+              "width": 6,
+              "height": 6,
+              "properties": {
+                  "title": "Alarm-AutoScaling",
+                  "annotations": {
+                      "alarms": [
+                          "@dxl_scaling_alarm_arn@"
+                      ]
+                  },
+                  "region": "@region@",
+                  "view": "timeSeries",
+                  "stacked": true
+              }
+          },
+          {
+              "type": "metric",
+              "x": 12,
+              "y": 46,
+              "width": 6,
+              "height": 6,
+              "properties": {
+                  "view": "timeSeries",
+                  "stacked": true,
+                  "metrics": [
+                      [ "AWS/AutoScaling", "GroupTotalInstances", "AutoScalingGroupName", "@dxl_asg_name@", { "period": 300, "label": "TotalInstances", "color": "#7f7f7f", "id": "m2" } ],
+                      [ ".", "GroupInServiceInstances", ".", ".", { "period": 300, "label": "InService", "color": "#1f77b4", "id": "m1" } ],
+                      [ ".", "GroupMinSize", ".", ".", { "period": 300, "label": "Min", "color": "#2ca02c", "id": "m3" } ],
+                      [ ".", "GroupMaxSize", ".", ".", { "period": 300, "label": "Max", "id": "m4", "color": "#d62728" } ]
+                  ],
+                  "region": "@region@",
+                  "title": "AutoScaling Group Details",
+                  "period": 300,
+                  "yAxis": {
+                      "left": {
+                          "min": 1
+                      }
+                  }
+              }
+          },
+          {
+              "type": "metric",
+              "x": 18,
+              "y": 46,
+              "width": 6,
+              "height": 6,
+              "properties": {
+                  "view": "timeSeries",
+                  "stacked": true,
+                  "metrics": [
+                      [ "McAfee-DXL", "netstat_tcp_established", "AutoScalingGroupName", "dxl-broker-autoscaling-group", "StackName", "@stack_name@", { "stat": "Average", "period": 300, "label": "ActiveConnections" } ],
+                      [ "...", { "stat": "Minimum", "period": 300, "label": "Min", "color": "#2ca02c" } ],
+                      [ "...", { "stat": "Maximum", "period": 300, "label": "Max", "color": "#d62728" } ]
+                  ],
+                  "region": "@region@",
+                  "title": "Active Client Connections",
+                  "period": 300,
+                  "yAxis": {
+                      "left": {
+                          "min": 0
+                      }
+                  }
+              }
+          },
+          {
+              "type": "metric",
+              "x": 0,
+              "y": 52,
+              "width": 9,
+              "height": 6,
+              "properties": {
+                  "view": "timeSeries",
+                  "stacked": true,
+                  "metrics": [
+                      [ "AWS/ELB", "RequestCount", "LoadBalancerName", "@dxl_elb_name@", "AvailabilityZone", "@stack_az_1@", { "stat": "Sum", "color": "#1f77b4", "period": 60 } ],
+                      [ "...", "@stack_az_2@", { "stat": "Sum", "color": "#9467bd", "period": 60 } ]
+                  ],
+                  "region": "@region@",
+                  "period": 300,
+                  "title": "Request Count"
+              }
+          },
+          {
+              "type": "metric",
+              "x": 9,
+              "y": 52,
+              "width": 9,
+              "height": 6,
+              "properties": {
+                  "view": "timeSeries",
+                  "stacked": true,
+                  "metrics": [
+                      [ "AWS/ELB", "BackendConnectionErrors", "LoadBalancerName", "@dxl_elb_name@", { "label": "BackendConnectionErrors", "stat": "Sum", "color": "#d62728" } ]
+                  ],
+                  "region": "@region@",
+                  "title": "Backend Connection Errors",
+                  "period": 300
+              }
+          },
+          {
+              "type": "metric",
+              "x": 18,
+              "y": 52,
+              "width": 3,
+              "height": 6,
+              "properties": {
+                  "view": "singleValue",
+                  "metrics": [
+                      [ "AWS/ELB", "HealthyHostCount", "LoadBalancerName", "@dxl_elb_name@", { "label": "Healthy", "color": "#2ca02c" } ],
+                      [ ".", "UnHealthyHostCount", ".", ".", { "label": "UnHealthy", "color": "#d62728" } ]
+                  ],
+                  "region": "@region@",
+                  "title": "Host Count",
+                  "period": 300
+              }
+          },
+          {
+              "type": "metric",
+              "x": 21,
+              "y": 52,
+              "width": 3,
+              "height": 6,
+              "properties": {
+                  "view": "singleValue",
+                  "stacked": true,
+                  "metrics": [
+                      [ "AWS/ELB", "Latency", "LoadBalancerName", "@dxl_elb_name@", "AvailabilityZone", "@stack_az_1@", { "period": 2592000, "stat": "Average" } ],
+                      [ "...", "@stack_az_2@", { "period": 2592000, "color": "#9467bd" } ]
+                  ],
+                  "region": "@region@",
+                  "title": "ELB Latency",
+                  "period": 300
+              }
+          }
+    ]
+}

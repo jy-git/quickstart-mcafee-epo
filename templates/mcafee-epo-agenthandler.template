@@ -176,7 +176,7 @@ Parameters:
     Type: String
     Description: AH instance type, must be valid instance size for the region.
   AHInstanceSize:
-    Default: '256'
+    Default: '128'
     Type: String
     Description: Allocated disk storage for AH Instance.
   AHBuildVersion:
@@ -521,7 +521,7 @@ Resources:
             0setup:
               command: !Join
                 - ' '
-                - - !Sub cwa-config.bat ah ${AWS::Region}
+                - - !Sub cwa-config.bat ah ${AWS::Region} McAfee-ePO ${ParentStack}
                   - Fn::ImportValue: !Sub ${BaseStack}-AHLogGroup
               cwd: c:\provision\scripts\
               waitAfterCompletion: '0'
@@ -566,6 +566,8 @@ Resources:
       LaunchConfigurationName: !Ref AHLaunchConfig
       LoadBalancerNames:
         - !Ref AHLoadBalancer
+      MetricsCollection:
+        - Granularity: 1Minute
       MaxSize: 8
       MinSize: !If [cHARequired, 2, 1]
       Tags:
@@ -1125,3 +1127,6 @@ Outputs:
   AHAutoscalingGroup:
     Description: AH Auto Scaling Group
     Value: !Ref AHAutoscalingGroup
+  ApacheWorkersBusyAlarmARN:
+    Description: ARN of AH Apache busy alaram
+    Value: !GetAtt [ ApacheWorkersBusyAlarm, Arn ]

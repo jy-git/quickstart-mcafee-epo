@@ -96,7 +96,7 @@ def get_email_address_list(email_address):
 def send_email(sender_address, to_addresses, cc_addresses, subject, message):
     charset = 'UTF-8'
     ses = boto3.client('ses', region_name='us-west-2')
-   
+
     response = ses.send_email(
         Destination={
             'ToAddresses': get_email_address_list(to_addresses),
@@ -196,15 +196,12 @@ def remote_command_handler(user_data, request_type):
             group_name = 'vgroup_' + cmd_data['ParentStackName']
             epo_dns_name = cmd_data['EPOURL']
             ah_url = cmd_data['AHURL']
-            dxl_url = cmd_data['DXLURL']
             ah_elb_url = cmd_data['AHURL']
-            dxl_elb_url = cmd_data['DXLURL']
+            dxl_elb_url = user_data['DXLELBURL']
             dxl_port = cmd_data['DXLPort']
             if '' == cmd_data['DomainName']:
                 epo_dns_name = user_data['EPOELBURL']
                 ah_elb_url = user_data['AHELBURL']
-                dxl_elb_url = user_data['DXLELBURL']
-
 
             parameter_store_identifier = user_data['ParameterStoreIdentifier']
             response = ssm.get_parameter(Name=parameter_store_identifier+'/EPOAdminUserName')
@@ -227,7 +224,7 @@ def remote_command_handler(user_data, request_type):
             print(response.status, response.reason)
 
             # Remote command to set DXL loadbalancer info
-            dxl_remote_cmd_path = '/remote/DxlBrokerMgmt.setLoadBalancerInfo?dnsName=' + dxl_url + '&ipAddress=' + dxl_elb_url + '&port=' + dxl_port
+            dxl_remote_cmd_path = '/remote/DxlBrokerMgmt.setLoadBalancerInfo?dnsName=' + dxl_elb_url + '&ipAddress=' + dxl_elb_url + '&port=' + dxl_port
             https = http.client.HTTPSConnection(epo_hostname, epo_port, context=ssl._create_unverified_context())
             https.request('POST', dxl_remote_cmd_path, headers=headers)
             response = https.getresponse()
