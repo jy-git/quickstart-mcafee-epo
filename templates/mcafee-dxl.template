@@ -71,7 +71,7 @@ Metadata:
       DXLInstanceSize:
         default: Allocated Storage
       DXLBuildVersion:
-        default: Version
+        default: Build Version
       AdminEmailAddress:
         default: Operator Email
       QSS3BucketName:
@@ -115,7 +115,6 @@ Parameters:
     MaxLength: 256
     Type: String
   EPOAdminUserName:
-    Default: 'admin'
     Description: The global administrator username for ePO Console Access.
     MaxLength: 256
     MinLength: 2
@@ -123,7 +122,6 @@ Parameters:
   EPOAdminPassword:
     AllowedPattern: '((?=.*\d)(?=.*\W).{8,256})'
     ConstraintDescription: Must be minimum of 8 characters and contain alpha, numeric, and a special character.
-    Default: '!Welcome2Mcafee'
     Description: 'The administrator password for ePO Console Access.  Must be a minimum of 8 characters and contain alpha, numeric, and a special character.'
     MaxLength: 256
     MinLength: 8
@@ -148,7 +146,6 @@ Parameters:
   ClientAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Default: '0.0.0.0/0'
     Description: >-
       CIDR block that's that is permitted to allowed to connect from on premise endpoints to Agent Handler's/DXL Brokers.
       e.g., x.x.x.x/16-28. Keep default setting to allow roaming endpoints.
@@ -305,6 +302,15 @@ Resources:
   DXLLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
+      AccessLoggingPolicy:
+        EmitInterval: 60
+        Enabled: true
+        S3BucketName:
+          Fn::ImportValue: !Sub ${BaseStack}-DataStore
+        S3BucketPrefix: 'logs/elb/dxl'
+      ConnectionDrainingPolicy:
+        Enabled: true
+        Timeout: 180
       ConnectionSettings:
         IdleTimeout: 600
       CrossZone: true
@@ -327,12 +333,6 @@ Resources:
       Subnets:
           - Fn::ImportValue: !Sub ${BaseStack}-PublicSubnet1ID
           - Fn::ImportValue: !Sub ${BaseStack}-PublicSubnet2ID
-      AccessLoggingPolicy:
-        EmitInterval: 60
-        Enabled: true
-        S3BucketName:
-          Fn::ImportValue: !Sub ${BaseStack}-DataStore
-        S3BucketPrefix: 'logs/elb/dxl'
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-DXLLoadBalancer

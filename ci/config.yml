@@ -1,0 +1,16 @@
+global:
+  marketplace-ami: false
+  owner: quickstart-eng@amazon.com
+  qsname: quickstart-mcafee-epo
+  regions:
+    - ca-central-1
+    - us-east-1
+    - us-east-2
+    - us-west-1
+    - us-west-2
+  reporting: true
+ 
+tests:
+  quickstart-mcafee-epot1:
+    parameter_input: mcafee-epo-params1.json
+    template_file: mcafee-epo-master.template

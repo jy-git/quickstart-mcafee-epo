@@ -232,8 +232,8 @@
                 "view": "singleValue",
                 "stacked": true,
                 "metrics": [
-                    [ "McAfee-ePO", "apache_BusyWorkers", "AutoScalingGroupName", "epo-ah-autoscaling-group", "StackName", "@stack_name@", { "label": "Busy" } ],
-                    [ ".", "apache_IdleWorkers", ".", ".", ".", ".", { "label": "Idle", "color": "#2ca02c" } ]
+                    [ "McAfee-ePO", "apache_BusyWorkers", "AutoScalingGroupName", "epo-ah-autoscaling-group", "StackName", "@stack_name@", { "stat": "Sum", "period": 60, "label": "Busy" } ],
+                    [ ".", "apache_IdleWorkers", ".", ".", ".", ".", {"stat": "Sum", "period": 60, "label": "Idle", "color": "#2ca02c" } ]
                 ],
                 "region": "@region@",
                 "title": "Apache Workers"

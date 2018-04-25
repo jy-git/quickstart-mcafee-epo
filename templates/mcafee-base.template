@@ -216,7 +216,7 @@ Resources:
   ##############################################################################
   # Source copying as per region
   ##############################################################################
-  # Amazon S3 bucker for regional source store
+  # Amazon S3 bucket for regional source store
   SourceStore:
     Type: AWS::S3::Bucket
     Properties:
@@ -1432,6 +1432,11 @@ Outputs:
     Value: !GetAtt [PostDeployLambda, Arn]
     Export:
       Name:  !Sub ${AWS::StackName}-PostDeployLambda
+  PostDeployLambdaRole:
+    Description: Post deployment action lambda role name
+    Value: !Ref PostDeployLambdaRole
+    Export:
+      Name:  !Sub ${AWS::StackName}-PostDeployLambdaRole
   # network exports
   SolutionDBInstanceIdentifier:
     Description: Unique DB instance identifier based on parameters

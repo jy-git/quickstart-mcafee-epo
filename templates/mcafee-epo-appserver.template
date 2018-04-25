@@ -98,7 +98,7 @@ Metadata:
       EPODatabaseName:
         default: Database Name
       EPOBuildVersion:
-        default: Version
+        default: Build Version
       DBMasterUsername:
         default: DB Master Username
       DBMasterUserPassword:
@@ -176,7 +176,6 @@ Parameters:
     Description: Enter in your ePO license key (xxx-xxx-xxx-xxxx).  If no license key is entered, environment will launch in evaluation mode.
     Type: String
   EPOAdminUserName:
-    Default: 'admin'
     Description: The global administrator username for ePO Console Access.
     MaxLength: 256
     MinLength: 2
@@ -184,7 +183,6 @@ Parameters:
   EPOAdminPassword:
     AllowedPattern: '((?=.*\d)(?=.*\W).{8,256})'
     ConstraintDescription: Must be minimum of 8 characters and contain alpha, numeric, and a special character.
-    Default: '!Welcome2Mcafee'
     Description: 'The administrator password for ePO Console Access.  Must be a minimum of 8 characters and contain alpha, numeric, and a special character.'
     MaxLength: 256
     MinLength: 8
@@ -193,7 +191,6 @@ Parameters:
   EPOPassphraseDR:
     AllowedPattern: '^[^\"\\\s]*$'
     ConstraintDescription: 'It must be 14 to 200 characters in length. It must not contain backslashes (\) or spaces or any double quotes (")'
-    Default: '!Welcome2Mcafee'
     Description: 'The Keystore encryption password required for disaster recovery. Server recovery passphrase must be 14 to 200 characters in length. It must not contain backslashes (\) or spaces or any double quotes (")'
     MaxLength: 200
     MinLength: 14
@@ -217,7 +214,6 @@ Parameters:
   EPOAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Default: '0.0.0.0/0'
     Description: >-
       CIDR block that's allowed external access to the ePO Console.
       e.g., x.x.x.x/16-28. We recommend that you set this value to a trusted
@@ -269,7 +265,6 @@ Parameters:
   ClientAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Default: '0.0.0.0/0'
     Description: >-
       CIDR block that's that is permitted to allowed to connect from on premise endpoints to Agent Handler's/DXL Brokers.
       e.g., x.x.x.x/16-28. Keep default setting to allow roaming endpoints.

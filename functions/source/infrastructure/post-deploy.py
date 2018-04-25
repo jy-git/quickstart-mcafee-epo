@@ -244,6 +244,27 @@ def remote_command_handler(user_data, request_type):
         print('failed to execute remote commands %s' %(str(e)))
         raise Exception('Provisioning of DXL and AH failed to set the virtual groups')
 
+# Register Local AgentHandler with  AgentHandler's LoadBalancer
+def localah_registration_handler(user_data, request_type):
+    elb_client = boto3.client('elb')
+    ah_loadbalancer_id = user_data['LocalAHRegistrationHandlerData']['AHELBName']
+    epo_instance_id = user_data['LocalAHRegistrationHandlerData']['EPOInstanceID']
+    print('Performing action %s with ePOInstanceId %s and AHELBName %s' %(request_type, epo_instance_id, ah_loadbalancer_id))
+    if 'Create' == request_type or 'Update'==  request_type:
+        response = elb_client.register_instances_with_load_balancer(LoadBalancerName= ah_loadbalancer_id, Instances= [ {'InstanceId':epo_instance_id}])
+        if 'Instances' in response and (len(response['Instances']) > 0):
+            print('Registered epo instance id '+ epo_instance_id+ ' with AgentHandler LoadBalancer '+ ah_loadbalancer_id + ' successfully')
+        else:
+            print('Failed to register instance with response %s' %(response))
+    elif 'Delete' == request_type:
+        response = elb_client.deregister_instances_from_load_balancer(LoadBalancerName= ah_loadbalancer_id, Instances= [ {'InstanceId':epo_instance_id}])
+        if 'Instances' in response and (len(response['Instances']) > 0):
+            print('Deregistered epo instance id '+ epo_instance_id+ ' with AgentHandler LoadBalancer '+ ah_loadbalancer_id + ' successfully')
+        else:
+            print('Failed to de-register instance with response %s' %(response))
+    else:
+        print('Unknown request type for localah_registration_handler')
+
 def handler(event, context):
     print(event)
     response = {
@@ -269,6 +290,8 @@ def handler(event, context):
             email_handler(user_data, request_type)
         if 'ResourceGroupHandlerData' in user_data:
             resource_group_handler(user_data, request_type)
+        if 'LocalAHRegistrationHandlerData' in user_data:
+            localah_registration_handler(user_data,request_type)
         return send_response(event, response, status='SUCCESS', reason="succesfully applied post deployment actions")
     except ClientError as e:
         print(str(e))
