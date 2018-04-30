@@ -411,7 +411,7 @@ Resources:
       Handler: cleanup.handler
       Role: !GetAtt PipelineLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 60
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-CleanUpLambda
@@ -553,6 +553,7 @@ Resources:
       MemorySize: 256
       Role: !GetAtt PipelineLambdaRole.Arn
       Runtime: python3.6
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-SetupArtifactsLambda
@@ -597,6 +598,7 @@ Resources:
       MemorySize: 256
       Role: !GetAtt PipelineLambdaRole.Arn
       Runtime: python3.6
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-PostUpdateLambda

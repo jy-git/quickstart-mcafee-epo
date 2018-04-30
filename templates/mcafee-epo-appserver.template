@@ -373,7 +373,7 @@ Resources:
       Handler: sync-epo-instance-parameters.handler
       Role: !GetAtt SyncEPOInstanceParametersLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 30
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-SyncEPOInstanceParametersLambda
@@ -1104,6 +1104,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt EPOAMIBackupLambdaRole.Arn
       Runtime: python3.6
+      Timeout: 180
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-EPOCreateAMIBackupLambda
@@ -1137,6 +1138,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt EPOAMIBackupLambdaRole.Arn
       Runtime: python3.6
+      Timeout: 180
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-EPODeleteAMIBackupLambda

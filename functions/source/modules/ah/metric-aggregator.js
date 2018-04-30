@@ -1,8 +1,12 @@
 var AWS = require('aws-sdk');
 var cloudwatch = new AWS.CloudWatch();
 //Alarm constants
-var sourceAlarms = {'{{ ah.apache_busy_alarm.name }}':'ALARM', '{{ ah.db_blocked_connections_high_alarm.name }}':'OK'};
-var targetAlarms = ['{{ ah.aggregator_alarm.name }}'];
+const apacheBusyAlarm = process.env.APACHE_BUSY_ALARM_NAME
+const dbBlockedConnHighAlarm = process.env.DB_BLOCKED_CONN_ALARM_NAME
+const  aggregatorAlarm = process.env.AGGREGATOR_ALAM_NAME
+var sourceAlarms = {};
+sourceAlarms[apacheBusyAlarm] = 'ALARM';
+sourceAlarms[dbBlockedConnHighAlarm] = 'OK';var targetAlarms = [aggregatorAlarm];
 var soureAlarmsRef = {};
 var targetAlarmsRef = {};
 exports.handler = function(event, context) {
@@ -21,9 +25,8 @@ exports.handler = function(event, context) {
 
 function processAlarms(alarm) {
   console.log('Aggregator: Alarm '+alarm.AlarmName+ ' is being processed');
-  var stackNamePrefix = '${AWS::StackName}';
   var params = {
-    AlarmNamePrefix: stackNamePrefix
+    AlarmNames:[apacheBusyAlarm, dbBlockedConnHighAlarm, aggregatorAlarm]
   };
   console.log('Aggregator: Get all Alarms with the prefix' + JSON.stringify(params));
   cloudwatch.describeAlarms(params, (err, data) => {
@@ -31,6 +34,8 @@ function processAlarms(alarm) {
         console.log('Aggregator: ERROR: '+err.message);
         return;
       }
+      // TODO: Since now we are using Env variables, we have whole name of the Alarm, so the below code
+      // can be improved
       try {
         Object.keys(sourceAlarms).forEach(sourceAlarm => {
           data.MetricAlarms.forEach(alarm => {
@@ -75,11 +80,11 @@ function decideTargetAlarmAction() {
 }
 
 function triggerAlarmByPuttingMetricData(alarm) {
-  console.log('Aggregator: Triggering '+alarm.AlarmName +' indirectly by sending metric data which will breach the threshold of alarm '+ alarm.AlarmName);            
+  console.log('Aggregator: Triggering '+alarm.AlarmName +' indirectly by sending metric data which will breach the threshold of alarm '+ alarm.AlarmName);
   var params = {
-    MetricData: [ 
+    MetricData: [
       {
-        MetricName: alarm.MetricName, 
+        MetricName: alarm.MetricName,
         Dimensions: alarm.Dimensions,
         Timestamp: new Date,
         Value: 1.0
@@ -90,6 +95,6 @@ function triggerAlarmByPuttingMetricData(alarm) {
 
   cloudwatch.putMetricData(params, function(err, data) {
     if (err) console.log(err, err.stack);
-    else     console.log(data);          
+    else     console.log(data);
   });
 }

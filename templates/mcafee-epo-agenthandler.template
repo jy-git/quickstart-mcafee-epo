@@ -661,7 +661,7 @@ Resources:
       Handler: update-asg-metrics.handler
       Role: !GetAtt AHUpdateASGMetricsLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 30
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-AHUpdateASGMetricsLambda
@@ -728,6 +728,7 @@ Resources:
   ApacheWorkersBusyAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
+      AlarmName: !Sub ${AWS::StackName}-ApacheWorkersBusyAlarm
       AlarmActions:
         - !Ref MetricAggregatorTopic
       AlarmDescription: Alarm if 75 percent of Apache Workers are busy over 10 minutes
@@ -768,6 +769,7 @@ Resources:
   DBBlockedConnectionsHighAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
+      AlarmName: !Sub ${AWS::StackName}-DBBlockedConnectionsHighAlarm
       AlarmDescription: Alarm if over 50% percent of AH connections are blocked over 5 mins
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
@@ -786,6 +788,7 @@ Resources:
   AggregatorAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
+      AlarmName: !Sub ${AWS::StackName}-AggregatorAlarm
       AlarmActions:
         - !Ref AHScaleUpPolicy
       AlarmDescription: Alarm If both ApacheWorkersBusyAlarm and DBBlockedConnectionsHighAlarm are in ALARM state.
@@ -857,7 +860,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - cloudwatch:putMetricData
-                Resource: 'arn:aws:cloudwatch:*:*:*'
+                Resource: '*'
 
   # Metric Aggregator Lambda to simulate AWS Alarm with multi-metrics.
   AHMetricsAggregatorLamda:
@@ -867,10 +870,15 @@ Resources:
         S3Bucket: !Sub ${QSS3BucketName}
         S3Key: !Sub ${QSS3KeyPrefix}functions/packages/modules/ah/metric-aggregator.zip
       Description: Lambda to simulate AWS Alarm with multi-metrics.
+      Environment:
+        Variables:
+          APACHE_BUSY_ALARM_NAME: !Sub ${AWS::StackName}-ApacheWorkersBusyAlarm
+          DB_BLOCKED_CONN_ALARM_NAME:  !Sub ${AWS::StackName}-DBBlockedConnectionsHighAlarm
+          AGGREGATOR_ALAM_NAME: !Sub ${AWS::StackName}-AggregatorAlarm
       Handler: metric-aggregator.handler
       Role: !GetAtt AHMetricAggregatorLambdaRole.Arn
       Runtime: nodejs6.10
-      Timeout: 30
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-AHMetricsAggregatorLamda

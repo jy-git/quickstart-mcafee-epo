@@ -103,7 +103,13 @@ def setup_parameter_store_handler(user_data, request_type):
     else:
         stack_parameters = {}
 
-    if request_type == 'Create' or request_type == 'Update':
+    if request_type == 'Create':
+        update_parameter_store(stack_parameters, user_parameters, parameter_store_id)
+    elif request_type == 'Update':
+        if 'PipelineExecutionVersion' in user_parameters:
+            item  = user_parameters.pop('PipelineExecutionVersion')
+            print('PipelineExecutionVersion'+str(item))
+        print(user_parameters)
         update_parameter_store(stack_parameters, user_parameters, parameter_store_id)
     elif request_type == 'Delete':
         delete_parameter_store(stack_parameters, user_parameters, parameter_store_id)
@@ -140,6 +146,7 @@ def email_verification_handler(user_data, request_type):
         print(str(e))
 
 def handler(event, context):
+    print(event)
     response = {
         'StackId': event['StackId'],
         'RequestId': event['RequestId'],

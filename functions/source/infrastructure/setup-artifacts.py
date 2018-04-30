@@ -144,18 +144,22 @@ def handle_stage_transitition(job_data):
     try:
         version = 0
         pipeline_execution_version = get_parameter_from_parameter_store(pipeline_execution_parameter)
+
         # this is the first time pipeline is created, so its already in sync
         #just disable the stage transition to continue, update the parameter
+
         if "0" == pipeline_execution_version:
             print('Disabling the stage transition')
             response = code_pipeline.disable_stage_transition(pipelineName=pipeline_name, stageName=update_stage_name,
                                         transitionType='Inbound', reason='Pipeline is just created and have latest artifacts')
             print(response)
+
         # or enable the transition to the next stage and update the parameter
         else:
             print('Enabling the stage transition')
             response = code_pipeline.enable_stage_transition(pipelineName=pipeline_name, stageName=update_stage_name, transitionType='Inbound')
             print(response)
+
         version = (int(pipeline_execution_version) + 1)
         put_parameter_into_parameter_store(pipeline_execution_parameter, 'Pipeline execution version', str(version), 'String')
     except Exception as e:

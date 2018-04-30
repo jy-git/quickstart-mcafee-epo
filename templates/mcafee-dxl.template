@@ -620,7 +620,7 @@ Resources:
       Handler: update-asg-metrics.handler
       Role: !GetAtt DXLUpdateASGMetricsLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 30
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-DXLUpdateASGMetricsLambda

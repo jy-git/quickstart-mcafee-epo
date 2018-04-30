@@ -109,8 +109,17 @@ def email_handler(job_data):
         subject = 'McAfee ePO On Public Cloud - Updated'
         # Extract the user data
         user_data = get_user_data(job_data)
-        message = download_message(user_data)
-        send_email(user_data['SenderEmailAddress'], user_data['ToEmailAddresses'], user_data['CcEmailAddress'], subject, message)
+
+        # If PipelineExecutionVersion is 0 which means the pipeline updated for the firsttime immediately after creation of stack, so no need to send update email.
+        ssm = boto3.client('ssm')
+        parameter_store_identifier = user_data['ParameterStoreIdentifier']
+        response = ssm.get_parameter(Name=parameter_store_identifier+'/PipelineExecutionVersion')
+        pipelineExecutionVersion = int(response['Parameter']['Value'])
+        print('PipelineExecutionVersion is : '+str(pipelineExecutionVersion))
+
+        if pipelineExecutionVersion > 1:
+            message = download_message(user_data)
+            send_email(user_data['SenderEmailAddress'], user_data['ToEmailAddresses'], user_data['CcEmailAddress'], subject, message)
     except Exception as e:
         print('failed to send email to reciepents')
         print(str(e))

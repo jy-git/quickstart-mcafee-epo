@@ -504,7 +504,7 @@ Resources:
       Handler: pre-deploy.handler
       Role: !GetAtt PreDeployLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 30
+      Timeout: 120
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-PreDeployLambda
@@ -830,7 +830,7 @@ Resources:
       Handler: cleanup.handler
       Role: !GetAtt AutoCleanupLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 60
+      Timeout: 180
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-AutoCleanupLambda
@@ -1124,7 +1124,7 @@ Resources:
       Handler: get-vpc-details.handler
       Role: !GetAtt GetVpcDetailsLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 30
+      Timeout: 180
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-get-vpc-details-lambda
@@ -1355,7 +1355,7 @@ Resources:
       Handler: post-deploy.handler
       Role: !GetAtt PostDeployLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 30
+      Timeout: 300
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-PostDeployLambda

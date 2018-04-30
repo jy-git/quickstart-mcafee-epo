@@ -454,25 +454,25 @@ Mappings:
       MFEEPOAGENTHANDLERHVM: McAfee ePO Agent Handler Image
       MFEDXLBROKERHVM: McAfee Data Exchange Layer Image
     us-west-2:
-      MFEDXLBROKERHVM: ami-a193fbd9
-      MFEEPOAGENTHANDLERHVM: ami-c897ffb0
-      MFEEPOSERVERHVM: ami-8b97fff3
+      MFEDXLBROKERHVM: ami-e8245190
+      MFEEPOAGENTHANDLERHVM: ami-2613665e
+      MFEEPOSERVERHVM: ami-4a126732
     us-west-1:
-      MFEEPOAGENTHANDLERHVM: ami-57b5a837
-      MFEEPOSERVERHVM: ami-d3b7aab3
-      MFEDXLBROKERHVM: ami-ecb5a88c
+      MFEDXLBROKERHVM: ami-0ef7eb6e
+      MFEEPOAGENTHANDLERHVM: ami-a0f0ecc0
+      MFEEPOSERVERHVM: ami-34f1ed54
     ca-central-1:
-      MFEEPOSERVERHVM: ami-8e1091ea
-      MFEEPOAGENTHANDLERHVM: ami-5a11903e
-      MFEDXLBROKERHVM: ami-dd0f8eb9
-    us-east-1:
-      MFEEPOAGENTHANDLERHVM: ami-a38335dc
-      MFEDXLBROKERHVM: ami-a38630dc
-      MFEEPOSERVERHVM: ami-4587313a
+      MFEEPOSERVERHVM: ami-6d38b909
+      MFEEPOAGENTHANDLERHVM: ami-6e38b90a
+      MFEDXLBROKERHVM: ami-9238b9f6
     us-east-2:
-      MFEEPOSERVERHVM: ami-d84775bd
-      MFEEPOAGENTHANDLERHVM: ami-024b7967
-      MFEDXLBROKERHVM: ami-1b4a787e
+      MFEEPOSERVERHVM: ami-41ead824
+      MFEDXLBROKERHVM: ami-18ebd97d
+      MFEEPOAGENTHANDLERHVM: ami-10e8da75
+    us-east-1:
+      MFEEPOAGENTHANDLERHVM: ami-4865da37
+      MFEDXLBROKERHVM: ami-6263dc1d
+      MFEEPOSERVERHVM: ami-0f62dd70
   NodeTierMap:
     '1-10K': {'Tier': '1'}
     '10K-25K': {'Tier': '2'}
@@ -512,25 +512,25 @@ Mappings:
     'Development': {'1': '1000', '2': '1000', '3': '1000', '4': '1000', '5': '1000',
       '6': '1000', '7': '1000'}
   BuildVersionMap:
-    ca-central-1:
-      EPO: 5.10.0.2248
-      AH: 5.10.0.2248
-      DXL: 4.1.0.186
-    us-west-1:
-      EPO: 5.10.0.2248
-      AH: 5.10.0.2248
+    us-east-1:
+      EPO: 5.10.0.2256
+      AH: 5.10.0.2256
       DXL: 4.1.0.186
     us-east-2:
-      EPO: 5.10.0.2248
-      AH: 5.10.0.2248
+      EPO: 5.10.0.2256
+      AH: 5.10.0.2256
+      DXL: 4.1.0.186
+    us-west-1:
+      EPO: 5.10.0.2256
+      AH: 5.10.0.2256
+      DXL: 4.1.0.186
+    ca-central-1:
+      EPO: 5.10.0.2256
+      AH: 5.10.0.2256
       DXL: 4.1.0.186
     us-west-2:
-      EPO: 5.10.0.2248
-      AH: 5.10.0.2248
-      DXL: 4.1.0.186
-    us-east-1:
-      EPO: 5.10.0.2248
-      AH: 5.10.0.2248
+      EPO: 5.10.0.2256
+      AH: 5.10.0.2256
       DXL: 4.1.0.186
 
 Conditions:
@@ -1000,7 +1000,7 @@ Resources:
       Role: !GetAtt CheckStackDetailsLambdaRole.Arn
       MemorySize: 128
       Runtime: python3.6
-      Timeout: 60
+      Timeout: 120
       Code:
         ZipFile: !Sub |
           #!/usr/bin/env python3
