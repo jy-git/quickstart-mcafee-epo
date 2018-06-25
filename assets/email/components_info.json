@@ -1,14 +1,14 @@
 {
 	"ePO": {
-		"BuildVersion": "5.10.0.2256",
+		"BuildVersion": "5.10.0.2327",
     "Name": "ePolicy Orchestrator"
 	},
 	"AH": {
-		"BuildVersion": "5.10.0.2256",
+		"BuildVersion": "5.10.0.2327",
     "Name": "Agent Handler"
 	},
 	"DXL": {
-		"BuildVersion": "4.1.0.186",
+		"BuildVersion": "4.1.0.214",
     "Name": "Data Exchange Layer Broker"
 	}
 }

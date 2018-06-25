@@ -1,32 +1,32 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: >-
-  McAfee-ePO Network stack which manages vpc and subnets. It creates two public and
-  two private subnets, one in each AWS availability zone into a newly created VPC.
+Description: McAfee-ePO Network stack which manages vpc and subnets. It creates two
+  public and two private subnets, one in each AWS availability zone into a newly created
+  VPC.
 Metadata:
   LICENSE: Apache License Version 2.0
   AWS::CloudFormation::Interface:
     ParameterGroups:
-      - Label:
-          default: McAfee Enterprise Security Management Platform Configuration
-        Parameters:
-          - Environment
-      - Label:
-          default: Peer-Parent Stack Configuration
-        Parameters:
-          - ParentStack
-      - Label:
-          default: Network Configuration
-        Parameters:
-          - AvailabilityZones
-          - VPCCIDR
-          - PrivateSubnet1CIDR
-          - PrivateSubnet2CIDR
-          - PublicSubnet1CIDR
-          - PublicSubnet2CIDR
-      - Label:
-          default: Administration Configuration
-        Parameters:
-          - AdminEmailAddress
+    - Label:
+        default: McAfee Enterprise Security Management Platform Configuration
+      Parameters:
+      - Environment
+    - Label:
+        default: Peer-Parent Stack Configuration
+      Parameters:
+      - ParentStack
+    - Label:
+        default: Network Configuration
+      Parameters:
+      - AvailabilityZones
+      - VPCCIDR
+      - PrivateSubnet1CIDR
+      - PrivateSubnet2CIDR
+      - PublicSubnet1CIDR
+      - PublicSubnet2CIDR
+    - Label:
+        default: Administration Configuration
+      Parameters:
+      - AdminEmailAddress
     ParameterLabels:
       Environment:
         default: Deployment Environment
@@ -50,8 +50,8 @@ Metadata:
 Parameters:
   Environment:
     AllowedValues:
-      - 'Production'
-      - 'Development'
+    - 'Production'
+    - 'Development'
     Default: 'Production'
     Description: What is the targeted deployment environment?
     Type: String
@@ -61,48 +61,57 @@ Parameters:
     MaxLength: 256
     Type: String
   AvailabilityZones:
-    Description: >-
-      List of Availability Zones to use for the subnets in the VPC. Note:
-      The logical order is preserved (2 AZs are used for this deployment)
+    Description: 'List of Availability Zones to use for the subnets in the VPC. Note:
+      The logical order is preserved (2 AZs are used for this deployment)'
     Type: List<AWS::EC2::AvailabilityZone::Name>
   VPCCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: 'Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g. 10.0.0.0/16)'
+    ConstraintDescription: 'Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g.
+      10.0.0.0/16)'
     Default: 10.0.0.0/16
     Description: CIDR block should be used to create the VPC (e.g. 10.0.0.0/16)
     Type: String
   PrivateSubnet1CIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g. 10.0.2.0/24)
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g.
+      10.0.2.0/24)
     Default: 10.0.2.0/24
-    Description: CIDR block should be used to create the private subnet in Availability Zone 1 (e.g. 10.0.2.0/24)
+    Description: CIDR block should be used to create the private subnet in Availability
+      Zone 1 (e.g. 10.0.2.0/24)
     Type: String
   PrivateSubnet2CIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription:  Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g. 10.0.3.0/24)
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g.
+      10.0.3.0/24)
     Default: 10.0.3.0/24
-    Description: CIDR block should be used to create the private subnet in Availability Zone 2 (e.g. 10.0.3.0/24)
+    Description: CIDR block should be used to create the private subnet in Availability
+      Zone 2 (e.g. 10.0.3.0/24)
     Type: String
   PublicSubnet1CIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g. 10.0.0.0/24)
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g.
+      10.0.0.0/24)
     Default: 10.0.0.0/24
-    Description: CIDR block should be used to create the public subnet in Availability Zone 1 (e.g. 10.0.0.0/24)
+    Description: CIDR block should be used to create the public subnet in Availability
+      Zone 1 (e.g. 10.0.0.0/24)
     Type: String
   PublicSubnet2CIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
-    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g. 10.0.1.0/24)
+    ConstraintDescription: Must be a valid IP CIDR range of the form x.x.x.x/x. (e.g.
+      10.0.1.0/24)
     Default: 10.0.1.0/24
-    Description: CIDR block should be used to create the public subnet in Availability Zone 2 (e.g. 10.0.1.0/24)
+    Description: CIDR block should be used to create the public subnet in Availability
+      Zone 2 (e.g. 10.0.1.0/24)
     Type: String
   AdminEmailAddress:
-    AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)
+    AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)
     ConstraintDescription: Must be a valid email address.
-    Description: Email address that notifications of any operations will be sent. In addtion this will be used for tagging of ownership of resources.
+    Description: Email address that notifications of any operations will be sent.
+      In addtion this will be used for tagging of ownership of resources.
     Type: String
 
 Conditions:
-  cIsProductionEnvironment: !Equals [ !Ref Environment, 'Production' ]
+  cIsProductionEnvironment: !Equals [!Ref Environment, 'Production']
 
 Resources:
   # VPC
@@ -114,18 +123,18 @@ Resources:
       EnableDnsSupport: true
       InstanceTenancy: default
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-VPC
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-VPC
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # Subnets (PublicSubnet1, PublicSubnet2, PrivateSubnet1, PrivateSubnet2))
   PublicSubnet1:
@@ -134,22 +143,22 @@ Resources:
     Properties:
       AvailabilityZone:
         Fn::Select:
-          - '0'
-          - !Ref AvailabilityZones
+        - '0'
+        - !Ref AvailabilityZones
       CidrBlock: !Ref PublicSubnet1CIDR
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PublicSubnet1
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PublicSubnet1
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPC
 
   PublicSubnet2:
@@ -158,22 +167,22 @@ Resources:
     Properties:
       AvailabilityZone:
         Fn::Select:
-          - '1'
-          - !Ref AvailabilityZones
+        - '1'
+        - !Ref AvailabilityZones
       CidrBlock: !Ref PublicSubnet2CIDR
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PublicSubnet2
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PublicSubnet2
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPC
 
   PrivateSubnet1:
@@ -182,22 +191,22 @@ Resources:
     Properties:
       AvailabilityZone:
         Fn::Select:
-          - '0'
-          - !Ref AvailabilityZones
+        - '0'
+        - !Ref AvailabilityZones
       CidrBlock: !Ref PrivateSubnet1CIDR
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PrivateSubnet1
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PrivateSubnet1
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPC
 
   PrivateSubnet2:
@@ -206,22 +215,22 @@ Resources:
     Properties:
       AvailabilityZone:
         Fn::Select:
-          - '1'
-          - !Ref AvailabilityZones
+        - '1'
+        - !Ref AvailabilityZones
       CidrBlock: !Ref PrivateSubnet2CIDR
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PrivateSubnet2
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PrivateSubnet2
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPC
 
 
@@ -231,18 +240,18 @@ Resources:
     DependsOn: VPC
     Properties:
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PublicRouteTable1
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PublicRouteTable1
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPC
 
   PrivateRouteTable1:
@@ -250,18 +259,18 @@ Resources:
     DependsOn: VPC
     Properties:
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PrivateRouteTable1
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PrivateRouteTable1
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPC
 
   PrivateRouteTable2:
@@ -269,18 +278,18 @@ Resources:
     DependsOn: VPC
     Properties:
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PrivateRouteTable2
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PrivateRouteTable2
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPC
 
 
@@ -307,9 +316,9 @@ Resources:
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !If
-        - cIsProductionEnvironment
-        - !Ref NATGateway2
-        - !Ref NATGateway1
+      - cIsProductionEnvironment
+      - !Ref NATGateway2
+      - !Ref NATGateway1
       RouteTableId: !Ref PrivateRouteTable2
 
 
@@ -318,8 +327,8 @@ Resources:
   PublicSubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     DependsOn:
-      - PublicRouteTable1
-      - PublicSubnet1
+    - PublicRouteTable1
+    - PublicSubnet1
     Properties:
       RouteTableId: !Ref PublicRouteTable1
       SubnetId: !Ref PublicSubnet1
@@ -327,8 +336,8 @@ Resources:
   PublicSubnetRouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     DependsOn:
-      - PublicRouteTable1
-      - PublicSubnet2
+    - PublicRouteTable1
+    - PublicSubnet2
     Properties:
       RouteTableId: !Ref PublicRouteTable1
       SubnetId: !Ref PublicSubnet2
@@ -336,8 +345,8 @@ Resources:
   PrivateSubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     DependsOn:
-      - PrivateRouteTable1
-      - PrivateSubnet1
+    - PrivateRouteTable1
+    - PrivateSubnet1
     Properties:
       RouteTableId: !Ref PrivateRouteTable1
       SubnetId: !Ref PrivateSubnet1
@@ -345,8 +354,8 @@ Resources:
   PrivateSubnetRouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     DependsOn:
-      - PrivateRouteTable2
-      - PrivateSubnet2
+    - PrivateRouteTable2
+    - PrivateSubnet2
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       SubnetId: !Ref PrivateSubnet2
@@ -357,23 +366,23 @@ Resources:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-InternetGateway
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-InternetGateway
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # GatewayToInternet
   GatewayToInternet:
     Type: AWS::EC2::VPCGatewayAttachment
-    DependsOn: [ InternetGateway , VPC]
+    DependsOn: [InternetGateway, VPC]
     Properties:
       InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
@@ -397,49 +406,49 @@ Resources:
   NATGateway1:
     Type: AWS::EC2::NatGateway
     DependsOn:
-      - GatewayToInternet
-      - NATGatewayEIP1
-      - PublicSubnet1
+    - GatewayToInternet
+    - NATGatewayEIP1
+    - PublicSubnet1
     Properties:
       AllocationId: !GetAtt 'NATGatewayEIP1.AllocationId'
       SubnetId: !Ref PublicSubnet1
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-NATGateway1
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-NATGateway1
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   NATGateway2:
     Type: AWS::EC2::NatGateway
     Condition: cIsProductionEnvironment
     DependsOn:
-      - GatewayToInternet
-      - NATGatewayEIP2
-      - PublicSubnet2
+    - GatewayToInternet
+    - NATGatewayEIP2
+    - PublicSubnet2
     Properties:
       AllocationId: !GetAtt 'NATGatewayEIP2.AllocationId'
       SubnetId: !Ref PublicSubnet2
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-NATGateway2
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Network
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-NATGateway2
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Network
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
 
 Outputs:

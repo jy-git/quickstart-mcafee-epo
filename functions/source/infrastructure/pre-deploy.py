@@ -8,6 +8,7 @@ import http.client
 import urllib
 import json
 import uuid
+import copy
 from botocore.exceptions import ClientError
 
 ssm = boto3.client('ssm')
@@ -106,14 +107,24 @@ def setup_parameter_store_handler(user_data, request_type):
     if request_type == 'Create':
         update_parameter_store(stack_parameters, user_parameters, parameter_store_id)
     elif request_type == 'Update':
-        if 'PipelineExecutionVersion' in user_parameters:
-            item  = user_parameters.pop('PipelineExecutionVersion')
-            print('PipelineExecutionVersion'+str(item))
-        print(user_parameters)
-        update_parameter_store(stack_parameters, user_parameters, parameter_store_id)
+        params = exclude_parameters(stack_parameters, user_parameters)
+        update_parameter_store(params['stack_params'], params['user_params'], parameter_store_id)
     elif request_type == 'Delete':
         delete_parameter_store(stack_parameters, user_parameters, parameter_store_id)
     print('handler parameter store finished')
+
+# Some parameters should not be updated in to SSM Parameter Store when request_type is update
+def exclude_parameters(stack_parameters, user_parameters):
+    exclude_params = ['PipelineExecutionVersion', 'EPOAdminUserName', 'EPOAdminPassword', 'ConfirmEPOAdminPassword', 'EPOPassphraseDR' ,'ConfirmEPOPassphraseDR' , 'EPODatabaseName', 'DBMasterUserPassword', 'ConfirmDBMasterUserPassword']
+    user_parameters_copy = copy.deepcopy(user_parameters)
+    stack_parameters_copy = copy.deepcopy(stack_parameters)
+    for param in exclude_params:
+        if param in user_parameters_copy:
+            user_parameters_copy.pop(param)
+        if param in stack_parameters_copy:
+            stack_parameters_copy.pop(param)
+
+    return {'user_params':user_parameters_copy, 'stack_params':stack_parameters_copy}
 
 def validate_user_data_for_email_verification(user_data):
     if 'SenderEmailAddress' not in user_data:

@@ -194,6 +194,7 @@ def remote_command_handler(user_data, request_type):
         print(cmd_data)
         if request_type == 'Create':
             group_name = 'vgroup_' + cmd_data['ParentStackName']
+            assignment_name = 'vassign_' + cmd_data['ParentStackName']
             epo_dns_name = cmd_data['EPOURL']
             ah_url = cmd_data['AHURL']
             ah_elb_url = cmd_data['AHURL']
@@ -209,7 +210,7 @@ def remote_command_handler(user_data, request_type):
             response = ssm.get_parameter(Name=parameter_store_identifier+'/EPOAdminPassword', WithDecryption=True)
             epo_password = response['Parameter']['Value']
 
-            epo_hostname = user_data['EPOELBURL']
+            epo_hostname = cmd_data['EPOURL']
             epo_port = cmd_data['EPOConsolePort']
 
             auth_string = epo_username + ':' + epo_password

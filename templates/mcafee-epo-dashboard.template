@@ -1,47 +1,46 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: >-
-  McAfee-ePO Dashboard Stack which creates and manages AWS CloudWatch dashboard
+Description: McAfee-ePO Dashboard Stack which creates and manages AWS CloudWatch dashboard
   for infrastructure and application monitoring.
 Metadata:
   LICENSE: Apache License Version 2.0
   AWS::CloudFormation::Interface:
     ParameterGroups:
-      - Label:
-          default: McAfee Enterprise Security Management Platform Configuration
-        Parameters:
-          - Environment
-      - Label:
-          default: Peer-Parent Stack Configuration
-        Parameters:
-          - ParentStack
-      - Label:
-          default: McAfee ePO Dashboard Configuration
-        Parameters:
-          - EPOConsoleURL
-          - EPOELBName
-          - EPOSystemCheckAlarmARN
-          - EPOStatusCheckAlarmARN
-          - EPOInstanceID
-          - HostedZoneID
-          - ParentStackID
-          - DatastoreBucketName
-          - AvailabilityZones
-          - AHELBName
-          - AHASGName
-          - AHScaleAlarmARN
-          - DBInstanceIdentifier
-          - DXLELBName
-          - DXLASGName
-          - DXLScaleAlarmARN
-      - Label:
-          default: Administration Configuration
-        Parameters:
-          - AdminEmailAddress
-      - Label:
-          default: AWS Quick Start Configuration
-        Parameters:
-        - QSS3BucketName
-        - QSS3KeyPrefix
+    - Label:
+        default: McAfee Enterprise Security Management Platform Configuration
+      Parameters:
+      - Environment
+    - Label:
+        default: Peer-Parent Stack Configuration
+      Parameters:
+      - ParentStack
+    - Label:
+        default: McAfee ePO Dashboard Configuration
+      Parameters:
+      - EPOConsoleURL
+      - EPOELBName
+      - EPOSystemCheckAlarmARN
+      - EPOStatusCheckAlarmARN
+      - EPOInstanceID
+      - HostedZoneID
+      - ParentStackID
+      - DatastoreBucketName
+      - AvailabilityZones
+      - AHELBName
+      - AHASGName
+      - AHScaleAlarmARN
+      - DBInstanceIdentifier
+      - DXLELBName
+      - DXLASGName
+      - DXLScaleAlarmARN
+    - Label:
+        default: Administration Configuration
+      Parameters:
+      - AdminEmailAddress
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3KeyPrefix
     ParameterLabels:
       Environment:
         default: Deployment Environment
@@ -88,8 +87,8 @@ Metadata:
 Parameters:
   Environment:
     AllowedValues:
-      - 'Production'
-      - 'Development'
+    - 'Production'
+    - 'Development'
     Default: 'Production'
     Description: What is the targeted deployment environment?
     Type: String
@@ -139,9 +138,8 @@ Parameters:
     MaxLength: 256
     Type: String
   AvailabilityZones:
-    Description: >-
-      List of Availability Zones to use for the subnets in the VPC. Note:
-      The logical order is preserved (2 AZs are used for this deployment)
+    Description: 'List of Availability Zones to use for the subnets in the VPC. Note:
+      The logical order is preserved (2 AZs are used for this deployment)'
     Type: List<AWS::EC2::AvailabilityZone::Name>
   AHELBName:
     Description: AH AWS ELB name.
@@ -179,30 +177,31 @@ Parameters:
     MaxLength: 256
     Type: String
   AdminEmailAddress:
-    AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)
+    AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)
     ConstraintDescription: Must be a valid email address.
-    Description: Email address that notifications of any operations will be sent. In addtion this will be used for tagging of ownership of resources.
+    Description: Email address that notifications of any operations will be sent.
+      In addtion this will be used for tagging of ownership of resources.
     Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: >-
-      Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
-      It cannot start or end with a hyphen (-) or period (.).
-    Default: quickstart-reference
-    Description: >-
-      S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
-      It cannot start or end with a hyphen (-) or period (.).
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
+      end with a hyphen (-) or period (.).
+    Default: hosted-epo-quickstart-reference
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, periods (.), and
+      hyphens (-). It cannot start or end with a hyphen (-) or period (.).
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: >-
-      Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
-      Prefix cannot start with a slash but must end with a slash unless it is the empty string.'
-    Default: mcafee/epo/latest/
-    Description: >-
-      The S3 key name prefix used to simulate a folder for your copy of Quick Start assets,
-      if you decide to customize or extend the Quick Start for your own use.This prefix can include numbers,
-      lowercase letters, uppercase letters, hyphens, and forward slashes.'
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
+      a slash but must end with a slash unless it is the empty string.'
+    Default: artifacts/1-0-72/
+    Description: The S3 key name prefix used to simulate a folder for your copy of
+      Quick Start assets, if you decide to customize or extend the Quick Start for
+      your own use.This prefix can include numbers, lowercase letters, uppercase letters,
+      hyphens, and forward slashes.'
     Type: String
 
 Resources:
@@ -213,42 +212,42 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: DashboardUpdateLambdaRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:ListBucket
-                Resource:
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref QSS3BucketName
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref QSS3BucketName
-                      - '/*'
-              - Effect: Allow
-                Action:
-                  - cloudwatch:GetDashboard
-                  - cloudwatch:PutDashboard
-                Resource: '*'
+      - PolicyName: DashboardUpdateLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            - s3:ListBucket
+            Resource:
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref QSS3BucketName
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref QSS3BucketName
+                - '/*'
+          - Effect: Allow
+            Action:
+            - cloudwatch:GetDashboard
+            - cloudwatch:PutDashboard
+            Resource: '*'
 
   # Update AWS cloudwatch dashboard lambda
   DashboardUpdateLambda:
@@ -263,18 +262,18 @@ Resources:
       Runtime: python3.6
       Timeout: 120
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-DashboardUpdateLambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Dashboard
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-DashboardUpdateLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Dashboard
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # Update dashboard lambda version
   DashboardUpdateLambdaVersion:
@@ -288,17 +287,17 @@ Resources:
     DependsOn: DashboardUpdateLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref DashboardUpdateLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref DashboardUpdateLambda
       RetentionInDays: 7
 
   # Update Dashboard custom action to modify the dashboard
   DashboardUpdateAction:
     Type: Custom::DashboardUpdateAction
-    DependsOn: [ DashboardUpdateLambda ]
+    DependsOn: [DashboardUpdateLambda]
     Properties:
-      ServiceToken:  !GetAtt DashboardUpdateLambda.Arn
+      ServiceToken: !GetAtt DashboardUpdateLambda.Arn
       SourceBucket: !Sub ${QSS3BucketName}
       KeyPrefix: !Sub ${QSS3KeyPrefix}
       DashboardPath: !Sub ${QSS3KeyPrefix}assets/dashboard/json/mcafee_solution_dashboard.json
@@ -322,12 +321,12 @@ Resources:
       DXLScaleAlarmARN: !Sub ${DXLScaleAlarmARN}
       AvailabilityZone1:
         Fn::Select:
-          - '0'
-          - !Ref AvailabilityZones
+        - '0'
+        - !Ref AvailabilityZones
       AvailabilityZone2:
         Fn::Select:
-          - '1'
-          - !Ref AvailabilityZones
+        - '1'
+        - !Ref AvailabilityZones
 
   # Empty Dashboard Resource
   McAfeeEPODashboard:

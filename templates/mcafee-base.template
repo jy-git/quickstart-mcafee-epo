@@ -1,43 +1,42 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: >-
-  McAfee-ePO Base stack which creates shared infrastructure.
+Description: McAfee-ePO Base stack which creates shared infrastructure.
 Metadata:
   LICENSE: Apache License Version 2.0
   AWS::CloudFormation::Interface:
     ParameterGroups:
-      - Label:
-          default: McAfee Enterprise Security Management Platform Configuration
-        Parameters:
-          - Environment
-          - DomainName
-          - SubDomainName
-      - Label:
-          default: Peer-Parent Stack Configuration
-        Parameters:
-          - ParentStack
-      - Label:
-          default: Network Configuration
-        Parameters:
-          - VPCID
-          - PrivateSubnet1ID
-          - PrivateSubnet2ID
-          - PublicSubnet1ID
-          - PublicSubnet2ID
-          - BastionSecurityGroupID
-      - Label:
-          default: Databse-VPC Peering Configuration
-        Parameters:
-          - DBInstanceIdentifier
-      - Label:
-          default: Administration Configuration
-        Parameters:
-          - AdminEmailAddress
-          - AutoCleanup
-      - Label:
-          default: AWS Quick Start Configuration
-        Parameters:
-        - QSS3BucketName
-        - QSS3KeyPrefix
+    - Label:
+        default: McAfee Enterprise Security Management Platform Configuration
+      Parameters:
+      - Environment
+      - DomainName
+      - SubDomainName
+    - Label:
+        default: Peer-Parent Stack Configuration
+      Parameters:
+      - ParentStack
+    - Label:
+        default: Network Configuration
+      Parameters:
+      - VPCID
+      - PrivateSubnet1ID
+      - PrivateSubnet2ID
+      - PublicSubnet1ID
+      - PublicSubnet2ID
+      - BastionSecurityGroupID
+    - Label:
+        default: Databse-VPC Peering Configuration
+      Parameters:
+      - DBInstanceIdentifier
+    - Label:
+        default: Administration Configuration
+      Parameters:
+      - AdminEmailAddress
+      - AutoCleanup
+    - Label:
+        default: AWS Quick Start Configuration
+      Parameters:
+      - QSS3BucketName
+      - QSS3KeyPrefix
     ParameterLabels:
       Environment:
         default: Deployment Environment
@@ -72,24 +71,25 @@ Metadata:
 Parameters:
   Environment:
     AllowedValues:
-      - 'Production'
-      - 'Development'
+    - 'Production'
+    - 'Development'
     Default: 'Production'
     Description: What is the targeted deployment environment?
     Type: String
   DomainName:
-    AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,3})$
-    Description: >-
-      [Optional] AWS Route 53 registered domain name (e.g. mcafee.com).
-      We recommend either to register AWS Route 53 domain name so that public DNS records can be propagated automatically
-      OR add the sub domain Name Server(NS) records into your main domain server.
+    AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
+    Description: '[Optional] AWS Route 53 registered domain name (e.g. mcafee.com).
+      We recommend either to register AWS Route 53 domain name so that public DNS
+      records can be propagated automatically OR add the sub domain Name Server(NS)
+      records into your main domain server.'
     Default: ''
     Type: String
   SubDomainName:
-    AllowedPattern: ^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,3})$
-    Description: >-
-      The non-existant sub domain name to be used for managment solution. (e.g. manage.mcafee.com ). We recommend either to register AWS Route 53
-      domain name so that public DNS records can be propagated automatically OR add the sub domain Name Server(NS) records into your main domain server.
+    AllowedPattern: ^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
+    Description: The non-existant sub domain name to be used for managment solution.
+      (e.g. manage.mcafee.com ). We recommend either to register AWS Route 53 domain
+      name so that public DNS records can be propagated automatically OR add the sub
+      domain Name Server(NS) records into your main domain server.
     MinLength: 1
     MaxLength: 256
     Type: String
@@ -102,19 +102,24 @@ Parameters:
     Description: ID of your existing VPC for deployment(e.g., vpc-fd990584)
     Type: AWS::EC2::VPC::Id
   PublicSubnet1ID:
-    Description: ID of public subnet 1 in Availability Zone 1 for the ELB load balancer (e.g., subnet-9bc642ac)
+    Description: ID of public subnet 1 in Availability Zone 1 for the ELB load balancer
+      (e.g., subnet-9bc642ac)
     Type: AWS::EC2::Subnet::Id
   PublicSubnet2ID:
-    Description: ID of public subnet 2 in Availability Zone 2 for the ELB load balancer (e.g., subnet-e3246d8e)
+    Description: ID of public subnet 2 in Availability Zone 2 for the ELB load balancer
+      (e.g., subnet-e3246d8e)
     Type: AWS::EC2::Subnet::Id
   PrivateSubnet1ID:
-    Description: ID of private subnet 1 in Availability Zone 1 for the McAfee application components (e.g., subnet-a0246dcd)
+    Description: ID of private subnet 1 in Availability Zone 1 for the McAfee application
+      components (e.g., subnet-a0246dcd)
     Type: AWS::EC2::Subnet::Id
   PrivateSubnet2ID:
-    Description: ID of private subnet 2 in Availability Zone 2 for the McAfee application components (e.g., subnet-b1f432cd)
+    Description: ID of private subnet 2 in Availability Zone 2 for the McAfee application
+      components (e.g., subnet-b1f432cd)
     Type: AWS::EC2::Subnet::Id
   BastionSecurityGroupID:
-    Description: ID of the bastion host security group to enable SSH connections (e.g., sg-7f16e910)
+    Description: ID of the bastion host security group to enable SSH connections (e.g.,
+      sg-7f16e910)
     Type: AWS::EC2::SecurityGroup::Id
   DBInstanceIdentifier:
     Default: ''
@@ -122,37 +127,38 @@ Parameters:
     Description: N/A for new database instance,existing database instance identifier.
     Type: String
   AdminEmailAddress:
-    AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)
+    AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)
     ConstraintDescription: Must be a valid email address.
-    Description: Email address that notifications of any operations will be sent. In addtion this will be used for tagging of ownership of resources.
+    Description: Email address that notifications of any operations will be sent.
+      In addtion this will be used for tagging of ownership of resources.
     Type: String
   AutoCleanup:
     AllowedValues:
-      - Enable
-      - Disable
+    - Enable
+    - Disable
     Default: Enable
     Description: Enable/Disable Auto cleanup of backup logs and data.
     Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: >-
-      Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
-      It cannot start or end with a hyphen (-) or period (.).
-    Default: quickstart-reference
-    Description: >-
-      S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
-      It cannot start or end with a hyphen (-) or period (.).
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
+      end with a hyphen (-) or period (.).
+    Default: hosted-epo-quickstart-reference
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, periods (.), and
+      hyphens (-). It cannot start or end with a hyphen (-) or period (.).
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: >-
-      Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
-      Prefix cannot start with a slash but must end with a slash unless it is the empty string.'
-    Default: mcafee/epo/latest/
-    Description: >-
-      The S3 key name prefix used to simulate a folder for your copy of Quick Start assets,
-      if you decide to customize or extend the Quick Start for your own use.This prefix can include numbers,
-      lowercase letters, uppercase letters, hyphens, and forward slashes.'
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
+      a slash but must end with a slash unless it is the empty string.'
+    Default: artifacts/1-0-72/
+    Description: The S3 key name prefix used to simulate a folder for your copy of
+      Quick Start assets, if you decide to customize or extend the Quick Start for
+      your own use.This prefix can include numbers, lowercase letters, uppercase letters,
+      hyphens, and forward slashes.'
     Type: String
 
 Rules:
@@ -209,8 +215,8 @@ Mappings:
 
 Conditions:
   cEnableCleanup: !Equals [!Ref AutoCleanup, 'Enable']
-  cCreateVPCPeering: !Not [ !Equals [ !Ref DBInstanceIdentifier, '' ] ]
-  cExistingDomain: !Not [ !Equals [ !Ref DomainName, '' ] ]
+  cCreateVPCPeering: !Not [!Equals [!Ref DBInstanceIdentifier, '']]
+  cExistingDomain: !Not [!Equals [!Ref DomainName, '']]
 
 Resources:
   ##############################################################################
@@ -223,18 +229,18 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-SourceStore
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-SourceStore
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # Source copying lambda role
   CopySourceLambdaRole:
@@ -243,63 +249,61 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: CopySourceLambdaRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - s3:GetBucketLocation
-                  - s3:GetObject
-                  - s3:ListBucket
-                  - s3:ListBucketMultipartUploads
-                Resource:
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref QSS3BucketName
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref QSS3BucketName
-                      - '/*'
-              - Effect: Allow
-                Action:
-                  - s3:AbortMultipartUpload
-                  - s3:Get*
-                  - s3:Put*
-                  - s3:List*
-                  - s3:Delete*
-                Resource:
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref SourceStore
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref SourceStore
-                      - '/*'
-
-  # Source copying lambda
+      - PolicyName: CopySourceLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - s3:GetBucketLocation
+            - s3:GetObject
+            - s3:ListBucket
+            - s3:ListBucketMultipartUploads
+            Resource:
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref QSS3BucketName
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref QSS3BucketName
+                - '/*'
+          - Effect: Allow
+            Action:
+            - s3:AbortMultipartUpload
+            - s3:Get*
+            - s3:Put*
+            - s3:List*
+            - s3:Delete*
+            Resource:
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref SourceStore
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref SourceStore
+                - '/*'
   CopySourceLambda:
     Type: AWS::Lambda::Function
     Properties:
       Handler: index.handler
-      Role: !GetAtt  CopySourceLambdaRole.Arn
+      Role: !GetAtt CopySourceLambdaRole.Arn
       MemorySize: 128
       Runtime: python3.6
       Timeout: 300
@@ -402,18 +406,18 @@ Resources:
                   print('Exception in handling the request, %s' % (str(e)))
                   cfnresponse.send(event, context, cfnresponse.FAILED, {}, None)
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-CopySourceLambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-CopySourceLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # Source copying lambda version
   CopySourceLambdaVersion1:
@@ -427,9 +431,9 @@ Resources:
     DependsOn: CopySourceLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref CopySourceLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref CopySourceLambda
       RetentionInDays: 7
 
   # copy source custom action, which copies the source into regional bucket
@@ -437,7 +441,7 @@ Resources:
     Type: Custom::CopySourceAction
     DependsOn: CopySourceLambdaLogGroup
     Properties:
-      ServiceToken:  !GetAtt CopySourceLambda.Arn
+      ServiceToken: !GetAtt CopySourceLambda.Arn
       SourceBucket: !Sub ${QSS3BucketName}
       DestBucket: !Ref SourceStore
       Prefix: !Sub ${QSS3KeyPrefix}
@@ -454,43 +458,43 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: PreDeployLambdaRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - ssm:PutParameter
-                  - ssm:DeleteParameter
-                Resource:
-                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*
-              - Effect: Allow
-                Action:
-                  - kms:Encrypt
-                Resource:
-                  - !Sub arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/*
-              - Effect: Allow
-                Action:
-                  - cloudformation:DescribeStacks
-                Resource:
-                  - !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ParentStack}*
-              - Effect: Allow
-                Action:
-                  - ses:VerifyEmailIdentity
-                Resource: '*'
+      - PolicyName: PreDeployLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - ssm:PutParameter
+            - ssm:DeleteParameter
+            Resource:
+            - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*
+          - Effect: Allow
+            Action:
+            - kms:Encrypt
+            Resource:
+            - !Sub arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/*
+          - Effect: Allow
+            Action:
+            - cloudformation:DescribeStacks
+            Resource:
+            - !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ParentStack}*
+          - Effect: Allow
+            Action:
+            - ses:VerifyEmailIdentity
+            Resource: '*'
 
   # pre deploy lambda  setups the ssm parameter store, verifies the email address
   PreDeployLambda:
@@ -506,18 +510,18 @@ Resources:
       Runtime: python3.6
       Timeout: 120
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PreDeployLambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PreDeployLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # pre deploy lambda  version
   PreDeployLambdaVersion1:
@@ -531,9 +535,9 @@ Resources:
     DependsOn: PreDeployLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref PreDeployLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref PreDeployLambda
       RetentionInDays: 7
 
   ##############################################################################
@@ -548,38 +552,38 @@ Resources:
       AccessControl: BucketOwnerFullControl
       NotificationConfiguration:
         LambdaConfigurations:
-          - Function: !GetAtt ELBLogsLambda.Arn
-            Event: s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: 'prefix'
-                    Value: 'logs/elb'
+        - Function: !GetAtt ELBLogsLambda.Arn
+          Event: s3:ObjectCreated:*
+          Filter:
+            S3Key:
+              Rules:
+              - Name: 'prefix'
+                Value: 'logs/elb'
       LifecycleConfiguration:
         Rules:
-          - ExpirationInDays: 90
-            Id: !Sub ${ParentStack}-DataStore-lifecycle-rule
-            Status: Enabled
-            Transitions:
-              - StorageClass: STANDARD_IA
-                TransitionInDays: 30
-              - StorageClass: GLACIER
-                TransitionInDays: 60
+        - ExpirationInDays: 90
+          Id: !Sub ${ParentStack}-DataStore-lifecycle-rule
+          Status: Enabled
+          Transitions:
+          - StorageClass: STANDARD_IA
+            TransitionInDays: 30
+          - StorageClass: GLACIER
+            TransitionInDays: 60
       VersioningConfiguration:
         Status: Enabled
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-DataStore
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-DataStore
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # data store S3 bucket policy to take backup of logs and config
   DataStorePolicy:
@@ -588,24 +592,24 @@ Resources:
       Bucket: !Ref DataStore
       PolicyDocument:
         Statement:
-          - Action: s3:GetBucketAcl
-            Effect: Allow
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref DataStore
-            Principal:
-              Service: !Sub 'logs.${AWS::Region}.${AWS::URLSuffix}'
-          - Action: s3:PutObject
-            Effect: Allow
-            Resource: !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - !Ref DataStore
-                  - '/*'
-            Principal:
-              Service: !Sub 'logs.${AWS::Region}.${AWS::URLSuffix}'
-              AWS: !FindInMap [AWSELBAccountID, !Ref 'AWS::Region', ID]
+        - Action: s3:GetBucketAcl
+          Effect: Allow
+          Resource: !Join
+          - ''
+          - - 'arn:aws:s3:::'
+            - !Ref DataStore
+          Principal:
+            Service: !Sub 'logs.${AWS::Region}.${AWS::URLSuffix}'
+        - Action: s3:PutObject
+          Effect: Allow
+          Resource: !Join
+          - ''
+          - - 'arn:aws:s3:::'
+            - !Ref DataStore
+            - '/*'
+          Principal:
+            Service: !Sub 'logs.${AWS::Region}.${AWS::URLSuffix}'
+            AWS: !FindInMap [AWSELBAccountID, !Ref 'AWS::Region', ID]
 
   ##############################################################################
   # Log groups
@@ -614,14 +618,14 @@ Resources:
   VpcLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName:  !Sub /mcafee/${ParentStack}-vpcflowlog
+      LogGroupName: !Sub /mcafee/${ParentStack}-vpcflowlog
       RetentionInDays: 7
 
   # ELB log groups
   ELBLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName:  !Sub /mcafee/${ParentStack}-elb
+      LogGroupName: !Sub /mcafee/${ParentStack}-elb
       RetentionInDays: 7
 
   # ePO loggroup
@@ -655,34 +659,32 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: DataBackupLambdaRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                  - logs:CreateExportTask
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - s3:PutObject
-                Resource: !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref DataStore
-                      - '/*'
-
-  # data backup event rule
+      - PolicyName: DataBackupLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            - logs:CreateExportTask
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - s3:PutObject
+            Resource: !Join
+            - ''
+            - - 'arn:aws:s3:::'
+              - !Ref DataStore
+              - '/*'
   DataBackupEventRule:
     Type: AWS::Events::Rule
     Properties:
@@ -690,44 +692,44 @@ Resources:
       ScheduleExpression: rate(1 day)
       State: ENABLED
       Targets:
-        - Arn: !GetAtt DataBackupLambda.Arn
-          Id: !Sub ${ParentStack}-epo
-          Input: !Sub >
-            {
-              "Type": "epo",
-              "LogGroupName": "/mcafee/${ParentStack}-epo"
-            }
-        - Arn: !GetAtt DataBackupLambda.Arn
-          Id: !Sub ${ParentStack}-ah
-          Input: !Sub >
-            {
-              "Type": "ah",
-              "LogGroupName": "/mcafee/${ParentStack}-ah"
-            }
-        - Arn: !GetAtt DataBackupLambda.Arn
-          Id: !Sub ${ParentStack}-dxl
-          Input: !Sub >
-            {
-              "Type": "dxl",
-              "LogGroupName": "/mcafee/${ParentStack}-dxl"
-            }
-        - Arn: !GetAtt DataBackupLambda.Arn
-          Id: !Sub ${ParentStack}-vpcflowlog
-          Input: !Sub >
-            {
-              "Type": "vpcflowlog",
-              "LogGroupName": "/mcafee/${ParentStack}-vpcflowlog"
-            }
+      - Arn: !GetAtt DataBackupLambda.Arn
+        Id: !Sub ${ParentStack}-epo
+        Input: !Sub >
+          {
+            "Type": "epo",
+            "LogGroupName": "/mcafee/${ParentStack}-epo"
+          }
+      - Arn: !GetAtt DataBackupLambda.Arn
+        Id: !Sub ${ParentStack}-ah
+        Input: !Sub >
+          {
+            "Type": "ah",
+            "LogGroupName": "/mcafee/${ParentStack}-ah"
+          }
+      - Arn: !GetAtt DataBackupLambda.Arn
+        Id: !Sub ${ParentStack}-dxl
+        Input: !Sub >
+          {
+            "Type": "dxl",
+            "LogGroupName": "/mcafee/${ParentStack}-dxl"
+          }
+      - Arn: !GetAtt DataBackupLambda.Arn
+        Id: !Sub ${ParentStack}-vpcflowlog
+        Input: !Sub >
+          {
+            "Type": "vpcflowlog",
+            "LogGroupName": "/mcafee/${ParentStack}-vpcflowlog"
+          }
 
-  # Data backup lambda log group name
+# Data backup lambda log group name
   DataBackupLambdaLogGroup:
     Type: AWS::Logs::LogGroup
     DependsOn: DataBackupLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref DataBackupLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref DataBackupLambda
       RetentionInDays: 7
 
   # data backup lambda
@@ -748,18 +750,18 @@ Resources:
       Runtime: python3.6
       Timeout: 300
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-DataBackupLambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-DataBackupLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # data backup lambda version
   DataBackupLambdaVersion1:
@@ -786,37 +788,37 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: AutoCleanupLambdaRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - s3:Delete*
-                  - s3:List*
-                Resource:
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref DataStore
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref DataStore
-                      - '/*'
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: '*'
+      - PolicyName: AutoCleanupLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:Delete*
+            - s3:List*
+            Resource:
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref DataStore
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref DataStore
+                - '/*'
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
 
   # auto cleanup lambda
   AutoCleanupLambda:
@@ -825,25 +827,25 @@ Resources:
     Properties:
       Code:
         S3Bucket: !Ref SourceStore
-        S3Key: !Sub  ${QSS3KeyPrefix}functions/packages/infrastructure/cleanup.zip
+        S3Key: !Sub ${QSS3KeyPrefix}functions/packages/infrastructure/cleanup.zip
       Description: Lambda function to cleanup backup data and logs.
       Handler: cleanup.handler
       Role: !GetAtt AutoCleanupLambdaRole.Arn
       Runtime: python3.6
       Timeout: 180
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-AutoCleanupLambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-AutoCleanupLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # auto cleanup lambda version
   AutoCleanupLambdaVersion1:
@@ -857,9 +859,9 @@ Resources:
     DependsOn: AutoCleanupLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref AutoCleanupLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref AutoCleanupLambda
       RetentionInDays: 7
 
   # auto cleanup custom action
@@ -867,42 +869,38 @@ Resources:
     Type: Custom::AutoCleanupAction
     DependsOn: AutoCleanupLambdaLogGroup
     Properties:
-      ServiceToken:  !GetAtt AutoCleanupLambda.Arn
+      ServiceToken: !GetAtt AutoCleanupLambda.Arn
       DeleteBucket: 'yes'
       BucketNames:
-        - !If
-          - cEnableCleanup
-          - !Ref DataStore
-          - !Ref 'AWS::NoValue'
-
-  ##############################################################################
-  # VPC Flow logs
-  ##############################################################################
+      - !If
+        - cEnableCleanup
+        - !Ref DataStore
+        - !Ref 'AWS::NoValue'
   VpcFlowLogRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Statement:
-          - Action:
-              - sts:AssumeRole
-            Effect: Allow
-            Principal:
-              Service:
-                - vpc-flow-logs.amazonaws.com
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - vpc-flow-logs.amazonaws.com
         Version: '2012-10-17'
       Path: /
       Policies:
-        - PolicyName: VpcFlowLogRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Action:
-                  - logs:CreateLogStream
-                  - logs:DescribeLogGroups
-                  - logs:DescribeLogStreams
-                  - logs:PutLogEvents
-                Effect: Allow
-                Resource: '*'
+      - PolicyName: VpcFlowLogRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - logs:CreateLogStream
+            - logs:DescribeLogGroups
+            - logs:DescribeLogStreams
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
 
   # enable vpc flow logs if advance logging is enabled
   VpcFlowLog:
@@ -926,27 +924,27 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Policies:
-        - PolicyName: ELBLogsLambdaRole
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                  - logs:DescribeLogStreams
-                  - logs:DescribeLogGroups
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                Resource: '*'
+      - PolicyName: ELBLogsLambdaRole
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            - logs:DescribeLogStreams
+            - logs:DescribeLogGroups
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            Resource: '*'
 
   # ELB logs lambda log group name
   ELBLogsLambdaLogGroup:
@@ -954,9 +952,9 @@ Resources:
     DependsOn: ELBLogsLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref ELBLogsLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref ELBLogsLambda
       RetentionInDays: 7
 
   # elb logs upload lambda verison
@@ -967,7 +965,8 @@ Resources:
       Code:
         S3Bucket: !Ref SourceStore
         S3Key: !Sub ${QSS3KeyPrefix}functions/packages/infrastructure/elb-logs.zip
-      Description: Lambda function to move elb logs from Amazon S3 to Amazon cloud watch.
+      Description: Lambda function to move elb logs from Amazon S3 to Amazon cloud
+        watch.
       Handler: elb-logs.handler
       Environment:
         Variables:
@@ -976,18 +975,18 @@ Resources:
       Runtime: nodejs6.10
       Timeout: 300
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-ELBLogsLambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-ELBLogsLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # elb logs upload lambda verison
   ELBLogsLambdaVersion1:
@@ -1014,64 +1013,64 @@ Resources:
     Properties:
       GroupDescription: Open up Device Management Application ports for private instances
       SecurityGroupEgress:
-        - IpProtocol: -1
-          FromPort: 0
-          ToPort: 65535
-          CidrIp: 0.0.0.0/0
+      - IpProtocol: -1
+        FromPort: 0
+        ToPort: 65535
+        CidrIp: 0.0.0.0/0
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: tcp
-          FromPort: 3389
-          ToPort: 3389
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: tcp
-          FromPort: 135
-          ToPort: 135
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: tcp
-          FromPort: 593
-          ToPort: 593
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: tcp
-          FromPort: 445
-          ToPort: 445
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: tcp
-          FromPort: 139
-          ToPort: 139
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: tcp
-          FromPort: 5985
-          ToPort: 5985
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: udp
-          FromPort: 137
-          ToPort: 137
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
-        - IpProtocol: icmp
-          FromPort: -1
-          ToPort: -1
-          SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 3389
+        ToPort: 3389
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 135
+        ToPort: 135
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 593
+        ToPort: 593
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 445
+        ToPort: 445
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 139
+        ToPort: 139
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 5985
+        ToPort: 5985
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: udp
+        FromPort: 137
+        ToPort: 137
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
+      - IpProtocol: icmp
+        FromPort: -1
+        ToPort: -1
+        SourceSecurityGroupId: !Ref BastionSecurityGroupID
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-RDPAdminSecurityGroup
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-RDPAdminSecurityGroup
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
       VpcId: !Ref VPCID
 
   ##############################################################################
@@ -1087,30 +1086,30 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: GetVpcDetailsLambdaRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - ec2:DescribeVpcs
-                  - ec2:DescribeRouteTables
-                  - ec2:DescribeSubnets
-                  - rds:DescribeDBInstances
-                Resource: '*'
+      - PolicyName: GetVpcDetailsLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - ec2:DescribeVpcs
+            - ec2:DescribeRouteTables
+            - ec2:DescribeSubnets
+            - rds:DescribeDBInstances
+            Resource: '*'
 
   # Lambda to get VPC details and additonally db vpc details if required
   GetVpcDetailsLambda:
@@ -1119,25 +1118,25 @@ Resources:
     Properties:
       Code:
         S3Bucket: !Ref SourceStore
-        S3Key:  !Sub ${QSS3KeyPrefix}functions/packages/infrastructure/get-vpc-details.zip
+        S3Key: !Sub ${QSS3KeyPrefix}functions/packages/infrastructure/get-vpc-details.zip
       Description: Lambda function to get VPC details and DB VPC details if required.
       Handler: get-vpc-details.handler
       Role: !GetAtt GetVpcDetailsLambdaRole.Arn
       Runtime: python3.6
       Timeout: 180
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-get-vpc-details-lambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-get-vpc-details-lambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # Get VPC details lambda log group name
   GetVpcDetailsLambdaLogGroup:
@@ -1145,9 +1144,9 @@ Resources:
     DependsOn: GetVpcDetailsLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref GetVpcDetailsLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref GetVpcDetailsLambda
       RetentionInDays: 7
 
   # Get VPC details lambda version
@@ -1161,7 +1160,7 @@ Resources:
     Type: Custom::CFNGetVpcDetails
     DependsOn: GetVpcDetailsLambdaLogGroup
     Properties:
-      ServiceToken:  !GetAtt GetVpcDetailsLambda.Arn
+      ServiceToken: !GetAtt GetVpcDetailsLambda.Arn
       DBInstanceIdentifier: !Ref DBInstanceIdentifier
       VPCID: !Ref VPCID
       PrivateSubnet1ID: !Ref PrivateSubnet1ID
@@ -1174,21 +1173,21 @@ Resources:
     Type: AWS::EC2::VPCPeeringConnection
     Condition: cCreateVPCPeering
     Properties:
-      PeerVpcId: !GetAtt [ GetVpcDetailsCustom, DBVPCID ]
+      PeerVpcId: !GetAtt [GetVpcDetailsCustom, DBVPCID]
       VpcId: !Ref VPCID
       Tags:
-        - Key: Name
-          Value: !Sub DBVPCPeering
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub DBVPCPeering
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # Routes between our vpc and DB vpc (PeeringRouteVpcPrivate1ToDBVpc, PeeringRouteVpcPrivate2ToDBVpc, PeeringRouteDBVpcToVpc)
   PeeringRouteVpcPrivate1ToDBVpc:
@@ -1196,8 +1195,8 @@ Resources:
     Condition: cCreateVPCPeering
     DependsOn: [DBVPCPeering]
     Properties:
-      DestinationCidrBlock: !GetAtt [ GetVpcDetailsCustom, DBVPCCIDR ]
-      RouteTableId: !GetAtt [ GetVpcDetailsCustom, PrivateRouteTable1ID ]
+      DestinationCidrBlock: !GetAtt [GetVpcDetailsCustom, DBVPCCIDR]
+      RouteTableId: !GetAtt [GetVpcDetailsCustom, PrivateRouteTable1ID]
       VpcPeeringConnectionId: !Ref DBVPCPeering
 
   PeeringRouteVpcPrivate2ToDBVpc:
@@ -1205,8 +1204,8 @@ Resources:
     Condition: cCreateVPCPeering
     DependsOn: [DBVPCPeering]
     Properties:
-      DestinationCidrBlock: !GetAtt [ GetVpcDetailsCustom, DBVPCCIDR ]
-      RouteTableId: !GetAtt [ GetVpcDetailsCustom, PrivateRouteTable2ID ]
+      DestinationCidrBlock: !GetAtt [GetVpcDetailsCustom, DBVPCCIDR]
+      RouteTableId: !GetAtt [GetVpcDetailsCustom, PrivateRouteTable2ID]
       VpcPeeringConnectionId: !Ref DBVPCPeering
 
   PeeringRouteDBVpcToVpc:
@@ -1214,8 +1213,8 @@ Resources:
     Condition: cCreateVPCPeering
     DependsOn: [DBVPCPeering]
     Properties:
-      DestinationCidrBlock: !GetAtt [ GetVpcDetailsCustom, VPCCIDR ]
-      RouteTableId: !GetAtt [ GetVpcDetailsCustom, DBVPCRouteTableID ]
+      DestinationCidrBlock: !GetAtt [GetVpcDetailsCustom, VPCCIDR]
+      RouteTableId: !GetAtt [GetVpcDetailsCustom, DBVPCRouteTableID]
       VpcPeeringConnectionId: !Ref DBVPCPeering
 
 
@@ -1230,18 +1229,18 @@ Resources:
         Comment: Managed by McAfee Enterprise Security Management
       Name: !Sub ${SubDomainName}
       HostedZoneTags:
-        - Key: Name
-          Value: !Sub R53PublicHostedZone
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub R53PublicHostedZone
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # sub domain name servers record set in base domain
   NSR53PublicRecordSet:
@@ -1251,7 +1250,7 @@ Resources:
     Properties:
       HostedZoneName: !Sub '${DomainName}.'
       Comment: Sub Domain NS RecordSet
-      Name:  !Sub ${SubDomainName}
+      Name: !Sub ${SubDomainName}
       Type: NS
       TTL: '900'
       ResourceRecords: !GetAtt R53PublicHostedZone.NameServers
@@ -1264,22 +1263,113 @@ Resources:
         Comment: Managed by McAfee Enterprise Security Management
       Name: !Sub ${SubDomainName}
       VPCs:
-        -
-          VPCId: !Ref VPCID
-          VPCRegion: !Ref AWS::Region
+      - VPCId: !Ref VPCID
+        VPCRegion: !Ref AWS::Region
       HostedZoneTags:
-        - Key: Name
-          Value: !Sub R53PrivateHostedZone
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub R53PrivateHostedZone
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
+
+  ##############################################################################
+  # Clean Resources which are attached to Lambda like ENI, etc.
+  # This lambda will get ENIs for the given SecurityGroup and look for ENIs which are associated with Lambdas.
+  # Then detach ENI from SG and delete.
+  ##############################################################################
+
+  # Lambda role for deleting resources associated with lambda
+  DeleteResourcesAssociatedWithLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: DeleteResourcesAssociatedWithLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - ec2:DescribeNetworkInterfaces
+            - ec2:CreateNetworkInterface
+            - ec2:DetachNetworkInterface
+            - ec2:DeleteNetworkInterface
+            Resource: '*'
+
+  # Lambda to delete resources associated with lambda
+  DeleteResourcesAssociatedWithLambda:
+    Type: AWS::Lambda::Function
+    DependsOn: [CopySourceAction, PostDeployLambda]
+    Properties:
+      Code:
+        S3Bucket: !Ref SourceStore
+        S3Key: !Sub ${QSS3KeyPrefix}functions/packages/infrastructure/delete-resources-associated-with-lambda.zip
+      Description: Lambda function to delete resources associated with lambda.
+      Handler: delete-resources-associated-with-lambda.handler
+      Role: !GetAtt DeleteResourcesAssociatedWithLambdaRole.Arn
+      Runtime: python3.6
+      Timeout: 300
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-DeleteResourcesAssociatedWithLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
+
+  # Lambda version to delete resources associated with lambda
+  DeleteResourcesAssociatedWithLambdaV1:
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName: !Ref DeleteResourcesAssociatedWithLambda
+
+  # Log group for delete resources associated with lambda lambda
+  DeleteResourcesAssociatedWithLambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: DeleteResourcesAssociatedWithLambda
+    Properties:
+      LogGroupName: !Join
+      - ''
+      - - '/aws/lambda/'
+        - !Ref DeleteResourcesAssociatedWithLambda
+      RetentionInDays: 7
+
+  # Custom action to invoke the delete resources associated with lambda, for now its just ENI associated with security group
+  DeleteResourcesAssociatedWithLambdaCustomAction:
+    Type: Custom::DeleteResourcesAssociatedWithLambdaCustomAction
+    DependsOn: [DeleteResourcesAssociatedWithLambdaLogGroup]
+    Properties:
+      ServiceToken: !GetAtt DeleteResourcesAssociatedWithLambda.Arn
+      SecurityGroup: !Ref PostDeployLambdaSecurityGroup
+
 
   ##############################################################################
   # Post deployment lambdar role, function which setups up the resource groups
@@ -1292,62 +1382,98 @@ Resources:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       Path: /
       Policies:
-        - PolicyName: PostDeployLambdaRole
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - ses:SendEmail
-                  - ses:SendRawEmail
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:ListBucket
-                Resource:
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref SourceStore
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - !Ref SourceStore
-                      - '/*'
-              - Effect: Allow
-                Action:
-                  - resource-groups:UpdateGroup
-                  - resource-groups:DeleteGroup
-                  - resource-groups:CreateGroup
-                  - resource-groups:GetGroup
-                Resource: '*'
-              - Effect: Allow
-                Action:
-                  - ssm:PutParameter
-                  - ssm:GetParameter
-                  - ssm:DeleteParameter
-                Resource:
-                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*
+      - PolicyName: PostDeployLambdaRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            - s3:ListBucket
+            Resource:
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref SourceStore
+            - !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref SourceStore
+                - '/*'
+          - Effect: Allow
+            Action:
+            - resource-groups:UpdateGroup
+            - resource-groups:DeleteGroup
+            - resource-groups:CreateGroup
+            - resource-groups:GetGroup
+            Resource: '*'
+          - Effect: Allow
+            Action:
+            - ssm:PutParameter
+            - ssm:GetParameter
+            - ssm:DeleteParameter
+            Resource:
+            - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*
+          - Effect: Allow
+            Action:
+            - ec2:DescribeNetworkInterfaces
+            - ec2:CreateNetworkInterface
+            - ec2:DeleteNetworkInterface
+            Resource: '*'
 
   # Post deploy lambda
+  PostDeployLambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for PostDeployLambda.
+      SecurityGroupEgress:
+      - IpProtocol: -1
+        FromPort: 0
+        ToPort: 65535
+        CidrIp: 0.0.0.0/0
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PostDeployLambdaSecurityGroup
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: PostDeployLambda
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
+      VpcId: !Ref VPCID
+
   PostDeployLambda:
     Type: AWS::Lambda::Function
     DependsOn: CopySourceAction
     Properties:
+      VpcConfig:
+        SecurityGroupIds:
+        - !Ref PostDeployLambdaSecurityGroup
+        SubnetIds:
+        - !Ref PrivateSubnet1ID
+        - !Ref PrivateSubnet2ID
       Code:
         S3Bucket: !Ref SourceStore
         S3Key: !Sub ${QSS3KeyPrefix}functions/packages/infrastructure/post-deploy.zip
@@ -1357,18 +1483,18 @@ Resources:
       Runtime: python3.6
       Timeout: 300
       Tags:
-        - Key: Name
-          Value: !Sub ${AWS::StackName}-PostDeployLambda
-        - Key: Owner
-          Value: !Ref AdminEmailAddress
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Product
-          Value: McAfee-ePO-Base
-        - Key: Solution
-          Value: McAfee-ePO
-        - Key: mcafee:cloudformation:stack-name
-          Value: !Sub ${ParentStack}
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-PostDeployLambda
+      - Key: Owner
+        Value: !Ref AdminEmailAddress
+      - Key: Environment
+        Value: !Ref Environment
+      - Key: Product
+        Value: McAfee-ePO-Base
+      - Key: Solution
+        Value: McAfee-ePO
+      - Key: mcafee:cloudformation:stack-name
+        Value: !Sub ${ParentStack}
 
   # Post deploylambda version
   PostDeployLambdaVersion1:
@@ -1382,9 +1508,9 @@ Resources:
     DependsOn: PostDeployLambda
     Properties:
       LogGroupName: !Join
-            - ''
-            - - '/aws/lambda/'
-              - !Ref PostDeployLambda
+      - ''
+      - - '/aws/lambda/'
+        - !Ref PostDeployLambda
       RetentionInDays: 7
 
 Outputs:
@@ -1399,52 +1525,57 @@ Outputs:
     Description: Amazon S3 bucket for keeping the data and logs
     Value: !Ref DataStore
     Export:
-      Name:  !Sub ${AWS::StackName}-DataStore
+      Name: !Sub ${AWS::StackName}-DataStore
   #export log groups
   ELBLogGroup:
     Description: AWS ELB log group name
     Value: !Ref ELBLogGroup
     Export:
-      Name:  !Sub ${AWS::StackName}-ELBLogGroup
+      Name: !Sub ${AWS::StackName}-ELBLogGroup
   ePOLogGroup:
     Description: ePO log group name
     Value: !Ref ePOLogGroup
     Export:
-      Name:  !Sub ${AWS::StackName}-ePOLogGroup
+      Name: !Sub ${AWS::StackName}-ePOLogGroup
   AHLogGroup:
     Description: AH log group name
     Value: !Ref AHLogGroup
     Export:
-      Name:  !Sub ${AWS::StackName}-AHLogGroup
+      Name: !Sub ${AWS::StackName}-AHLogGroup
   DXLLogGroup:
     Description: DXL log group name
     Value: !Ref DXLLogGroup
     Export:
-      Name:  !Sub '${AWS::StackName}-DXLLogGroup'
+      Name: !Sub '${AWS::StackName}-DXLLogGroup'
   # export lambdas
   PreDeployLambdaARN:
     Description: Pre deployment action lambda ARN
     Value: !GetAtt [PreDeployLambda, Arn]
     Export:
-      Name:  !Sub ${AWS::StackName}-PreDeployLambda
+      Name: !Sub ${AWS::StackName}-PreDeployLambda
   PostDeployLambdaARN:
     Description: Post deployment action lambda ARN
     Value: !GetAtt [PostDeployLambda, Arn]
     Export:
-      Name:  !Sub ${AWS::StackName}-PostDeployLambda
+      Name: !Sub ${AWS::StackName}-PostDeployLambda
+  DeleteResourcesAssociatedWithLambdaArn:
+    Description: Delete resources associated with  lambda ARN
+    Value: !GetAtt [DeleteResourcesAssociatedWithLambda, Arn]
+    Export:
+      Name: !Sub ${AWS::StackName}-DeleteResourcesAssociatedWithLambda
   PostDeployLambdaRole:
     Description: Post deployment action lambda role name
     Value: !Ref PostDeployLambdaRole
     Export:
-      Name:  !Sub ${AWS::StackName}-PostDeployLambdaRole
+      Name: !Sub ${AWS::StackName}-PostDeployLambdaRole
   # network exports
   SolutionDBInstanceIdentifier:
     Description: Unique DB instance identifier based on parameters
     Value:
-     Fn::If:
-        - cCreateVPCPeering
-        - !Ref DBInstanceIdentifier
-        - !Sub ${ParentStack}-rds
+      Fn::If:
+      - cCreateVPCPeering
+      - !Ref DBInstanceIdentifier
+      - !Sub ${ParentStack}-rds
   VPCID:
     Description: VPC ID
     Value: !Ref VPCID
@@ -1452,7 +1583,7 @@ Outputs:
       Name: !Sub ${AWS::StackName}-VPCID
   VPCCIDR:
     Description: VPC CIDR
-    Value: !GetAtt [ GetVpcDetailsCustom, VPCCIDR ]
+    Value: !GetAtt [GetVpcDetailsCustom, VPCCIDR]
     Export:
       Name: !Sub ${AWS::StackName}-VPCCIDR
   PublicSubnet1ID:
@@ -1462,7 +1593,7 @@ Outputs:
       Name: !Sub ${AWS::StackName}-PublicSubnet1ID
   PublicSubnet1CIDR:
     Description: VPC Public Subnet-1 CIDR
-    Value: !GetAtt [ GetVpcDetailsCustom, PublicSubnet1CIDR ]
+    Value: !GetAtt [GetVpcDetailsCustom, PublicSubnet1CIDR]
     Export:
       Name: !Sub ${AWS::StackName}-PublicSubnet1CIDR
   PublicSubnet2ID:
@@ -1472,7 +1603,7 @@ Outputs:
       Name: !Sub ${AWS::StackName}-PublicSubnet2ID
   PublicSubnet2CIDR:
     Description: VPC Public Subnet-2 CIDR
-    Value: !GetAtt [ GetVpcDetailsCustom, PublicSubnet2CIDR ]
+    Value: !GetAtt [GetVpcDetailsCustom, PublicSubnet2CIDR]
     Export:
       Name: !Sub '${AWS::StackName}-PublicSubnet2CIDR'
   PrivateSubnet1ID:
@@ -1482,7 +1613,7 @@ Outputs:
       Name: !Sub ${AWS::StackName}-PrivateSubnet1ID
   PrivateSubnet1CIDR:
     Description: VPC Private Subnet-1 CIDR
-    Value: !GetAtt [ GetVpcDetailsCustom, PrivateSubnet1CIDR ]
+    Value: !GetAtt [GetVpcDetailsCustom, PrivateSubnet1CIDR]
     Export:
       Name: !Sub ${AWS::StackName}-PrivateSubnet1CIDR
   PrivateSubnet2ID:
@@ -1492,7 +1623,7 @@ Outputs:
       Name: !Sub ${AWS::StackName}-PrivateSubnet2ID
   PrivateSubnet2CIDR:
     Description: VPC Private Subnet-2 CIDR
-    Value: !GetAtt [ GetVpcDetailsCustom, PrivateSubnet2CIDR ]
+    Value: !GetAtt [GetVpcDetailsCustom, PrivateSubnet2CIDR]
     Export:
       Name: !Sub ${AWS::StackName}-PrivateSubnet2CIDR
   RDPAdminSecurityGroup:
