@@ -144,7 +144,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hosted-epo-quickstart-reference
+    Default: hepo-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -154,7 +154,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/1-0-72/
+    Default: artifacts/latest/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
