@@ -439,7 +439,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hepo-quickstart
+    Default: hosted-epo-quickstart-reference
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -449,7 +449,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/latest/
+    Default: artifacts/1-0-72/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -513,45 +513,45 @@ Mappings:
       MFEEPOAGENTHANDLERHVM: McAfee ePO Agent Handler Image
       MFEDXLBROKERHVM: McAfee Data Exchange Layer Image
     us-west-2:
-      MFEDXLBROKERHVM: ami-a4f8b0dc
-      MFEEPOAGENTHANDLERHVM: ami-e2fcb49a
-      MFEEPOSERVERHVM: ami-90fcb4e8
+      MFEDXLBROKERHVM: ami-f5f5bb8d
+      MFEEPOAGENTHANDLERHVM: ami-31f2bc49
+      MFEEPOSERVERHVM: ami-eb084193
     us-east-1:
-      MFEEPOAGENTHANDLERHVM: ami-942679eb
-      MFEEPOSERVERHVM: ami-bd227dc2
-      MFEDXLBROKERHVM: ami-2e306f51
+      MFEDXLBROKERHVM: ami-cc6031b3
+      MFEEPOSERVERHVM: ami-cd6031b2
+      MFEEPOAGENTHANDLERHVM: ami-5561302a
     ca-central-1:
-      MFEDXLBROKERHVM: ami-489c1e2c
-      MFEEPOAGENTHANDLERHVM: ami-a19f1dc5
-      MFEEPOSERVERHVM: ami-4f9c1e2b
+      MFEEPOSERVERHVM: ami-0eee6c6a
+      MFEDXLBROKERHVM: ami-0fec6e6b
+      MFEEPOAGENTHANDLERHVM: ami-e5e86a81
     eu-west-2:
-      MFEDXLBROKERHVM: ami-6428c103
-      MFEEPOSERVERHVM: ami-ba29c0dd
-      MFEEPOAGENTHANDLERHVM: ami-0fd23b68
+      MFEDXLBROKERHVM: ami-3f8b6258
+      MFEEPOSERVERHVM: ami-3e8b6259
+      MFEEPOAGENTHANDLERHVM: ami-2bbe574c
     us-west-1:
-      MFEEPOSERVERHVM: ami-3f72945c
-      MFEEPOAGENTHANDLERHVM: ami-3d72945e
-      MFEDXLBROKERHVM: ami-3e72945d
+      MFEDXLBROKERHVM: ami-058e6866
+      MFEEPOAGENTHANDLERHVM: ami-878660e4
+      MFEEPOSERVERHVM: ami-63816700
     ap-northeast-1:
-      MFEDXLBROKERHVM: ami-64df0f1b
-      MFEEPOAGENTHANDLERHVM: ami-06c01079
-      MFEEPOSERVERHVM: ami-31d9094e
+      MFEEPOAGENTHANDLERHVM: ami-52b7602d
+      MFEEPOSERVERHVM: ami-978453e8
+      MFEDXLBROKERHVM: ami-2ab76055
     eu-central-1:
-      MFEDXLBROKERHVM: ami-36dae4dd
-      MFEEPOSERVERHVM: ami-f5dfe11e
-      MFEEPOAGENTHANDLERHVM: ami-f4dfe11f
+      MFEEPOSERVERHVM: ami-50dde1bb
+      MFEDXLBROKERHVM: ami-b6dee25d
+      MFEEPOAGENTHANDLERHVM: ami-51dde1ba
     ap-southeast-2:
-      MFEDXLBROKERHVM: ami-23b76f41
-      MFEEPOAGENTHANDLERHVM: ami-84bb63e6
-      MFEEPOSERVERHVM: ami-24b76f46
+      MFEEPOSERVERHVM: ami-d8fd24ba
+      MFEEPOAGENTHANDLERHVM: ami-11f12873
+      MFEDXLBROKERHVM: ami-3efd245c
     ap-southeast-1:
-      MFEDXLBROKERHVM: ami-d9ebe6a5
-      MFEEPOAGENTHANDLERHVM: ami-c4ebe6b8
-      MFEEPOSERVERHVM: ami-daebe6a6
+      MFEEPOSERVERHVM: ami-4c999a30
+      MFEEPOAGENTHANDLERHVM: ami-e8969594
+      MFEDXLBROKERHVM: ami-8d989bf1
     us-east-2:
-      MFEEPOSERVERHVM: ami-e4a69f81
-      MFEEPOAGENTHANDLERHVM: ami-5da69f38
-      MFEDXLBROKERHVM: ami-e7a69f82
+      MFEEPOAGENTHANDLERHVM: ami-6d0b3208
+      MFEEPOSERVERHVM: ami-6c0b3209
+      MFEDXLBROKERHVM: ami-3a01385f
   NodeTierMap:
     '1-10K': {'Tier': '1'}
     '10K-25K': {'Tier': '2'}

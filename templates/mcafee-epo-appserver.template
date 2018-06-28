@@ -334,7 +334,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hepo-quickstart
+    Default: hosted-epo-quickstart-reference
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -344,7 +344,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/latest/
+    Default: artifacts/1-0-72/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -411,7 +411,8 @@ Resources:
           "OnPremiseDomainName": {"Type": "String","Value": "${OnPremiseDomainName}","Description":
         "On Premise domain name."},
           "OnPremiseServerDNS": {"Type": "String","Value": "${OnPremiseServerDNS}","Description":
-        "On Premise DNS server IP."} }
+        "On Premise DNS server IP."}
+        }
 
 # Sync ePO instance parameters lambda role
   SyncEPOInstanceParametersLambdaRole:

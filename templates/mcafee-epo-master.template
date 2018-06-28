@@ -468,7 +468,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hepo-quickstart
+    Default: hosted-epo-quickstart-reference
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -478,7 +478,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/latest/
+    Default: artifacts/1-0-72/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -531,26 +531,26 @@ Mappings:
     AMI:
       MFEBASTIONHVM: McAfee Bastion Image
     us-west-2:
-      MFEBASTIONHVM: ami-7bfab203
+      MFEBASTIONHVM: ami-c3f2bcbb
 
     us-east-1:
-      MFEBASTIONHVM: ami-7b5d0204
+      MFEBASTIONHVM: ami-6b633214
     ca-central-1:
-      MFEBASTIONHVM: ami-a29f1dc6
+      MFEBASTIONHVM: ami-08ec6e6c
     eu-west-2:
-      MFEBASTIONHVM: ami-34d23b53
+      MFEBASTIONHVM: ami-14b75e73
     us-west-1:
-      MFEBASTIONHVM: ami-907e98f3
+      MFEBASTIONHVM: ami-bf8f69dc
     ap-northeast-1:
-      MFEBASTIONHVM: ami-cbdf0fb4
+      MFEBASTIONHVM: ami-2bb76054
     eu-central-1:
-      MFEBASTIONHVM: ami-c7fbc52c
+      MFEBASTIONHVM: ami-53dde1b8
     ap-southeast-2:
-      MFEBASTIONHVM: ami-21a87043
+      MFEBASTIONHVM: ami-a6ff26c4
     ap-southeast-1:
-      MFEBASTIONHVM: ami-dbebe6a7
+      MFEBASTIONHVM: ami-ab999ad7
     us-east-2:
-      MFEBASTIONHVM: ami-e5a69f80
+      MFEBASTIONHVM: ami-ce0039ab
 Resources:
 
   # Network layer stack to create network resources like VPC, Subnets, NAT, & Routing Table
