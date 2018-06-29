@@ -3,25 +3,67 @@ global:
   owner: quickstart-eng@amazon.com
   qsname: quickstart-mcafee-epo
   regions:
-    - ap-northeast-1
-    - ap-northeast-2
-    - ap-south-1
-    - ap-southeast-1
-    - ap-southeast-2
-    - ca-central-1
-    - eu-central-1
-    - eu-west-1
-    - sa-east-1
     - us-east-1
     - us-east-2
     - us-west-1
+    - ca-central-1
     - us-west-2
+    - eu-central-1
+    - eu-west-2
+    - ap-southeast-1 
+    - ap-southeast-2
+    - ap-northeast-1
+
   reporting: true
- 
 tests:
-  quickstart-mcafee-epot1:
-    parameter_input: quickstart-mcafee-epo-example-params1.json
-    template_file: quickstart-mcafee-epo-example1.template
-  quickstart-mcafee-epot2:
-    parameter_input: quickstart-mcafee-epo-example-params2.json
-    template_file: quickstart-mcafee-epo-example2.template
+  mcafee-epo-t1:
+    regions:
+      - us-west-1
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-us-west-1.json
+  mcafee-epo-t2:
+    regions:
+      - us-east-1
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-us-east-1.json
+  mcafee-epo-t3:
+    regions:
+      - us-east-2
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-us-east-2.json
+  mcafee-epo-t4:
+    regions:
+      - ca-central-1
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-us-ca-central-1.json
+  mcafee-epo-t5:
+    regions:
+      - eu-central-1
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-eu-central-1.json
+  mcafee-epo-t6:
+    regions:
+      - eu-west-2
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-eu-west-2.json
+  mcafee-epo-t7:
+    regions:
+      - ap-southeast-1
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-ap-southeast-1.json
+  mcafee-epo-t8:
+    regions:
+      - ap-southeast-2
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-ap-southeast-2.json
+  mcafee-epo-t9:
+    regions:
+      - ap-northeast-1
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-ap-northeast-1.json
+  mcafee-epo-t10:
+    regions:
+      - us-west-2
+    template_file: mcafee-epo-master.template
+    parameter_input: stack-params-us-west-2.json
+
