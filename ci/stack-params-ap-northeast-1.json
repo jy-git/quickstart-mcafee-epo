@@ -1,4 +1,4 @@
-  [  
+  [
     {
      "ParameterKey": "ProtectedInstances",
      "ParameterValue": "1-10K"
@@ -21,7 +21,7 @@
     },
     {
      "ParameterKey": "KeyPairName",
-     "ParameterValue": "$[alfred_getkeypair]" 
+     "ParameterValue": "$[alfred_getkeypair]"
     },
     {
      "ParameterKey": "AvailabilityZones",
@@ -50,10 +50,6 @@
     {
      "ParameterKey": "RemoteAccessCIDR",
      "ParameterValue": "0.0.0.0/0"
-    },
-    {
-     "ParameterKey": "EPOLicenseKey",
-     "ParameterValue": ""
     },
     {
      "ParameterKey": "EPOAdminUserName",
@@ -117,7 +113,7 @@
     },
     {
      "ParameterKey": "AutoApproval",
-     "ParameterValue": "Yes"
+     "ParameterValue": "Automatic"
     },
     {
      "ParameterKey": "AdminEmailAddress",

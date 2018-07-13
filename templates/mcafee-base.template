@@ -9,6 +9,7 @@ Metadata:
       Parameters:
       - Environment
       - DomainName
+      - HostedZoneID
       - SubDomainName
     - Label:
         default: Peer-Parent Stack Configuration
@@ -42,6 +43,8 @@ Metadata:
         default: Deployment Environment
       DomainName:
         default: Domain Name
+      HostedZoneID:
+        default: Domain Public Hosted Zone ID
       SubDomainName:
         default: Sub Domain Name
       ParentStack:
@@ -82,6 +85,10 @@ Parameters:
       We recommend either to register AWS Route 53 domain name so that public DNS
       records can be propagated automatically OR add the sub domain Name Server(NS)
       records into your main domain server.'
+    Default: ''
+    Type: String
+  HostedZoneID:
+    Description: Domain name hosted zone ID (public) for the passed domain name.
     Default: ''
     Type: String
   SubDomainName:
@@ -144,7 +151,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hosted-epo-quickstart-reference
+    Default: hepo-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -154,7 +161,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/1-0-72/
+    Default: artifacts/1-0-87/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -1248,7 +1255,7 @@ Resources:
     Condition: cExistingDomain
     DependsOn: R53PublicHostedZone
     Properties:
-      HostedZoneName: !Sub '${DomainName}.'
+      HostedZoneId: !Sub ${HostedZoneID}
       Comment: Sub Domain NS RecordSet
       Name: !Sub ${SubDomainName}
       Type: NS

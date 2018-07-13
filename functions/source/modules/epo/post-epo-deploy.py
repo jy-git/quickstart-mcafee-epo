@@ -110,6 +110,7 @@ def epo_elb_certifcate_handler(user_data, request_type):
     elif request_type == 'Delete':
         iam_client = boto3.client('iam')
         iam_client.delete_server_certificate(ServerCertificateName=('EPO_ELB_' + parent_stack_name))
+        print('certificate deleted')
 
 
 def handler(event, context):
@@ -134,4 +135,4 @@ def handler(event, context):
         return send_response(event, response, status='SUCCESS', reason="succesfully applied epo applicaiton server post deployment actions")
     except ClientError as e:
         print(str(e))
-        return send_response(event, response, status='SUCCESS', reason="Was not able to epo applicaiton server post deployment actions")
+        return send_response(event, response, status='SUCCESS', reason="Not able to complete epo applicaiton server post deployment actions")
