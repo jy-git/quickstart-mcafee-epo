@@ -1,22 +1,24 @@
 # quickstart-mcafee-epo
 ## McAfee ePO on the AWS Cloud
 
-This Quick Start sets up a highly available, secure AWS environment, and launches McAfee ePolicy Orchestrator (ePO) Security Management Platform that integrates with Amazon Web Services(AWS) such as Amazon Managed Relational Database Service(RDS), Amazon Simple Storage Service (Amazon S3) and Amazon CloudWatch.
+This Quick Start sets up an Amazon Web Services (AWS) architecture and deploys McAfee ePolicy Orchestrator (McAfee ePO) on the AWS Cloud, using services such as Amazon Elastic Compute Cloud (Amazon EC2), Amazon Virtual Private Cloud (Amazon VPC), and Amazon Relational Database Service (Amazon RDS). The Quick Start also uses AWS best practices to address common scalability, high availability, and security requirements.
 
-Use this quick start to deploy McAfee ePO to manage from a single console endpoint security, data loss prevention, encryption, public cloud server (your AWS environment), and the innovative information sharing Data Exchange Layer (DXL)
+McAfee ePO is a centralized, extensible platform that enables you to manage and enforce your security policies. It detects threats and helps to protect endpoints against these threats in your network.
 
-Simplify. Accelerate. Orchestrate. This security management platform allows you to handle a comprehensive threat defense lifecycle so you can protect, detect & correct from a common view across your IT environment. Gain global, contextual visibility into changing events and a cross-product command and control core. Intelligently connect dynamic context from global threat intelligence, enterprise risk, and system security posture in real time. This interlacing of threat intelligence and risk management instantly blocks damaging attacks and enables you to adjust your security posture as risks change.
+In less than an hour, you can use a single console—the McAfee ePO console—to manage endpoint security, data loss prevention, encryption, server security in the public cloud, and the information-sharing Data Exchange Layer (DXL).
+
+McAfee ePO enables you to handle a comprehensive threat defense lifecycle, to protect, detect, and correct from a common view across your IT environment. You can intelligently connect dynamic context from global threat intelligence, enterprise risk, and system security posture in real time. 
 
 The AWS CloudFormation templates included with the Quick Start automate the following:
 
-- Deploying the McAfee ePO Security Management Platform into a new virtual private cloud (VPC)
-- Deploying the McAfee ePO Security Management Platform into an existing VPC in your AWS account
+- Deploying McAfee ePO into a new virtual private cloud (VPC)
+- Deploying McAfee ePO into an existing VPC in your AWS account
 
 You can also use the AWS CloudFormation templates as a starting point for your own implementation.
 
-![Quick Start architecture for McAfee ePO on AWS Cloud]()
+![Quick Start architecture for McAfee ePO on AWS Cloud](https://d1.awsstatic.com/partner-network/QuickStart/datasheets/mcafee-epo-on-aws-architecture.ae57e4dd3719f42ff920cd80faef2853f993cccf.png)
 
-For architectural details, best practices, step-by-step instructions, and customization options, see the [deployment guide]().
+For architectural details, best practices, step-by-step instructions, and customization options, see the [deployment guide](https://fwd.aws/Jq6dV).
 
 To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
 If you'd like to submit code for this Quick Start, please review the [AWS Quick Start Contributor's Kit](https://aws-quickstart.github.io/).
