@@ -71,7 +71,7 @@ Metadata:
       - QSS3KeyPrefix
     ParameterLabels:
       ProtectedInstances:
-        default: Endpoints Size
+        default: Number of Endpoints
       Environment:
         default: Deployment Environment
       DomainName:
@@ -97,9 +97,9 @@ Metadata:
       BastionSecurityGroupID:
         default: Bastion Security Group ID
       OnPremiseDomainName:
-        default: On Premise Domain Name
+        default: On Premises Domain Name
       OnPremiseServerDNS:
-        default: On Premise Server DNS
+        default: On Premises Server DNS
       EPOLicenseKey:
         default: License Key
       EPOAdminUserName:
@@ -139,9 +139,9 @@ Metadata:
       ClientAccessCIDR:
         default: External Access CIDR
       EnableAutoUpdate:
-        default: Enable Auto Update
+        default: Easy Update
       AutoApproval:
-        default: Auto Approval
+        default: Application of Updates
       AdminEmailAddress:
         default: Operator Email
       ApproverEmailAddress:
@@ -163,7 +163,7 @@ Parameters:
     - '250K-400K'
     - '400K-500K'
     Default: '1-10K'
-    Description: Select how many endpoint instances would you like to protect.
+    Description: The number of endpoint instances you want to protect.
     Type: String
   Environment:
     AllowedValues:
@@ -229,22 +229,21 @@ Parameters:
     Type: AWS::EC2::SecurityGroup::Id
   OnPremiseDomainName:
     AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: '[Optional] On Premise Domain Name which you want to resolve from
-      inside AWS VPC (e.g. mcafee.com). This is required for DNS resolution between
-      ePO instance which is inside VPC and On Premise Services like LDAP(ldap.mcafee.com).
-      NOTE: This is only required if you are planning to use first active directory
-      and second you are planning to use domain name instead of IP address for LDAP
+    Description: '[Optional] The on-premises domain name that you want to resolve
+      from inside the VPC (e.g. mcafee.com). This is required for DNS resolution between
+      the ePO instance in the VPC and on-premises services like LDAP(ldap.mcafee.com).
+      Note: This is only required if you are planning to use Active Directory and
+      if you are planning to use a domain name instead of an IP address for the LDAP
       server.'
     Default: ''
     Type: String
   OnPremiseServerDNS:
     Default: ''
-    Description: '[Optional] On Premise Server DNS (e.g. 192.168.1.1) which will be
-      used to resolve the domain name queries. This is required for DNS resolution
-      between ePO instance which is inside VPC and On Premise Services like LDAP(ldap.mcafee.com).
-      NOTE: This is only required if you are planning to use first active directory
-      and second you are planning to use domain name instead of IP address for LDAP
-      server.'
+    Description: '[Optional] The on-premises DNS (e.g. 192.168.1.1) that will be used
+      to resolve the domain name queries. This is required for DNS resolution between
+      the ePO instance in VPC and services like LDAP(ldap.mcafee.com). Note: This
+      is only required if you are planning to use Active Directory if you are planning
+      to use a domain name instead of an IP address for the LDAP server.'
     MaxLength: 256
     Type: String
   EPOLicenseKey:
@@ -393,27 +392,27 @@ Parameters:
   ClientAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Description: CIDR block that's that is permitted to allowed to connect from on
-      premise endpoints to Agent Handler's/DXL Brokers. e.g., x.x.x.x/16-28. Keep
-      default setting to allow roaming endpoints.
+    Description: CIDR block that is allowed to connect from on-premises endpoints
+      to Agent Handler's/DXL Brokers. e.g., x.x.x.x/16-28.
     Type: String
   EnableAutoUpdate:
     AllowedValues:
     - 'Yes'
     - 'No'
     Default: 'Yes'
-    Description: Recommended, enabled auto updates of mcafee server stack components(e.g.
+    Description: Recommended, enables auto updates of mcafee server stack components(e.g.
       AH, DXL).
     Type: String
   AutoApproval:
     AllowedValues:
-    - 'Yes'
-    - 'No'
-    Default: 'Yes'
+    - 'Automatic'
+    - 'Update after Approval'
+    Default: 'Automatic'
     Description: 'Auto or Manual approval to review the change sets on auto updates
-      of stack components. Note: For no auto approval cases(Selected No), make sure
-      to provide approver email address so that notifications can be sent for approval
-      or user have to watch the pipeline periodically for approvals.'
+      of stack components. Note: For no auto approval cases(Selected Update after
+      Approval), make sure to provide approver email address so that notifications
+      can be sent for approval or user have to watch the pipeline periodically for
+      approvals.'
     Type: String
   AdminEmailAddress:
     AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)
@@ -422,6 +421,7 @@ Parameters:
       In addtion this will be used for tagging of ownership of resources.
     Type: String
   ApproverEmailAddress:
+    AllowedPattern: ^(?![\s\S])|(([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?))
     ConstraintDescription: Must be a valid email address.
     Default: ''
     Description: Approver Email address where approval will be sent in case of auto
@@ -439,7 +439,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: aws-quickstart
+    Default: hepo-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -449,7 +449,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: quickstart-mcafee-epo/
+    Default: artifacts/1-0-87/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -476,7 +476,7 @@ Rules:
   ValidateApprovalEmail:
     RuleCondition: !Equals
     - !Ref AutoApproval
-    - 'No'
+    - 'Update after Approval'
     Assertions:
     - Assert: !Not
       - !Equals
@@ -513,45 +513,45 @@ Mappings:
       MFEEPOAGENTHANDLERHVM: McAfee ePO Agent Handler Image
       MFEDXLBROKERHVM: McAfee Data Exchange Layer Image
     us-west-2:
-      MFEDXLBROKERHVM: ami-f5f5bb8d
-      MFEEPOAGENTHANDLERHVM: ami-31f2bc49
-      MFEEPOSERVERHVM: ami-eb084193
+      MFEDXLBROKERHVM: ami-f41e4c8c
+      MFEEPOAGENTHANDLERHVM: ami-871e4cff
+      MFEEPOSERVERHVM: ami-801e4cf8
     us-east-1:
-      MFEDXLBROKERHVM: ami-cc6031b3
-      MFEEPOSERVERHVM: ami-cd6031b2
-      MFEEPOAGENTHANDLERHVM: ami-5561302a
-    ca-central-1:
-      MFEEPOSERVERHVM: ami-0eee6c6a
-      MFEDXLBROKERHVM: ami-0fec6e6b
-      MFEEPOAGENTHANDLERHVM: ami-e5e86a81
-    eu-west-2:
-      MFEDXLBROKERHVM: ami-3f8b6258
-      MFEEPOSERVERHVM: ami-3e8b6259
-      MFEEPOAGENTHANDLERHVM: ami-2bbe574c
-    us-west-1:
-      MFEDXLBROKERHVM: ami-058e6866
-      MFEEPOAGENTHANDLERHVM: ami-878660e4
-      MFEEPOSERVERHVM: ami-63816700
+      MFEEPOSERVERHVM: ami-44d0e33b
+      MFEDXLBROKERHVM: ami-46d0e339
+      MFEEPOAGENTHANDLERHVM: ami-cbd7e4b4
     ap-northeast-1:
-      MFEEPOAGENTHANDLERHVM: ami-52b7602d
-      MFEEPOSERVERHVM: ami-978453e8
-      MFEDXLBROKERHVM: ami-2ab76055
+      MFEEPOSERVERHVM: ami-e5781508
+      MFEEPOAGENTHANDLERHVM: ami-006a07ed
+      MFEDXLBROKERHVM: ami-0d107de0
+    us-west-1:
+      MFEEPOAGENTHANDLERHVM: ami-794aa91a
+      MFEDXLBROKERHVM: ami-d845a6bb
+      MFEEPOSERVERHVM: ami-db45a6b8
+    eu-west-2:
+      MFEEPOSERVERHVM: ami-d4e00bb3
+      MFEEPOAGENTHANDLERHVM: ami-21e40f46
+      MFEDXLBROKERHVM: ami-2ee40f49
+    ca-central-1:
+      MFEDXLBROKERHVM: ami-5ac04d3e
+      MFEEPOSERVERHVM: ami-a6c04dc2
+      MFEEPOAGENTHANDLERHVM: ami-41c74a25
     eu-central-1:
-      MFEEPOSERVERHVM: ami-50dde1bb
-      MFEDXLBROKERHVM: ami-b6dee25d
-      MFEEPOAGENTHANDLERHVM: ami-51dde1ba
+      MFEDXLBROKERHVM: ami-d724233c
+      MFEEPOSERVERHVM: ami-ab2f2840
+      MFEEPOAGENTHANDLERHVM: ami-5e2720b5
     ap-southeast-2:
-      MFEEPOSERVERHVM: ami-d8fd24ba
-      MFEEPOAGENTHANDLERHVM: ami-11f12873
-      MFEDXLBROKERHVM: ami-3efd245c
+      MFEDXLBROKERHVM: ami-792b8e1b
+      MFEEPOAGENTHANDLERHVM: ami-3859fc5a
+      MFEEPOSERVERHVM: ami-432a8f21
     ap-southeast-1:
-      MFEEPOSERVERHVM: ami-4c999a30
-      MFEEPOAGENTHANDLERHVM: ami-e8969594
-      MFEDXLBROKERHVM: ami-8d989bf1
+      MFEEPOAGENTHANDLERHVM: ami-998bf373
+      MFEDXLBROKERHVM: ami-2191e9cb
+      MFEEPOSERVERHVM: ami-a3afd749
     us-east-2:
-      MFEEPOAGENTHANDLERHVM: ami-6d0b3208
-      MFEEPOSERVERHVM: ami-6c0b3209
-      MFEDXLBROKERHVM: ami-3a01385f
+      MFEDXLBROKERHVM: ami-b3f2c9d6
+      MFEEPOSERVERHVM: ami-88f3c8ed
+      MFEEPOAGENTHANDLERHVM: ami-c6fdc6a3
   NodeTierMap:
     '1-10K': {'Tier': '1'}
     '10K-25K': {'Tier': '2'}
@@ -591,45 +591,45 @@ Mappings:
     'Development': {'1': '1000', '2': '1000', '3': '1000', '4': '1000', '5': '1000',
       '6': '1000', '7': '1000'}
   BuildVersionMap:
-    eu-central-1:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
-      DXL: 4.1.0.214
-    ap-southeast-1:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
-      DXL: 4.1.0.214
-    ap-southeast-2:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
-      DXL: 4.1.0.214
-    ca-central-1:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
-      DXL: 4.1.0.214
-    us-west-2:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
-      DXL: 4.1.0.214
     us-east-2:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
-      DXL: 4.1.0.214
-    us-west-1:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
       DXL: 4.1.0.214
     eu-west-2:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
-      DXL: 4.1.0.214
-    ap-northeast-1:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
       DXL: 4.1.0.214
     us-east-1:
-      EPO: 5.10.0.2327
-      AH: 5.10.0.2327
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
+      DXL: 4.1.0.214
+    ca-central-1:
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
+      DXL: 4.1.0.214
+    ap-southeast-2:
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
+      DXL: 4.1.0.214
+    us-west-1:
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
+      DXL: 4.1.0.214
+    ap-northeast-1:
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
+      DXL: 4.1.0.214
+    ap-southeast-1:
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
+      DXL: 4.1.0.214
+    us-west-2:
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
+      DXL: 4.1.0.214
+    eu-central-1:
+      EPO: 5.10.0.2362
+      AH: 5.10.0.2362
       DXL: 4.1.0.214
 
 Conditions:
@@ -647,6 +647,7 @@ Resources:
       Parameters:
         Environment: !Ref Environment
         DomainName: !Ref DomainName
+        HostedZoneID: !GetAtt [CheckStackDetailsAction, HostedZoneId]
         SubDomainName: !Ref SubDomainName
         ParentStack: !GetAtt [CheckStackDetailsAction, ParentStack]
         VPCID: !Ref VPCID
@@ -1068,6 +1069,7 @@ Resources:
   # Check stack details lambda role
   CheckStackDetailsLambdaRole:
     Type: AWS::IAM::Role
+    DependsOn: [WorkloadCloudformationRole]
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -1135,14 +1137,29 @@ Resources:
               if request_type == 'Create':
                   domain_name = user_data['DomainName']
                   sub_domain_name = user_data['SubDomainName']
+                  # domain name validation
                   if '' != domain_name and False == is_route53_domain_exist(domain_name + '.'):
-                    print(domain_name + ' is not in AWS route53 hosted zone')
-                    return False
-                  else:
-                    if True == is_route53_domain_exist(sub_domain_name + '.'):
+                      print(domain_name + ' is not in AWS route53 hosted zone')
+                      return False
+
+                  # Sub domain validation
+                  if True == is_route53_domain_exist(sub_domain_name + '.'):
                       print(sub_domain_name + ' is already in AWS route53 hosted zone')
                       return False
               return True
+
+          def get_hosted_zone_id(user_data, response):
+              try:
+                  # Get hosted Zone Id of domain name
+                  domain_name = user_data['DomainName']
+                  response['HostedZoneId'] = ''
+                  if '' != domain_name:
+                      result = r53.list_hosted_zones_by_name(DNSName=domain_name)
+                      response['HostedZoneId'] = result['HostedZones'][0]['Id'].split('/')[2]
+                  print(response)
+                  return response
+              except Exception as e:
+                  print(str(e))
 
           def check_stack_details(user_data, response):
               result = cfn.describe_stacks(StackName=user_data['StackName'])
@@ -1169,7 +1186,10 @@ Resources:
                       if False == check_parameter_details(request_type, user_data):
                           status = cfnresponse.FAILED
                       else:
+                          response = get_hosted_zone_id(user_data, response)
+                          print(response)
                           response = check_stack_details(user_data, response)
+                          print(response)
                           if False == response:
                               status = cfnresponse.FAILED
                   cfnresponse.send(event, context, status, response, None)
@@ -1209,7 +1229,7 @@ Resources:
   # Check stack details custom action
   CheckStackDetailsAction:
     Type: Custom::CheckStackDetailsAction
-    DependsOn: [WorkloadCloudformationRole, CheckStackDetailsLambdaLogGroup]
+    DependsOn: [CheckStackDetailsLambdaLogGroup]
     Properties:
       ServiceToken: !GetAtt CheckStackDetailsLambda.Arn
       DomainName: !Ref DomainName

@@ -49,7 +49,7 @@ Metadata:
       PipelineCloudformationIAMRoleARN:
         default: Cloudformation IAM Role ARN
       AutoApproval:
-        default: Auto Approval
+        default: Application of Updates
       AdminEmailAddress:
         default: Operator Email
       ApproverEmailAddress:
@@ -105,6 +105,7 @@ Parameters:
       In addtion this will be used for tagging of ownership of resources.
     Type: String
   ApproverEmailAddress:
+    AllowedPattern: ^(?![\s\S])|(([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?))
     ConstraintDescription: Must be a valid email address.
     Default: ''
     Description: Approver Email address where approval will be sent in case of auto
@@ -112,20 +113,21 @@ Parameters:
     Type: String
   AutoApproval:
     AllowedValues:
-    - 'Yes'
-    - 'No'
-    Default: 'Yes'
+    - 'Automatic'
+    - 'Update after Approval'
+    Default: 'Automatic'
     Description: 'Auto or Manual approval to review the change sets on auto updates
-      of stack components. Note: For no auto approval cases(Selected No), make sure
-      to provide approver email address so that notifications can be sent for approval
-      or user have to watch the pipeline periodically for approvals.'
+      of stack components. Note: For no auto approval cases(Selected Update after
+      Approval), make sure to provide approver email address so that notifications
+      can be sent for approval or user have to watch the pipeline periodically for
+      approvals.'
     Type: String
   RegionQSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Region Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: quickstart-reference
+    Default: hepo-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -135,7 +137,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hosted-epo-quickstart-reference
+    Default: hepo-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -145,7 +147,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/1-0-72/
+    Default: artifacts/1-0-87/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -153,7 +155,7 @@ Parameters:
     Type: String
 
 Conditions:
-  cNoAutoApproval: !Equals [!Ref AutoApproval, 'No']
+  cNoAutoApproval: !Equals [!Ref AutoApproval, 'Update after Approval']
 
 Resources:
 
@@ -556,8 +558,7 @@ Resources:
       MemorySize: 256
       Role: !GetAtt PipelineLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 30
-
+      Timeout: 120
       Tags:
       - Key: Name
         Value: !Sub ${AWS::StackName}-SetupArtifactsLambda
@@ -571,6 +572,7 @@ Resources:
         Value: McAfee-ePO
       - Key: mcafee:cloudformation:stack-name
         Value: !Sub ${ParentStack}
+
   # Setup Artifacts lambda Version
   SetupArtifactsLambdaVersion1:
     Type: AWS::Lambda::Version

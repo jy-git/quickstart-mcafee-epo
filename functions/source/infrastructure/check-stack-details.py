@@ -21,14 +21,29 @@ def check_parameter_details(request_type, user_data):
     if request_type == 'Create':
         domain_name = user_data['DomainName']
         sub_domain_name = user_data['SubDomainName']
+        # domain name validation
         if '' != domain_name and False == is_route53_domain_exist(domain_name + '.'):
-          print(domain_name + ' is not in AWS route53 hosted zone')
-          return False
-        else:
-          if True == is_route53_domain_exist(sub_domain_name + '.'):
+            print(domain_name + ' is not in AWS route53 hosted zone')
+            return False
+
+        # Sub domain validation
+        if True == is_route53_domain_exist(sub_domain_name + '.'):
             print(sub_domain_name + ' is already in AWS route53 hosted zone')
             return False
     return True
+
+def get_hosted_zone_id(user_data, response):
+    try:
+        # Get hosted Zone Id of domain name
+        domain_name = user_data['DomainName']
+        response['HostedZoneId'] = ''
+        if '' != domain_name:
+            result = r53.list_hosted_zones_by_name(DNSName=domain_name)
+            response['HostedZoneId'] = result['HostedZones'][0]['Id'].split('/')[2]
+        print(response)
+        return response
+    except Exception as e:
+        print(str(e))
 
 def check_stack_details(user_data, response):
     result = cfn.describe_stacks(StackName=user_data['StackName'])
@@ -55,7 +70,10 @@ def handler(event, context):
             if False == check_parameter_details(request_type, user_data):
                 status = cfnresponse.FAILED
             else:
+                response = get_hosted_zone_id(user_data, response)
+                print(response)
                 response = check_stack_details(user_data, response)
+                print(response)
                 if False == response:
                     status = cfnresponse.FAILED
         cfnresponse.send(event, context, status, response, None)

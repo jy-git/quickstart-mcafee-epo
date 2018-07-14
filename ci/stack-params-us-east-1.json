@@ -52,10 +52,6 @@
      "ParameterValue": "0.0.0.0/0"
     },
     {
-     "ParameterKey": "EPOLicenseKey",
-     "ParameterValue": ""
-    },
-    {
      "ParameterKey": "EPOAdminUserName",
      "ParameterValue": "admin"
     },
@@ -117,7 +113,7 @@
     },
     {
      "ParameterKey": "AutoApproval",
-     "ParameterValue": "Yes"
+     "ParameterValue": "Automatic"
     },
     {
      "ParameterKey": "AdminEmailAddress",
