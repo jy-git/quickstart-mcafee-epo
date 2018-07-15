@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: McAfee-ePO Deploys McAfee Enterprise Security Management Platform on
-  AWS (New VPC)
+  AWS in a new VPC. (qs-1oknn9kad)
 Metadata:
   LICENSE: Apache License Version 2.0
   AWS::CloudFormation::Interface:
