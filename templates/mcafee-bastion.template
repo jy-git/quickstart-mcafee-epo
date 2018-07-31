@@ -5,7 +5,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: McAfee Enterprise Security Management Platform Configuration
+        default: McAfee ePolicy Orchestrator Platform Configuration
       Parameters:
       - Environment
       - KeyPairName
@@ -32,7 +32,7 @@ Metadata:
       Environment:
         default: Deployment Environment
       KeyPairName:
-        default: Key Pair Name
+        default: AWS Key Pair Name
       ParentStack:
         default: Parent Stack
       VPCID:
@@ -101,7 +101,7 @@ Rules:
       - 'Fn::EachMemberEquals':
         - 'Fn::RefAll': 'AWS::EC2::KeyPair::KeyName'
         - ''
-      AssertDescription: Key Pair Name parameters must not be empty
+      AssertDescription: AWS Key Pair Name parameters must not be empty
   SubnetsInVPC:
     Assertions:
     - Assert:

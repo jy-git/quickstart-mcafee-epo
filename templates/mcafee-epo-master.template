@@ -1,12 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: McAfee-ePO Deploys McAfee Enterprise Security Management Platform on
-  AWS in a new VPC. (qs-1oknn9kad)
+  AWS (New VPC)
 Metadata:
   LICENSE: Apache License Version 2.0
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: McAfee Enterprise Security Management Platform Configuration
+        default: McAfee ePolicy Orchestrator Platform Configuration
       Parameters:
       - ProtectedInstances
       - Environment
@@ -25,7 +25,7 @@ Metadata:
       - PublicSubnet2CIDR
       - RemoteAccessCIDR
     - Label:
-        default: On-Premise Network Configuration
+        default: On-Premise Domain Configuration
       Parameters:
       - OnPremiseDomainName
       - OnPremiseServerDNS
@@ -52,7 +52,7 @@ Metadata:
       - DBBackupRetentionPeriod
       - DBInstanceIdentifier
     - Label:
-        default: ePO Agents(Client) Configuration
+        default: Client Communication Configuration
       Parameters:
       - AHPort
       - DXLPort
@@ -62,8 +62,8 @@ Metadata:
       Parameters:
       - EnableAutoUpdate
       - AutoApproval
-      - AdminEmailAddress
       - ApproverEmailAddress
+      - AdminEmailAddress
       - AutoCleanup
     - Label:
         default: AWS Quick Start Configuration
@@ -82,7 +82,7 @@ Metadata:
       Availability:
         default: High Availability
       KeyPairName:
-        default: Key Pair Name
+        default: AWS Key Pair Name
       AvailabilityZones:
         default: Availability Zones
       VPCCIDR:
@@ -140,7 +140,7 @@ Metadata:
       ClientAccessCIDR:
         default: External Access CIDR
       EnableAutoUpdate:
-        default: Easy Update
+        default: Updates for Stack Components
       AutoApproval:
         default: Application of Updates
       AdminEmailAddress:
@@ -164,7 +164,7 @@ Parameters:
     - '250K-400K'
     - '400K-500K'
     Default: '1-10K'
-    Description: The number of endpoint instances you want to protect.
+    Description: Select the number of endpoints that you want to manage.
     Type: String
   Environment:
     AllowedValues:
@@ -195,7 +195,8 @@ Parameters:
     - 'Yes'
     - 'No'
     Default: 'Yes'
-    Description: We recommend selecting 'Yes' for production environments.
+    Description: We recommend selecting 'Yes' for production environments. It is applicable
+      for Agent Handlers, DXL Brokers, RDS.
     Type: String
   KeyPairName:
     Description: The name of an existing public/private key pair.If you do not have
@@ -336,12 +337,11 @@ Parameters:
   EPOELBCertificateARN:
     AllowedPattern: ^$|(arn:aws:)([a-z0-9/:-])*([a-z0-9])$
     Default: ''
-    Description: '[ Optional ] ARN of the certificate stored in  Amazon Certifcate
-      Manager(ACM) or imported in AWS IAM. Generally the certificate associated with
-      the sub domain needs to be presented. Certificate will be attached with ePO
-      AWS elastic load balancer. e.g., arn:aws:*:us-west-1:*:certificate/*. NOTE:
-      Recommended to attach the certificate with ePO AWS elastic load balancer for
-      production servers.'
+    Description: '[Optional] ARN of the certificate stored in  Amazon Certifcate Manager(ACM)
+      or imported in AWS IAM. Generally the certificate associated with the sub domain
+      needs to be presented. Certificate will be attached with ePO AWS elastic load
+      balancer. e.g., arn:aws:*:us-west-1:*:certificate/*. NOTE: Recommended to attach
+      the certificate with ePO AWS elastic load balancer for production servers.'
     MaxLength: 256
     Type: String
   EPOAccessCIDR:
@@ -389,20 +389,21 @@ Parameters:
   DBAllocatedStorage:
     Default: ''
     MaxLength: 16
-    Description: N/A for existing database instance,Specify how much storage to allocate
-      to ePO database. Leave it blank to pick default recommended size.
+    Description: Applicable for new database instance. Specify how much storage to
+      allocate to ePO database. Leave it blank to pick default recommended size.
     Type: String
   DBBackupRetentionPeriod:
     Default: '7'
     MinLength: 1
     MaxLength: 3
-    Description: N/A for existing database instance,The number of days for which automatic
-      DB snapshots are retained.
+    Description: Applicable for new database instance. The number of days for which
+      automatic DB snapshots are retained.
     Type: String
   DBInstanceIdentifier:
     Default: ''
     MaxLength: 512
-    Description: N/A for new database instance, existing database instance identifier.
+    Description: Specify your existing database instance identifier. Leave it blank
+      to create new database instance.
     Type: String
   AHPort:
     Default: '443'
@@ -429,8 +430,8 @@ Parameters:
     - 'Yes'
     - 'No'
     Default: 'Yes'
-    Description: Recommended, enables auto updates of mcafee server stack components(e.g.
-      AH, DXL).
+    Description: Recommended, enables automatic updates of McAfee server stack components
+      (Agent Handler, DXL Broker).
     Type: String
   AutoApproval:
     AllowedValues:
@@ -461,14 +462,14 @@ Parameters:
     - Enable
     - Disable
     Default: Enable
-    Description: Enable/Disable Auto cleanup of backup logs and data.
+    Description: Auto cleanup of backup logs and data in S3.
     Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: aws-quickstart
+    Default: hepo-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -478,7 +479,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: quickstart-mcafee-epo/
+    Default: artifacts/1-0-90/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -492,7 +493,7 @@ Rules:
       - 'Fn::EachMemberEquals':
         - 'Fn::RefAll': 'AWS::EC2::KeyPair::KeyName'
         - ''
-      AssertDescription: Key Pair Name parameters must not be empty
+      AssertDescription: AWS Key Pair Name parameters must not be empty
   ValidateApprovalEmail:
     RuleCondition: !Equals
     - !Ref AutoApproval
@@ -531,26 +532,26 @@ Mappings:
     AMI:
       MFEBASTIONHVM: McAfee Bastion Image
     us-west-2:
-      MFEBASTIONHVM: ami-f31e4c8b
+      MFEBASTIONHVM: ami-896832f1
 
     us-east-1:
-      MFEBASTIONHVM: ami-47d0e338
-    ap-northeast-1:
-      MFEBASTIONHVM: ami-a4791449
-    us-west-1:
-      MFEBASTIONHVM: ami-3f4aa95c
+      MFEBASTIONHVM: ami-7cbdaa03
     eu-west-2:
-      MFEBASTIONHVM: ami-b4e10ad3
-    ca-central-1:
-      MFEBASTIONHVM: ami-f2c34e96
+      MFEBASTIONHVM: ami-217a9046
     eu-central-1:
-      MFEBASTIONHVM: ami-732c2b98
+      MFEBASTIONHVM: ami-cf707c24
     ap-southeast-2:
-      MFEBASTIONHVM: ami-0a2b8e68
+      MFEBASTIONHVM: ami-b58021d7
     ap-southeast-1:
-      MFEBASTIONHVM: ami-5689f1bc
+      MFEBASTIONHVM: ami-d3fcbc39
     us-east-2:
-      MFEBASTIONHVM: ami-e5f3c880
+      MFEBASTIONHVM: ami-4f8eb42a
+    ap-northeast-1:
+      MFEBASTIONHVM: ami-81afdc6c
+    us-west-1:
+      MFEBASTIONHVM: ami-5c32de3f
+    ca-central-1:
+      MFEBASTIONHVM: ami-955dd0f1
 Resources:
 
   # Network layer stack to create network resources like VPC, Subnets, NAT, & Routing Table
