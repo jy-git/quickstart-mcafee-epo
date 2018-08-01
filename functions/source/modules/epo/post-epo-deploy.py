@@ -53,24 +53,12 @@ def epo_elb_certifcate_handler(user_data, request_type):
         auth = b64encode(auth_string.encode()).decode("ascii")
         headers = { 'Authorization' : 'Basic %s' %  auth }
         # Remote command to get ePO App server ELB certificate
-        # NOTE: using self signed genereted AH remote command,
-        # it may confuse suers for now but in future we will intorduce new remote command to generate cert for other purpose
         epo_cert_remote_cmd_path = '/remote/epo.command.createEPOLBCertificate?commonName=EPO_ELB_' + parent_stack_name
         https = http.client.HTTPSConnection(epo_hostname, epo_port, context=ssl._create_unverified_context())
         https.request('POST', epo_cert_remote_cmd_path, headers=headers)
         response = https.getresponse()
         print(response.status, response.reason)
         certs_out = response.read().decode()
-
-        if -1 == certs_out.find('BEGIN CERTIFICATE'):
-            print("trying to generate AH certificate as a fallback")
-            ah_cert_remote_cmd_path = '/remote/epo.command.createAgentHandlerCertificate?commonName=EPO_ELB_' + parent_stack_name
-
-            https = http.client.HTTPSConnection(epo_hostname, epo_port, context=ssl._create_unverified_context())
-            https.request('POST', ah_cert_remote_cmd_path, headers=headers)
-            response = https.getresponse()
-            print(response.status, response.reason)
-            certs_out = response.read().decode()
 
         if -1 != certs_out.find('BEGIN CERTIFICATE'):
             epo_elb_cert = re.search(r"^([-]+BEGIN CERTIFICATE[-]+\s+(.*?)\s+[-]+END CERTIFICATE[-]+)", certs_out, re.MULTILINE| re.DOTALL).group(1)
@@ -109,8 +97,27 @@ def epo_elb_certifcate_handler(user_data, request_type):
         print('nothing to do for EPO appserver elb certificate handler in case of update request type')
     elif request_type == 'Delete':
         iam_client = boto3.client('iam')
-        iam_client.delete_server_certificate(ServerCertificateName=('EPO_ELB_' + parent_stack_name))
-        print('certificate deleted')
+
+        result = iam_client.get_server_certificate(ServerCertificateName=('EPO_ELB_' + parent_stack_name))
+
+        if 'ServerCertificate' in result:
+            elb_client = boto3.client('elbv2')
+            epo_elb_cert_arn = result['ServerCertificate']['ServerCertificateMetadata']['Arn']
+            print(epo_elb_cert_arn)
+
+            # reset listner to http to delete the attached IAM certificate
+            result = elb_client.modify_listener(ListenerArn=epo_https_listener_arn, Protocol='HTTP')
+            print(result)
+
+            result = elb_client.modify_listener(ListenerArn=lah_https_listener_arn, Protocol='HTTP')
+            print(result)
+            #Wait 60  secs for above operations
+            time.sleep(60)
+            result = iam_client.delete_server_certificate(ServerCertificateName=('EPO_ELB_' + parent_stack_name))
+            print(result)
+            print('certificate deleted')
+        else:
+            print('No certificate available to delete')
 
 
 def handler(event, context):
@@ -135,4 +142,4 @@ def handler(event, context):
         return send_response(event, response, status='SUCCESS', reason="succesfully applied epo applicaiton server post deployment actions")
     except ClientError as e:
         print(str(e))
-        return send_response(event, response, status='SUCCESS', reason="Not able to complete epo applicaiton server post deployment actions")
+        return send_response(event, response, status='FAILED', reason="Not able to complete epo applicaiton server post deployment actions")

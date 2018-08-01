@@ -7,7 +7,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: McAfee Enterprise Security Management Platform Configuration
+        default: McAfee ePolicy Orchestrator Platform Configuration
       Parameters:
       - Environment
     - Label:

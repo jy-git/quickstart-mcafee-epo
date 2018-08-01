@@ -6,7 +6,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: McAfee Enterprise Security Management Platform Configuration
+        default: McAfee ePolicy Orchestrator Platform Configuration
       Parameters:
       - Environment
       - SubDomainName
@@ -17,7 +17,7 @@ Metadata:
       - ParentStack
       - BaseStack
     - Label:
-        default: On-Premise Network Configuration
+        default: On-Premise Domain Configuration
       Parameters:
       - OnPremiseDomainName
       - OnPremiseServerDNS
@@ -66,7 +66,7 @@ Metadata:
       SubDomainName:
         default: Sub Domain Name
       KeyPairName:
-        default: Key Pair Name
+        default: AWS Key Pair Name
       ParentStack:
         default: Parent Stack
       BaseStack:
@@ -332,7 +332,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hepo-quickstart
+    Default: aws-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -342,7 +342,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/1-0-87/
+    Default: quickstart-mcafee-epo/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,
@@ -1406,6 +1406,7 @@ Resources:
             Action:
             - iam:DeleteServerCertificate
             - iam:UploadServerCertificate
+            - iam:GetServerCertificate
             Resource:
             - !Sub 'arn:aws:iam::${AWS::AccountId}:server-certificate/EPO_ELB_${ParentStack}'
           - Effect: Allow
@@ -1508,7 +1509,7 @@ Resources:
   EPOPostDeployAction:
     Type: Custom::EPOPostDeployAction
     Condition: cCreateELBCertificate
-    DependsOn: [EPOPostDeployLambdaLogGroup]
+    DependsOn: [EPOPostDeployLambdaLogGroup, EPODeleteResourcesAssociatedWithLambdaCustomAction]
     Properties:
       ServiceToken: !GetAtt EPOPostDeployLambda.Arn
       ParentStack: !Sub ${ParentStack}

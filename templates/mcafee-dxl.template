@@ -5,7 +5,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: McAfee Enterprise Security Management Platform Configuration
+        default: McAfee ePolicy Orchestrator Platform Configuration
       Parameters:
       - Environment
       - SubDomainName
@@ -49,7 +49,7 @@ Metadata:
       Availability:
         default: High Availability
       KeyPairName:
-        default: Key Pair Name
+        default: AWS Key Pair Name
       ParentStack:
         default: Parent Stack
       BaseStack:
@@ -102,7 +102,8 @@ Parameters:
     - 'Yes'
     - 'No'
     Default: 'Yes'
-    Description: Recommended to choose high availability option for stack components.
+    Description: We recommend selecting 'Yes' for production environments. It is applicable
+      for Agent Handlers, DXL Brokers, RDS.
     Type: String
   KeyPairName:
     Description: The name of an existing public/private key pair, which allows you
@@ -192,7 +193,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
       end with a hyphen (-) or period (.).
-    Default: hepo-quickstart
+    Default: aws-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, periods (.), and
       hyphens (-). It cannot start or end with a hyphen (-) or period (.).
@@ -202,7 +203,7 @@ Parameters:
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
       uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
       a slash but must end with a slash unless it is the empty string.'
-    Default: artifacts/1-0-87/
+    Default: quickstart-mcafee-epo/
     Description: The S3 key name prefix used to simulate a folder for your copy of
       Quick Start assets, if you decide to customize or extend the Quick Start for
       your own use.This prefix can include numbers, lowercase letters, uppercase letters,

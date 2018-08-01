@@ -6,7 +6,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: McAfee Enterprise Security Management Platform Configuration
+        default: McAfee ePolicy Orchestrator Platform Configuration
       Parameters:
       - Environment
       - Availability
@@ -76,7 +76,8 @@ Parameters:
     - 'Yes'
     - 'No'
     Default: 'Yes'
-    Description: Recommended to choose high availability option for stack components.
+    Description: We recommend selecting 'Yes' for production environments. It is applicable
+      for Agent Handlers, DXL Brokers, RDS.
     Type: String
   ParentStack:
     Description: Parent stack name by which pipeline stack is deriving if any.
