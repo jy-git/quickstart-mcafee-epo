@@ -5,15 +5,6 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: McAfee ePolicy Orchestrator Platform Configuration
-      Parameters:
-      - ProtectedInstances
-      - Environment
-      - DomainName
-      - SubDomainName
-      - Availability
-      - KeyPairName
-    - Label:
         default: Network Configuration
       Parameters:
       - AvailabilityZones
@@ -24,7 +15,16 @@ Metadata:
       - PublicSubnet2ID
       - BastionSecurityGroupID
     - Label:
-        default: On-Premise Domain Configuration
+        default: McAfee ePolicy Orchestrator Platform Configuration
+      Parameters:
+      - ProtectedInstances
+      - Environment
+      - DomainName
+      - SubDomainName
+      - Availability
+      - KeyPairName
+    - Label:
+        default: On-Premises Domain Configuration
       Parameters:
       - OnPremiseDomainName
       - OnPremiseServerDNS
@@ -174,16 +174,16 @@ Parameters:
     Type: String
   DomainName:
     AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: '[Optional] AWS Route 53 registered domain name (e.g. mcafee.com).
-      We recommend either to register AWS Route 53 domain name so that public DNS
+    Description: '[Optional] Amazon Route 53 registered domain name (e.g. mcafee.com).
+      We recommend either to register Amazon Route 53 domain name so that public DNS
       records can be propagated automatically OR add the sub domain Name Server(NS)
       records into your main domain server.'
     Default: ''
     Type: String
   SubDomainName:
     AllowedPattern: ^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: The non-existant sub domain name to be used for managment solution.
-      (e.g. manage.mcafee.com ). We recommend either to register AWS Route 53 domain
+    Description: The non-existent sub domain name to be used for managment solution.
+      (e.g. manage.mcafee.com ). We recommend either to register Amazon Route 53 domain
       name so that public DNS records can be propagated automatically OR add the sub
       domain Name Server(NS) records into your main domain server.
     MinLength: 1
@@ -243,7 +243,7 @@ Parameters:
     Description: '[Optional] The on-premises DNS (e.g. 192.168.1.1) that will be used
       to resolve the domain name queries. This is required for DNS resolution between
       the ePO instance in VPC and services like LDAP(ldap.mcafee.com). Note: This
-      is only required if you are planning to use Active Directory if you are planning
+      is only required if you are planning to use Active Directory and if you are planning
       to use a domain name instead of an IP address for the LDAP server.'
     MaxLength: 256
     Type: String
@@ -273,7 +273,7 @@ Parameters:
     ConstraintDescription: Must be minimum of 8 characters and contain alpha, numeric,
       and a special character but it must not contain backslashes (\) or spaces or
       any double quotes (")'.
-    Description: 'Create a global administrator password for McAfee ePO console login.
+    Description: 'Your global administrator password that you confirm for logging in to McAfee ePO console.
       Must be a minimum of 8 characters and contain alpha, numeric, and a special
       character.'
     MaxLength: 256
@@ -295,7 +295,7 @@ Parameters:
     AllowedPattern: '^[^\"\\\s]*$'
     ConstraintDescription: 'It must be 14 to 200 characters in length. It must not
       contain backslashes (\) or spaces or any double quotes (")'
-    Description: 'Create a keystore encryption passphrase. This is required for disaster
+    Description: 'The keystore encryption passphrase that you confirm. This is required for disaster
       recovery. Server recovery passphrase must be 14 to 200 characters in length.
       It must not contain backslashes (\) or spaces or any double quotes (")'
     MaxLength: 200
@@ -312,9 +312,10 @@ Parameters:
     AllowedPattern: ^$|(arn:aws:)([a-z0-9/:-])*([a-z0-9])$
     Default: ''
     Description: '[ Optional ] ARN of the certificate stored in  Amazon Certifcate
-      Manager(ACM) or imported in AWS IAM. Generally the certificate associated with
-      the sub domain needs to be presented. Certificate will be attached with ePO
-      load balancer. e.g., arn:aws:*:us-west-1:*:certificate/*.'
+      Manager(ACM) or imported in AWS IAM. Generally the certificate associated with the sub domain
+      needs to be presented. The certificate will be attached with the Application Load Balancer 
+      for McAfee ePO (e.g., arn:aws:*:us-west-1:*:certificate/*). Note: For production servers, we 
+      recommend attaching the certificate with the Application Load Balancer for McAfee ePO.'
     MaxLength: 256
     Type: String
   EPOAccessCIDR:
@@ -345,7 +346,7 @@ Parameters:
     AllowedPattern: '[^@\/\"]+'
     ConstraintDescription: It can contain any printable ASCII character except "/",
       """, or "@". Must contain from 8 to 255 characters
-    Description: Create a password for the master user for the database. This password
+    Description: The password that you confirm for the master user for the database. This password
       can contain any printable ASCII character except "/", """, or "@". Must contain
       from 8 to 255 characters
     MaxLength: 255
