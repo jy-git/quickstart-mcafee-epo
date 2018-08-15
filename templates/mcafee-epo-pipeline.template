@@ -1,37 +1,36 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: McAfee-ePO Pipeline Stack which manages continuous delivery and udpate
-  of the stack components.
+Description: McAfee-ePO Pipeline Stack which manages continuous delivery and udpate of the stack components.
 Metadata:
   LICENSE: Apache License Version 2.0
   AWS::CloudFormation::Interface:
     ParameterGroups:
-    - Label:
-        default: McAfee ePolicy Orchestrator Platform Configuration
-      Parameters:
-      - Environment
-    - Label:
-        default: Peer-Parent Stack Configuration
-      Parameters:
-      - ParentStack
-      - BaseStack
-    - Label:
-        default: Pipeline Stack Configuration
-      Parameters:
-      - PipelineMasterStackName
-      - PipelineMasterStackTemplateName
-      - PipelineMasterStackTemplateConfigName
-      - PipelineCloudformationIAMRoleARN
-    - Label:
-        default: Administration Configuration
-      Parameters:
-      - AutoApproval
-      - AdminEmailAddress
-    - Label:
-        default: AWS Quick Start Configuration
-      Parameters:
-      - RegionQSS3BucketName
-      - QSS3BucketName
-      - QSS3KeyPrefix
+      - Label:
+          default: McAfee ePolicy Orchestrator Platform Configuration
+        Parameters:
+          - Environment
+      - Label:
+          default: Peer-Parent Stack Configuration
+        Parameters:
+          - ParentStack
+          - BaseStack
+      - Label:
+          default: Pipeline Stack Configuration
+        Parameters:
+          - PipelineMasterStackName
+          - PipelineMasterStackTemplateName
+          - PipelineMasterStackTemplateConfigName
+          - PipelineCloudformationIAMRoleARN
+      - Label:
+          default: Administration Configuration
+        Parameters:
+          - AutoApproval
+          - AdminEmailAddress
+      - Label:
+          default: AWS Quick Start Configuration
+        Parameters:
+          - RegionQSS3BucketName
+          - QSS3BucketName
+          - QSS3KeyPrefix
     ParameterLabels:
       Environment:
         default: Deployment Environment
@@ -62,8 +61,8 @@ Metadata:
 Parameters:
   Environment:
     AllowedValues:
-    - 'Production'
-    - 'Development'
+      - 'Production'
+      - 'Development'
     Default: 'Production'
     Description: What is the targeted deployment environment?
     Type: String
@@ -100,61 +99,58 @@ Parameters:
   AdminEmailAddress:
     AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)
     ConstraintDescription: Must be a valid email address.
-    Description: Email address that notifications of any operations will be sent.
-      In addtion this will be used for tagging of ownership of resources.
+    Description: Email address that notifications of any operations will be sent. In addtion this will be used for tagging of ownership of resources.
     Type: String
   ApproverEmailAddress:
     AllowedPattern: ^(?![\s\S])|(([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?))
     ConstraintDescription: Must be a valid email address.
     Default: ''
-    Description: Approver Email address where approval will be sent in case of auto
-      updates if AutoAproval is not selected.
+    Description: Approver Email address where approval will be sent in case of auto updates if AutoAproval is not selected.
     Type: String
   AutoApproval:
     AllowedValues:
-    - 'Automatic'
-    - 'Update after Approval'
+      - 'Automatic'
+      - 'Update after Approval'
     Default: 'Automatic'
-    Description: 'Auto or Manual approval to review the change sets on auto updates
-      of stack components. Note: For no auto approval cases(Selected Update after
-      Approval), make sure to provide approver email address so that notifications
-      can be sent for approval or user have to watch the pipeline periodically for
-      approvals.'
+    Description: >-
+      Auto or Manual approval to review the change sets on auto updates of stack components.
+      Note: For no auto approval cases(Selected Update after Approval), make sure to provide approver email address so that notifications
+      can be sent for approval or user have to watch the pipeline periodically for approvals.
     Type: String
   RegionQSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Region Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
-      end with a hyphen (-) or period (.).
+    ConstraintDescription: >-
+      Region Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
+      It cannot start or end with a hyphen (-) or period (.).
     Default: aws-quickstart
-    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
-      can include numbers, lowercase letters, uppercase letters, periods (.), and
-      hyphens (-). It cannot start or end with a hyphen (-) or period (.).
+    Description: >-
+      S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
+      It cannot start or end with a hyphen (-) or period (.).
     Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
-      end with a hyphen (-) or period (.).
+    ConstraintDescription: >-
+      Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
+      It cannot start or end with a hyphen (-) or period (.).
     Default: aws-quickstart
-    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
-      can include numbers, lowercase letters, uppercase letters, periods (.), and
-      hyphens (-). It cannot start or end with a hyphen (-) or period (.).
+    Description: >-
+      S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
+      It cannot start or end with a hyphen (-) or period (.).
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
-      a slash but must end with a slash unless it is the empty string.'
+    ConstraintDescription: >-
+      Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).
+      Prefix cannot start with a slash but must end with a slash unless it is the empty string.'
     Default: quickstart-mcafee-epo/
-    Description: The S3 key name prefix used to simulate a folder for your copy of
-      Quick Start assets, if you decide to customize or extend the Quick Start for
-      your own use.This prefix can include numbers, lowercase letters, uppercase letters,
-      hyphens, and forward slashes.'
+    Description: >-
+      The S3 key name prefix used to simulate a folder for your copy of Quick Start assets,
+      if you decide to customize or extend the Quick Start for your own use.This prefix can include numbers,
+      lowercase letters, uppercase letters, hyphens, and forward slashes.'
     Type: String
 
 Conditions:
-  cNoAutoApproval: !Equals [!Ref AutoApproval, 'Update after Approval']
+  cNoAutoApproval: !Equals [ !Ref AutoApproval, 'Update after Approval' ]
 
 Resources:
 
@@ -168,106 +164,107 @@ Resources:
       ScheduleExpression: rate(10 minutes)
       State: ENABLED
       Targets:
-      - Arn: !GetAtt ArtifactsSyncupLambda.Arn
-        Id: !Sub ${ParentStack}-artifacts-syncup
-        Input: !Sub >
-          {
-            "SourceBucket": "${QSS3BucketName}",
-            "DestinationBucket": "${RegionQSS3BucketName}",
-            "ArtifactsZIPKey": "assets/pipeline/artifacts/mcafee-artifacts.zip",
-            "Prefix": "${QSS3KeyPrefix}",
-            "ArtifactsVersionIDSSMParameter": "/mcafee/${ParentStack}/ArtifactsVersionId"
-          }
+        - Arn: !GetAtt ArtifactsSyncupLambda.Arn
+          Id: !Sub ${ParentStack}-artifacts-syncup
+          Input: !Sub >
+            {
+              "SourceBucket": "${QSS3BucketName}",
+              "DestinationBucket": "${RegionQSS3BucketName}",
+              "ArtifactsZIPKey": "assets/pipeline/artifacts/mcafee-artifacts.zip",
+              "Prefix": "${QSS3KeyPrefix}",
+              "ArtifactsVersionIDSSMParameter": "/mcafee/${ParentStack}/ArtifactsVersionId"
+            }
 
-# Artifacts sync up from source to regional source bucket lambda role
+  # Artifacts sync up from source to regional source bucket lambda role
   ArtifactsSyncupLambdaRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-            - lambda.amazonaws.com
-          Action:
-          - sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
       Path: /
       Policies:
-      - PolicyName: ArtifactsSyncupLambdaRole
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - Effect: Allow
-            Action:
-            - logs:CreateLogStream
-            - logs:PutLogEvents
-            Resource: '*'
-          - Effect: Allow
-            Action:
-            - ssm:PutParameter
-            - ssm:GetParameter
-            Resource:
-            - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*
-          - Effect: Allow
-            Action:
-            - s3:GetBucketLocation
-            - s3:GetObject
-            - s3:GetObjectVersion
-            - s3:ListBucket
-            - s3:ListBucketMultipartUploads
-            Resource:
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref QSS3BucketName
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref QSS3BucketName
-                - '/*'
-          - Effect: Allow
-            Action:
-            - s3:AbortMultipartUpload
-            - s3:Get*
-            - s3:Put*
-            - s3:List*
-            - s3:Delete*
-            Resource:
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref RegionQSS3BucketName
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref RegionQSS3BucketName
-                - '/*'
+        - PolicyName: ArtifactsSyncupLambdaRole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - ssm:PutParameter
+                  - ssm:GetParameter
+                Resource:
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*
+              - Effect: Allow
+                Action:
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:ListBucket
+                  - s3:ListBucketMultipartUploads
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref QSS3BucketName
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref QSS3BucketName
+                      - '/*'
+              - Effect: Allow
+                Action:
+                  - s3:AbortMultipartUpload
+                  - s3:Get*
+                  - s3:Put*
+                  - s3:List*
+                  - s3:Delete*
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref RegionQSS3BucketName
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref RegionQSS3BucketName
+                      - '/*'
+
+  # Artifacts sync up lambda
   ArtifactsSyncupLambda:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket: !Sub ${RegionQSS3BucketName}
         S3Key: !Sub ${QSS3KeyPrefix}functions/packages/infrastructure/artifacts-syncup.zip
-      Description: Lambda function to syncup quick start artifacts to region source
-        artifacts.
+      Description: Lambda function to syncup quick start artifacts to region source artifacts.
       Handler: artifacts-syncup.handler
       Role: !GetAtt ArtifactsSyncupLambdaRole.Arn
       Runtime: 'python3.6'
       Timeout: 300
       Tags:
-      - Key: Name
-        Value: !Sub ${AWS::StackName}-ArtifactsSyncupLambda
-      - Key: Owner
-        Value: !Ref AdminEmailAddress
-      - Key: Environment
-        Value: !Ref Environment
-      - Key: Product
-        Value: McAfee-ePO-Pipeline
-      - Key: Solution
-        Value: McAfee-ePO
-      - Key: mcafee:cloudformation:stack-name
-        Value: !Sub ${ParentStack}
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-ArtifactsSyncupLambda
+        - Key: Owner
+          Value: !Ref AdminEmailAddress
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Product
+          Value: McAfee-ePO-Pipeline
+        - Key: Solution
+          Value: McAfee-ePO
+        - Key: mcafee:cloudformation:stack-name
+          Value: !Sub ${ParentStack}
 
   # Artifacts sync up lambda version
   ArtifactsSyncupLambdaVersion1:
@@ -281,9 +278,9 @@ Resources:
     DependsOn: ArtifactsSyncupLambda
     Properties:
       LogGroupName: !Join
-      - ''
-      - - '/aws/lambda/'
-        - !Ref ArtifactsSyncupLambda
+            - ''
+            - - '/aws/lambda/'
+              - !Ref ArtifactsSyncupLambda
       RetentionInDays: 7
 
   # Artifacts sync up lambda permission
@@ -302,8 +299,8 @@ Resources:
       DisplayName: McAfee Pipeline Notification
       TopicName: !Sub ${ParentStack}-Notification
       Subscription:
-      - Endpoint: !Ref AdminEmailAddress
-        Protocol: email
+        - Endpoint: !Ref AdminEmailAddress
+          Protocol: email
 
   # Pipeline SNS topic policy name
   PipelineSNSTopicPolicy:
@@ -316,11 +313,11 @@ Resources:
         - Effect: Allow
           Principal:
             Service:
-            - events.amazonaws.com
+              - events.amazonaws.com
           Action: sns:Publish
           Resource: !Ref PipelineSNSTopic
       Topics:
-      - !Ref PipelineSNSTopic
+        - !Ref PipelineSNSTopic
 
   # Pipeline Approver SNS topic
   PipelineApproverSNSTopic:
@@ -330,8 +327,8 @@ Resources:
       DisplayName: McAfee Pipeline Approval Notification
       TopicName: !Sub ${ParentStack}-Approver-Notification
       Subscription:
-      - Endpoint: !Ref ApproverEmailAddress
-        Protocol: email
+        - Endpoint: !Ref ApproverEmailAddress
+          Protocol: email
 
   # Pipeline SNS topic policy name
   PipelineApproverSNSTopicPolicy:
@@ -345,11 +342,11 @@ Resources:
         - Effect: Allow
           Principal:
             Service:
-            - events.amazonaws.com
+              - events.amazonaws.com
           Action: sns:Publish
           Resource: !Ref PipelineApproverSNSTopic
       Topics:
-      - !Ref PipelineApproverSNSTopic
+        - !Ref PipelineApproverSNSTopic
 
   # Pipeline event rule which will monitor the pipeline
   PipelineEventRule:
@@ -358,25 +355,24 @@ Resources:
       Description: Trigger notifications based on pipeline state changes
       EventPattern:
         source:
-        - aws.codepipeline
+          - aws.codepipeline
         detail-type:
-        - 'CodePipeline Pipeline Execution State Change'
+          - 'CodePipeline Pipeline Execution State Change'
         detail:
           pipeline:
-          - !Sub ${ParentStack}-pipeline
+            - !Sub ${ParentStack}-pipeline
       State: 'ENABLED'
       Targets:
-      - Arn: !Ref PipelineSNSTopic
-        Id: !Sub ${ParentStack}-PipelineEventRule
-        InputTransformer:
-          InputTemplate: '"Continuous Updates pipeline @<pipeline> has reached <state>
-            at <at>. Refer https://console.aws.amazon.com/codepipeline/home?region=<region>#/view/<pipeline>
-            "'
-          InputPathsMap:
-            pipeline: "$.detail.pipeline"
-            state: "$.detail.state"
-            at: "$.time"
-            region: "$.region"
+        -
+          Arn: !Ref PipelineSNSTopic
+          Id: !Sub ${ParentStack}-PipelineEventRule
+          InputTransformer:
+            InputTemplate: '"Continuous Updates pipeline @<pipeline> has reached <state> at <at>. Refer https://console.aws.amazon.com/codepipeline/home?region=<region>#/view/<pipeline> "'
+            InputPathsMap:
+              pipeline: "$.detail.pipeline"
+              state: "$.detail.state"
+              at: "$.time"
+              region: "$.region"
 
   # Artifact Store for CodePipeline
   PipelineArtifactStore:
@@ -385,24 +381,24 @@ Resources:
     Properties:
       AccessControl: BucketOwnerFullControl
       LifecycleConfiguration:
-        Rules:
-        - ExpirationInDays: 14
-          Status: Enabled
+         Rules:
+           - ExpirationInDays: 14
+             Status: Enabled
       VersioningConfiguration:
         Status: Enabled
       Tags:
-      - Key: Name
-        Value: !Sub ${AWS::StackName}-PipelineArtifactStore
-      - Key: Owner
-        Value: !Ref AdminEmailAddress
-      - Key: Environment
-        Value: !Ref Environment
-      - Key: Product
-        Value: McAfee-ePO-Pipeline
-      - Key: Solution
-        Value: McAfee-ePO
-      - Key: mcafee:cloudformation:stack-name
-        Value: !Sub ${ParentStack}
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-PipelineArtifactStore
+        - Key: Owner
+          Value: !Ref AdminEmailAddress
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Product
+          Value: McAfee-ePO-Pipeline
+        - Key: Solution
+          Value: McAfee-ePO
+        - Key: mcafee:cloudformation:stack-name
+          Value: !Sub ${ParentStack}
 
   # Pipeline cleanup lambda
   CleanUpLambda:
@@ -417,18 +413,18 @@ Resources:
       Runtime: python3.6
       Timeout: 120
       Tags:
-      - Key: Name
-        Value: !Sub ${AWS::StackName}-CleanUpLambda
-      - Key: Owner
-        Value: !Ref AdminEmailAddress
-      - Key: Environment
-        Value: !Ref Environment
-      - Key: Product
-        Value: McAfee-ePO-Pipeline
-      - Key: Solution
-        Value: McAfee-ePO
-      - Key: mcafee:cloudformation:stack-name
-        Value: !Sub ${ParentStack}
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-CleanUpLambda
+        - Key: Owner
+          Value: !Ref AdminEmailAddress
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Product
+          Value: McAfee-ePO-Pipeline
+        - Key: Solution
+          Value: McAfee-ePO
+        - Key: mcafee:cloudformation:stack-name
+          Value: !Sub ${ParentStack}
 
   # Pipeline cleanup lambdalambda version
   CleanUpLambdaVersion1:
@@ -442,9 +438,9 @@ Resources:
     DependsOn: CleanUpLambda
     Properties:
       LogGroupName: !Join
-      - ''
-      - - '/aws/lambda/'
-        - !Ref CleanUpLambda
+            - ''
+            - - '/aws/lambda/'
+              - !Ref CleanUpLambda
       RetentionInDays: 7
 
   # Pipeline cleanup custom action
@@ -454,7 +450,7 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CleanUpLambda.Arn
       BucketNames:
-      - !Ref PipelineArtifactStore
+        - !Ref PipelineArtifactStore
 
 
   # Pipelines lambda roles
@@ -464,80 +460,80 @@ Resources:
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-            - lambda.amazonaws.com
-          Action:
-          - sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
       ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
-      - PolicyName: PipelineLambdaRolePolicy
-        PolicyDocument:
-          Version: 2012-10-17
-          Statement:
-          - Effect: Allow
-            Action:
-            - s3:GetObject
-            Resource:
-            - !Sub arn:aws:s3:::${RegionQSS3BucketName}/*
-          - Effect: Allow
-            Action:
-            - s3:PutObject
-            - s3:GetObject
-            - s3:DeleteObject*
-            - s3:List*
-            Resource:
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref PipelineArtifactStore
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref PipelineArtifactStore
-                - '/*'
-          - Effect: Allow
-            Action:
-            - sns:Publish
-            Resource:
-            - !Ref PipelineSNSTopic
-            - !If
-              - cNoAutoApproval
-              - !Ref PipelineApproverSNSTopic
-              - !Ref AWS::NoValue
-          - Effect: Allow
-            Action:
-            - codepipeline:PutJobSuccessResult
-            - codepipeline:PutJobFailureResult
-            - codepipeline:GetPipelineState
-            Resource: '*'
-          - Effect: Allow
-            Action:
-            - codepipeline:DisableStageTransition
-            - codepipeline:EnableStageTransition
-            Resource: '*'
-          - Effect: Allow
-            Action:
-            - kms:Decrypt
-            Resource: '*'
-          - Effect: Allow
-            Action:
-            - ses:SendEmail
-            - ses:SendRawEmail
-            Resource: '*'
-          - Effect: Allow
-            Action:
-            - ssm:PutParameter
-            - ssm:GetParameter
-            - ssm:GetParameters
-            - ssm:GetParameter
-            - ssm:PutParameter
-            - ssm:GetParametersByPath
-            Resource:
-            - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
+        - PolicyName: PipelineLambdaRolePolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource:
+                  - !Sub  arn:aws:s3:::${RegionQSS3BucketName}/*
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:DeleteObject*
+                  - s3:List*
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref PipelineArtifactStore
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref PipelineArtifactStore
+                      - '/*'
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource:
+                  - !Ref PipelineSNSTopic
+                  - !If
+                    - cNoAutoApproval
+                    - !Ref PipelineApproverSNSTopic
+                    - !Ref AWS::NoValue
+              - Effect: Allow
+                Action:
+                  - codepipeline:PutJobSuccessResult
+                  - codepipeline:PutJobFailureResult
+                  - codepipeline:GetPipelineState
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - codepipeline:DisableStageTransition
+                  - codepipeline:EnableStageTransition
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - kms:Decrypt
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - ses:SendEmail
+                  - ses:SendRawEmail
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - ssm:PutParameter
+                  - ssm:GetParameter
+                  - ssm:GetParameters
+                  - ssm:GetParameter
+                  - ssm:PutParameter
+                  - ssm:GetParametersByPath
+                Resource:
+                  - !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*'
 
 
   # Setup Artifacts Lambda
@@ -559,18 +555,18 @@ Resources:
       Runtime: python3.6
       Timeout: 120
       Tags:
-      - Key: Name
-        Value: !Sub ${AWS::StackName}-SetupArtifactsLambda
-      - Key: Owner
-        Value: !Ref AdminEmailAddress
-      - Key: Environment
-        Value: !Ref Environment
-      - Key: Product
-        Value: McAfee-ePO-Pipeline
-      - Key: Solution
-        Value: McAfee-ePO
-      - Key: mcafee:cloudformation:stack-name
-        Value: !Sub ${ParentStack}
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-SetupArtifactsLambda
+        - Key: Owner
+          Value: !Ref AdminEmailAddress
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Product
+          Value: McAfee-ePO-Pipeline
+        - Key: Solution
+          Value: McAfee-ePO
+        - Key: mcafee:cloudformation:stack-name
+          Value: !Sub ${ParentStack}
 
   # Setup Artifacts lambda Version
   SetupArtifactsLambdaVersion1:
@@ -584,9 +580,9 @@ Resources:
     DependsOn: SetupArtifactsLambda
     Properties:
       LogGroupName: !Join
-      - ''
-      - - '/aws/lambda/'
-        - !Ref SetupArtifactsLambda
+            - ''
+            - - '/aws/lambda/'
+              - !Ref SetupArtifactsLambda
       RetentionInDays: 7
 
   # Pipeline Post Update lambda sync lambda
@@ -601,21 +597,22 @@ Resources:
       MemorySize: 256
       Role: !GetAtt PipelineLambdaRole.Arn
       Runtime: python3.6
+      Timeout: 120
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-PostUpdateLambda
+        - Key: Owner
+          Value: !Ref AdminEmailAddress
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Product
+          Value: McAfee-ePO-Pipeline
+        - Key: Solution
+          Value: McAfee-ePO
+        - Key: mcafee:cloudformation:stack-name
+          Value: !Sub ${ParentStack}
       Timeout: 60
 
-      Tags:
-      - Key: Name
-        Value: !Sub ${AWS::StackName}-PostUpdateLambda
-      - Key: Owner
-        Value: !Ref AdminEmailAddress
-      - Key: Environment
-        Value: !Ref Environment
-      - Key: Product
-        Value: McAfee-ePO-Pipeline
-      - Key: Solution
-        Value: McAfee-ePO
-      - Key: mcafee:cloudformation:stack-name
-        Value: !Sub ${ParentStack}
   # Pipeline post update lambda version
   PostUpdateLambda1:
     Type: AWS::Lambda::Version
@@ -628,9 +625,9 @@ Resources:
     DependsOn: PostUpdateLambda
     Properties:
       LogGroupName: !Join
-      - ''
-      - - '/aws/lambda/'
-        - !Ref PostUpdateLambda
+            - ''
+            - - '/aws/lambda/'
+              - !Ref PostUpdateLambda
       RetentionInDays: 7
 
   # IAM Role for codepipeline
@@ -640,86 +637,88 @@ Resources:
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-            - codepipeline.amazonaws.com
-          Action:
-          - sts:AssumeRole
+          - Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+            Action:
+              - sts:AssumeRole
       Path: /
       Policies:
-      - PolicyName: CodePipelineRole
-        PolicyDocument:
-          Version: 2012-10-17
-          Statement:
+        - PolicyName: CodePipelineRole
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
               # read and write artifacts
-          - Effect: Allow
-            Action:
-            - s3:Get*
-            - s3:Head*
-            - s3:List*
-            - s3:AbortMultipartUpload
-            - s3:PutObject*
-            - s3:DeleteObject*
-            Resource:
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref PipelineArtifactStore
-            - !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref PipelineArtifactStore
-                - '/*'
-          - Effect: Allow
-            Action:
-            - s3:GetBucketVersioning
-            - s3:GetObject
-            - s3:GetObjectVersion
-            Resource:
-            - !Sub 'arn:aws:s3:::${RegionQSS3BucketName}'
-            - !Sub 'arn:aws:s3:::${RegionQSS3BucketName}/*'
+              - Effect: Allow
+                Action:
+                  - s3:Get*
+                  - s3:Head*
+                  - s3:List*
+                  - s3:AbortMultipartUpload
+                  - s3:PutObject*
+                  - s3:DeleteObject*
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref PipelineArtifactStore
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - !Ref PipelineArtifactStore
+                      - '/*'
+              # needs access to source templates  needs access to objects that are used in source actions
+              - Effect: Allow
+                Action:
+                  - s3:GetBucketVersioning
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                Resource:
+                  - !Sub 'arn:aws:s3:::${RegionQSS3BucketName}'
+                  - !Sub 'arn:aws:s3:::${RegionQSS3BucketName}/*'
               # For Approval actions
-          - Effect: Allow
-            Action:
-            - sns:Publish
-            Resource:
-            - !Ref PipelineSNSTopic
-            - !If
-              - cNoAutoApproval
-              - !Ref PipelineApproverSNSTopic
-              - !Ref AWS::NoValue
-          - Effect: Allow
-            Action:
-            - cloudformation:CreateChangeSet
-            - cloudformation:CreateStack
-            - cloudformation:CreateUploadBucket
-            - cloudformation:DeleteStack
-            - cloudformation:Describe*
-            - cloudformation:List*
-            - cloudformation:UpdateStack
-            - cloudformation:ValidateTemplate
-            - cloudformation:ExecuteChangeSet
-            - cloudformation:DeleteChangeSet
-            Resource:
-            - !Sub 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ParentStack}*'
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource:
+                  - !Ref PipelineSNSTopic
+                  - !If
+                    - cNoAutoApproval
+                    - !Ref PipelineApproverSNSTopic
+                    - !Ref AWS::NoValue
+              # Allow CodePipeline to manipulate CloudFormation stacks
+              - Effect: Allow
+                Action:
+                  - cloudformation:CreateChangeSet
+                  - cloudformation:CreateStack
+                  - cloudformation:CreateUploadBucket
+                  - cloudformation:DeleteStack
+                  - cloudformation:Describe*
+                  - cloudformation:List*
+                  - cloudformation:UpdateStack
+                  - cloudformation:ValidateTemplate
+                  - cloudformation:ExecuteChangeSet
+                  - cloudformation:DeleteChangeSet
+                Resource:
+                  - !Sub 'arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ParentStack}*'
               # Pass IAM role to cloudformation role
-          - Effect: Allow
-            Action:
-            - iam:PassRole
-            Resource:
-            - !Sub '${PipelineCloudformationIAMRoleARN}'
+              - Effect: Allow
+                Action:
+                  - iam:PassRole
+                Resource:
+                  - !Sub '${PipelineCloudformationIAMRoleARN}'
               # Allows CodePipeline to invoke Lambda function actions
-          - Effect: Allow
-            Action:
-            - lambda:ListFunctions
-            Resource: '*'
-          - Effect: Allow
-            Action:
-            - lambda:InvokeFunction
-            Resource:
-            - !GetAtt SetupArtifactsLambda.Arn
-            - !GetAtt PostUpdateLambda.Arn
+              - Effect: Allow
+                Action:
+                  - lambda:ListFunctions
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource:
+                  - !GetAtt SetupArtifactsLambda.Arn
+                  - !GetAtt PostUpdateLambda.Arn
 
   # Code pipeline
   CodePipeline:
@@ -733,139 +732,137 @@ Resources:
       RoleArn: !GetAtt CodePipelineRole.Arn
       Stages:
         # Stage 1-  Source, Detect changes in McAfee Artifacts, pipeline will watch for changes in McAfee S3 bucket
-      - Name: Source
-        Actions:
+        - Name: Source
+          Actions:
             # Action1 - Sync artifacts with McAfee
-        - Name: McAfee-Artifacts
-          ActionTypeId:
-            Category: Source
-            Owner: AWS
-            Provider: S3
-            Version: '1'
-          Configuration:
-            S3Bucket: !Ref RegionQSS3BucketName
-            S3ObjectKey: !Sub ${QSS3KeyPrefix}assets/pipeline/artifacts/mcafee-artifacts.zip
-          OutputArtifacts:
-          - Name: McAfeeArtifacts
-          RunOrder: 1
+            - Name: McAfee-Artifacts
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: S3
+                Version: '1'
+              Configuration:
+                S3Bucket: !Ref RegionQSS3BucketName
+                S3ObjectKey: !Sub ${QSS3KeyPrefix}assets/pipeline/artifacts/mcafee-artifacts.zip
+              OutputArtifacts:
+                - Name: McAfeeArtifacts
+              RunOrder: 1
         # Stage 2 - HouseKeeping
-      - Name: HouseKeeping
-        Actions:
+        - Name: HouseKeeping
+          Actions:
             # Action 1 - Setup the artifacts for next steps in pipeline
-        - Name: Setup-Artifacts
-          ActionTypeId:
-            Category: Invoke
-            Owner: AWS
-            Provider: Lambda
-            Version: 1
-          Configuration:
-            FunctionName: !Ref SetupArtifactsLambda
-            UserParameters: !Sub >
-              {
-                "ParameterStoreIdentifier": "/mcafee/${ParentStack}"
-              }
-          InputArtifacts:
-          - Name: McAfeeArtifacts
-          OutputArtifacts:
-          - Name: SetupArtifactsOutput
-          RunOrder: 1
+            - Name: Setup-Artifacts
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Provider: Lambda
+                Version: 1
+              Configuration:
+                FunctionName: !Ref SetupArtifactsLambda
+                UserParameters: !Sub >
+                  {
+                    "ParameterStoreIdentifier": "/mcafee/${ParentStack}"
+                  }
+              InputArtifacts:
+                - Name: McAfeeArtifacts
+              OutputArtifacts:
+                - Name: SetupArtifactsOutput
+              RunOrder: 1
         # Stage 3 - Pipeline, Update the pipeline itself, updating the updater
-      - Name: Pipeline
-        Actions:
+        - Name: Pipeline
+          Actions:
             #Action 1 - UpdaterPipeline, update the pipeline first and restart the pipeline
-        - Name: Update-Pipeline
-          ActionTypeId:
-            Category: Deploy
-            Owner: AWS
-            Provider: CloudFormation
-            Version: '1'
-          Configuration:
-            ActionMode: CREATE_UPDATE
-            Capabilities: CAPABILITY_IAM
-            RoleArn: !Sub '${PipelineCloudformationIAMRoleARN}'
-            StackName: !Sub '${AWS::StackName}'
-            TemplateConfiguration: SetupArtifactsOutput::assets/pipeline/config/pipeline-config.json
-            TemplatePath: 'McAfeeArtifacts::templates/mcafee-epo-pipeline.template'
-          InputArtifacts:
-          - Name: McAfeeArtifacts
-          - Name: SetupArtifactsOutput
-          RunOrder: 1
+            - Name: Update-Pipeline
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                Capabilities: CAPABILITY_IAM
+                RoleArn: !Sub '${PipelineCloudformationIAMRoleARN}'
+                StackName: !Sub '${AWS::StackName}'
+                TemplateConfiguration: SetupArtifactsOutput::assets/pipeline/config/pipeline-config.json
+                TemplatePath: 'McAfeeArtifacts::templates/mcafee-epo-pipeline.template'
+              InputArtifacts:
+                - Name: McAfeeArtifacts
+                - Name: SetupArtifactsOutput
+              RunOrder: 1
         # Stage 4 - Update
-      - Name: Update
-        Actions:
+        - Name: Update
+          Actions:
             # Action 1 - Create change sets on Master stack
-        - Name: Create-ChangeSet
-          ActionTypeId:
-            Category: Deploy
-            Owner: AWS
-            Provider: CloudFormation
-            Version: '1'
-          Configuration:
-            ActionMode: CHANGE_SET_REPLACE
-            Capabilities: CAPABILITY_IAM
-            ChangeSetName: !Sub ${PipelineMasterStackName}-McAfeeEPOChangeSet
-            RoleArn: !Sub '${PipelineCloudformationIAMRoleARN}'
-            StackName: !Sub ${PipelineMasterStackName}
-            TemplateConfiguration: !Sub 'SetupArtifactsOutput::assets/pipeline/config/${PipelineMasterStackTemplateConfigName}'
-            TemplatePath: !Sub 'McAfeeArtifacts::templates/${PipelineMasterStackTemplateName}'
-          InputArtifacts:
-          - Name: McAfeeArtifacts
-          - Name: SetupArtifactsOutput
-          RunOrder: 1
-        - !If
-          - cNoAutoApproval
+            - Name: Create-ChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                ActionMode: CHANGE_SET_REPLACE
+                Capabilities: CAPABILITY_IAM
+                ChangeSetName: !Sub ${PipelineMasterStackName}-McAfeeEPOChangeSet
+                RoleArn: !Sub '${PipelineCloudformationIAMRoleARN}'
+                StackName: !Sub ${PipelineMasterStackName}
+                TemplateConfiguration: !Sub 'SetupArtifactsOutput::assets/pipeline/config/${PipelineMasterStackTemplateConfigName}'
+                TemplatePath: !Sub 'McAfeeArtifacts::templates/${PipelineMasterStackTemplateName}'
+              InputArtifacts:
+                - Name: McAfeeArtifacts
+                - Name: SetupArtifactsOutput
+              RunOrder: 1
+            - !If
+              - cNoAutoApproval
               # Action 2 - Approval action
-          - Name: Approval
-            ActionTypeId:
-              Category: Approval
-              Owner: AWS
-              Provider: Manual
-              Version: '1'
-            Configuration:
-              NotificationArn: !Ref PipelineApproverSNSTopic
-              CustomData: !Sub 'Dear Approver, a new changeset was created for the
-                ${PipelineMasterStackName} stack. Please review your changeset at
-                Pipeline and either approve or reject using above link?'
-            RunOrder: 2
-          - !Ref AWS::NoValue
-        - Name: Apply-ChangeSet
-          ActionTypeId:
-            Category: Deploy
-            Owner: AWS
-            Provider: CloudFormation
-            Version: '1'
-          Configuration:
-            ActionMode: CHANGE_SET_EXECUTE
-            ChangeSetName: !Sub ${PipelineMasterStackName}-McAfeeEPOChangeSet
-            StackName: !Sub ${PipelineMasterStackName}
-          RunOrder: 3
+              - Name: Approval
+                ActionTypeId:
+                  Category: Approval
+                  Owner: AWS
+                  Provider: Manual
+                  Version: '1'
+                Configuration:
+                  NotificationArn: !Ref PipelineApproverSNSTopic
+                  CustomData: !Sub 'Dear Approver, a new changeset was created for the ${PipelineMasterStackName} stack. Please review your changeset at Pipeline and either approve or reject using above link?'
+                RunOrder: 2
+              - !Ref AWS::NoValue
+            # Action 3 - Apply change change set
+            - Name: Apply-ChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                ActionMode: CHANGE_SET_EXECUTE
+                ChangeSetName: !Sub ${PipelineMasterStackName}-McAfeeEPOChangeSet
+                StackName: !Sub ${PipelineMasterStackName}
+              RunOrder: 3
             # Action 4 - Post update Sync action
-        - Name: Post-Update
-          ActionTypeId:
-            Category: Invoke
-            Owner: AWS
-            Provider: Lambda
-            Version: 1
-          Configuration:
-            FunctionName: !Ref PostUpdateLambda
-            UserParameters: !Sub >
-              {
-                 "SenderEmailAddress": "${AdminEmailAddress}",
-                 "ToEmailAddresses": "${AdminEmailAddress}",
-                 "CcEmailAddress": "${ApproverEmailAddress}",
-                 "SourceBucket": "${RegionQSS3BucketName}",
-                 "Prefix": "${QSS3KeyPrefix}",
-                 "HTMLEmailSourceKey": "assets/email/html/update_email.html",
-                 "ComponentsJSONFile": "assets/email/components_info.json",
-                 "PipelineURL": "https://${AWS::Region}.console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${ParentStack}-pipeline",
-                 "ParameterStoreIdentifier": "/mcafee/${ParentStack}"
-              }
-          InputArtifacts:
-          - Name: McAfeeArtifacts
-          RunOrder: 4   
+            - Name: Post-Update
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Provider: Lambda
+                Version: 1
+              Configuration:
+                FunctionName: !Ref PostUpdateLambda
+                UserParameters: !Sub >
+                 {
+                    "SenderEmailAddress": "${AdminEmailAddress}",
+                    "ToEmailAddresses": "${AdminEmailAddress}",
+                    "CcEmailAddress": "${ApproverEmailAddress}",
+                    "SourceBucket": "${RegionQSS3BucketName}",
+                    "Prefix": "${QSS3KeyPrefix}",
+                    "HTMLEmailSourceKey": "assets/email/html/update_email.html",
+                    "ComponentsJSONFile": "assets/email/components_info.json",
+                    "PipelineURL": "https://${AWS::Region}.console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${ParentStack}-pipeline",
+                    "ParameterStoreIdentifier": "/mcafee/${ParentStack}"
+                 }
+              InputArtifacts:
+                - Name: McAfeeArtifacts
+              RunOrder: 4
 
 Outputs:
   McAfeeCodePipelineURL:
-    Description: McAfee code pipeline for continuous delievry, watch the pipeline
-      at the url
+    Description: McAfee code pipeline for continuous delievry, watch the pipeline at the url
     Value: !Sub 'https://${AWS::Region}.console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${ParentStack}-pipeline'
