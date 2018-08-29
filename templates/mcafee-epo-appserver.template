@@ -1189,7 +1189,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt EPOAMIBackupLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 180
+      Timeout: 300
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-EPOCreateAMIBackupLambda
@@ -1203,7 +1203,6 @@ Resources:
           Value: McAfee-ePO
         - Key: mcafee:cloudformation:stack-name
           Value: !Sub ${ParentStack}
-      Timeout: 300
 
   # Create AMI lambda version
   EPOCreateAMIBackupVersion1:
@@ -1223,7 +1222,7 @@ Resources:
       MemorySize: 128
       Role: !GetAtt EPOAMIBackupLambdaRole.Arn
       Runtime: python3.6
-      Timeout: 180
+      Timeout: 300
       Tags:
         - Key: Name
           Value: !Sub ${AWS::StackName}-EPODeleteAMIBackupLambda
@@ -1237,7 +1236,6 @@ Resources:
           Value: McAfee-ePO
         - Key: mcafee:cloudformation:stack-name
           Value: !Sub ${ParentStack}
-      Timeout: 300
 
   # Delete AMI backup lambda version
   EPODeleteAMIBackupVersion1:

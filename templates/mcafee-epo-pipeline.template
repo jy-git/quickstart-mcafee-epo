@@ -611,7 +611,6 @@ Resources:
           Value: McAfee-ePO
         - Key: mcafee:cloudformation:stack-name
           Value: !Sub ${ParentStack}
-      Timeout: 60
 
   # Pipeline post update lambda version
   PostUpdateLambda1:
