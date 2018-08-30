@@ -174,18 +174,20 @@ Parameters:
     Type: String
   DomainName:
     AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: '[Optional] AWS Route 53 registered domain name (e.g. mcafee.com).
+    Description: >-
+      [Optional] AWS Route 53 registered domain name (e.g. mcafee.com).
       We recommend either to register AWS Route 53 domain name so that public DNS
-      records can be propagated automatically OR add the sub domain Name Server(NS)
-      records into your main domain server.'
+      records can be propagated automatically
+      OR add the sub domain Name Server(NS) records into your main domain server.
     Default: ''
     Type: String
   SubDomainName:
     AllowedPattern: ^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: The non-existant sub domain name to be used for managment solution.
-      (e.g. manage.mcafee.com ). We recommend either to register AWS Route 53 domain
-      name so that public DNS records can be propagated automatically OR add the sub
-      domain Name Server(NS) records into your main domain server.
+    Description: >-
+      The non-existant sub domain name to be used for managment solution. (e.g. manage.mcafee.com
+      ). We recommend either to register AWS Route 53
+      domain name so that public DNS records can be propagated automatically OR add
+      the sub domain Name Server(NS) records into your main domain server.
     MinLength: 1
     MaxLength: 256
     Type: String
@@ -202,8 +204,9 @@ Parameters:
       to securely connect to your instance after it launches.
     Type: AWS::EC2::KeyPair::KeyName
   AvailabilityZones:
-    Description: 'List of Availability Zones to use for the subnets in the VPC. Note:
-      The logical order is preserved (2 AZs are used for this deployment)'
+    Description: >-
+      List of Availability Zones to use for the subnets in the VPC. Note:
+      The logical order is preserved (2 AZs are used for this deployment)
     Type: List<AWS::EC2::AvailabilityZone::Name>
   VPCID:
     Description: ID of your existing VPC for deployment(e.g., vpc-fd990584)
@@ -230,21 +233,26 @@ Parameters:
     Type: AWS::EC2::SecurityGroup::Id
   OnPremiseDomainName:
     AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: '[Optional] The on-premises domain name that you want to resolve
-      from inside the VPC (e.g. mcafee.com). This is required for DNS resolution between
-      the ePO instance in the VPC and on-premises services like LDAP(ldap.mcafee.com).
+    Description: >-
+      [Optional] The on-premises domain name that you want to resolve from inside
+      the VPC (e.g. mcafee.com).
+      This is required for DNS resolution between the ePO instance in the VPC and
+      on-premises services like LDAP(ldap.mcafee.com).
       Note: This is only required if you are planning to use Active Directory and
-      if you are planning to use a domain name instead of an IP address for the LDAP
-      server.'
+      if you are planning to use
+      a domain name instead of an IP address for the LDAP server.
     Default: ''
     Type: String
   OnPremiseServerDNS:
     Default: ''
-    Description: '[Optional] The on-premises DNS (e.g. 192.168.1.1) that will be used
-      to resolve the domain name queries. This is required for DNS resolution between
-      the ePO instance in VPC and services like LDAP(ldap.mcafee.com). Note: This
-      is only required if you are planning to use Active Directory if you are planning
-      to use a domain name instead of an IP address for the LDAP server.'
+    Description: >-
+      [Optional] The on-premises DNS (e.g. 192.168.1.1) that will be used to resolve
+      the domain name queries.
+      This is required for DNS resolution between the ePO instance in VPC and services
+      like LDAP(ldap.mcafee.com).
+      Note: This is only required if you are planning to use Active Directory if you
+      are planning to use
+      a domain name instead of an IP address for the LDAP server.
     MaxLength: 256
     Type: String
   EPOLicenseKey:
@@ -311,18 +319,21 @@ Parameters:
   EPOELBCertificateARN:
     AllowedPattern: ^$|(arn:aws:)([a-z0-9/:-])*([a-z0-9])$
     Default: ''
-    Description: '[ Optional ] ARN of the certificate stored in  Amazon Certifcate
-      Manager(ACM) or imported in AWS IAM. Generally the certificate associated with
-      the sub domain needs to be presented. Certificate will be attached with ePO
-      load balancer. e.g., arn:aws:*:us-west-1:*:certificate/*.'
+    Description: >-
+      [ Optional ] ARN of the certificate stored in  Amazon Certifcate Manager(ACM)
+      or imported in AWS IAM.
+      Generally the certificate associated with the sub domain needs to be presented.
+      Certificate will be attached with ePO load balancer. e.g., arn:aws:*:us-west-1:*:certificate/*.
     MaxLength: 256
     Type: String
   EPOAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Description: CIDR block that's allowed external access to the ePO Console. e.g.,
-      x.x.x.x/16-28. We recommend that you set this value to a trusted CIDR block.
-      For example, you might want to restrict access to your corporate network.
+    Description: >-
+      CIDR block that's allowed external access to the ePO Console.
+      e.g., x.x.x.x/16-28. We recommend that you set this value to a trusted
+      CIDR block. For example, you might want to restrict access to your
+      corporate network.
     Type: String
   DBMasterUsername:
     Description: Login ID for the master user for database, it must contain from 2
@@ -334,9 +345,10 @@ Parameters:
     AllowedPattern: '[^@\/\"]+'
     ConstraintDescription: It can contain any printable ASCII character except "/",
       """, or "@". Must contain from 8 to 255 characters
-    Description: The password for the master database user. This password can contain
-      any printable ASCII character except "/", """, or "@". Must contain from 8 to
-      255 characters
+    Description: >-
+      The password for the master database user. This password can contain any printable
+      ASCII character except "/", """, or "@".
+      Must contain from 8 to 255 characters
     MaxLength: 255
     MinLength: 8
     NoEcho: true
@@ -345,9 +357,10 @@ Parameters:
     AllowedPattern: '[^@\/\"]+'
     ConstraintDescription: It can contain any printable ASCII character except "/",
       """, or "@". Must contain from 8 to 255 characters
-    Description: Create a password for the master user for the database. This password
-      can contain any printable ASCII character except "/", """, or "@". Must contain
-      from 8 to 255 characters
+    Description: >-
+      Create a password for the master user for the database. This password can contain
+      any printable ASCII character except "/", """, or "@".
+      Must contain from 8 to 255 characters
     MaxLength: 255
     MinLength: 8
     NoEcho: true
@@ -394,8 +407,10 @@ Parameters:
   ClientAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Description: CIDR block that is allowed to connect from on-premises endpoints
-      to Agent Handler's/DXL Brokers. e.g., x.x.x.x/16-28.
+    Description: >-
+      CIDR block that is allowed to connect from on-premises endpoints to Agent Handler's/DXL
+      Brokers.
+      e.g., x.x.x.x/16-28.
     Type: String
   EnableAutoUpdate:
     AllowedValues:
@@ -410,11 +425,12 @@ Parameters:
     - 'Automatic'
     - 'Update after Approval'
     Default: 'Automatic'
-    Description: 'Auto or Manual approval to review the change sets on auto updates
-      of stack components. Note: For no auto approval cases(Selected Update after
-      Approval), make sure to provide approver email address so that notifications
+    Description: >-
+      Auto or Manual approval to review the change sets on auto updates of stack components.
+      Note: For no auto approval cases(Selected Update after Approval), make sure
+      to provide approver email address so that notifications
       can be sent for approval or user have to watch the pipeline periodically for
-      approvals.'
+      approvals.
     Type: String
   AdminEmailAddress:
     AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)
@@ -438,24 +454,30 @@ Parameters:
     Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
-      end with a hyphen (-) or period (.).
+    ConstraintDescription: >-
+      Quick Start bucket name can include numbers, lowercase letters, uppercase letters,
+      periods (.), and hyphens (-).
+      It cannot start or end with a hyphen (-) or period (.).
     Default: aws-quickstart
-    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
-      can include numbers, lowercase letters, uppercase letters, periods (.), and
-      hyphens (-). It cannot start or end with a hyphen (-) or period (.).
+    Description: >-
+      S3 bucket name for the Quick Start assets. Quick Start bucket name can include
+      numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
+      It cannot start or end with a hyphen (-) or period (.).
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
-      a slash but must end with a slash unless it is the empty string.'
+    ConstraintDescription: >-
+      Quick Start key prefix can include numbers, lowercase letters, uppercase letters,
+      hyphens (-), and forward slash (/).
+      Prefix cannot start with a slash but must end with a slash unless it is the
+      empty string.'
     Default: quickstart-mcafee-epo/
-    Description: The S3 key name prefix used to simulate a folder for your copy of
-      Quick Start assets, if you decide to customize or extend the Quick Start for
-      your own use.This prefix can include numbers, lowercase letters, uppercase letters,
-      hyphens, and forward slashes.'
+    Description: >-
+      The S3 key name prefix used to simulate a folder for your copy of Quick Start
+      assets,
+      if you decide to customize or extend the Quick Start for your own use.This prefix
+      can include numbers,
+      lowercase letters, uppercase letters, hyphens, and forward slashes.'
     Type: String
 
 Rules:
@@ -515,45 +537,45 @@ Mappings:
       MFEEPOAGENTHANDLERHVM: McAfee ePO Agent Handler Image
       MFEDXLBROKERHVM: McAfee Data Exchange Layer Image
     us-west-2:
-      MFEDXLBROKERHVM: ami-1c91b164
-      MFEEPOAGENTHANDLERHVM: ami-7c92b204
-      MFEEPOSERVERHVM: ami-318dad49
-    us-east-1:
-      MFEEPOSERVERHVM: ami-065a9106f1866cffd
-      MFEEPOAGENTHANDLERHVM: ami-0e01a32c61061e839
-      MFEDXLBROKERHVM: ami-09be2a8772229d219
-    ca-central-1:
-      MFEEPOSERVERHVM: ami-2e25a84a
-      MFEDXLBROKERHVM: ami-2f25a84b
-      MFEEPOAGENTHANDLERHVM: ami-8528a5e1
+      MFEDXLBROKERHVM: ami-0206d567da01c14d1
+      MFEEPOAGENTHANDLERHVM: ami-0c3b04c6f76c571a4
+      MFEEPOSERVERHVM: ami-085133a7f8c121bf6
     ap-northeast-1:
-      MFEEPOSERVERHVM: ami-09a686f751de01cb9
-      MFEEPOAGENTHANDLERHVM: ami-0e589ce4727ab1be3
-      MFEDXLBROKERHVM: ami-0ca863724a37a6fa3
-    ap-southeast-2:
-      MFEDXLBROKERHVM: ami-025a98dc500a4b64f
-      MFEEPOSERVERHVM: ami-0b992e790d20c13f9
-      MFEEPOAGENTHANDLERHVM: ami-0b1e83b6bcd09a4d5
-    us-east-2:
-      MFEEPOAGENTHANDLERHVM: ami-0506e8ef25b32b872
-      MFEEPOSERVERHVM: ami-0950cffbd8783f6bf
-      MFEDXLBROKERHVM: ami-0478db9197491ae65
-    us-west-1:
-      MFEEPOSERVERHVM: ami-05ff5d91a7bac035b
-      MFEDXLBROKERHVM: ami-04006d62f541e35b9
-      MFEEPOAGENTHANDLERHVM: ami-0318e57f72fb78da5
-    ap-southeast-1:
-      MFEDXLBROKERHVM: ami-0ab35c4311a1957ff
-      MFEEPOAGENTHANDLERHVM: ami-0a0faee91148cd1be
-      MFEEPOSERVERHVM: ami-013e994d0d102b030
-    eu-central-1:
-      MFEDXLBROKERHVM: ami-097f30b7a8ddd0153
-      MFEEPOSERVERHVM: ami-009410095d416ed7f
-      MFEEPOAGENTHANDLERHVM: ami-0df4c32cc5c7ff7b7
+      MFEEPOAGENTHANDLERHVM: ami-08b32718deac5f1bf
+      MFEEPOSERVERHVM: ami-0b3c0aaed63b70b71
+      MFEDXLBROKERHVM: ami-0e761701cbb24e66a
     eu-west-2:
-      MFEDXLBROKERHVM: ami-62be4a05
-      MFEEPOAGENTHANDLERHVM: ami-e2bd4985
-      MFEEPOSERVERHVM: ami-94be4af3
+      MFEEPOAGENTHANDLERHVM: ami-0d7cd89452a490f43
+      MFEDXLBROKERHVM: ami-06b2e622ed7d0ec08
+      MFEEPOSERVERHVM: ami-09abee5205304ff5e
+    us-west-1:
+      MFEEPOAGENTHANDLERHVM: ami-02bfe1ad47eb65749
+      MFEDXLBROKERHVM: ami-022be20bf8189ea2a
+      MFEEPOSERVERHVM: ami-05c6d4557d5852cce
+    ca-central-1:
+      MFEDXLBROKERHVM: ami-071036c69ef455763
+      MFEEPOAGENTHANDLERHVM: ami-0144f9ce97f518eae
+      MFEEPOSERVERHVM: ami-00360ebb0691e106f
+    eu-central-1:
+      MFEEPOAGENTHANDLERHVM: ami-0af0df96b2b7f525a
+      MFEEPOSERVERHVM: ami-0bce889e884aff59e
+      MFEDXLBROKERHVM: ami-095edde7f12ab56ba
+    us-east-1:
+      MFEEPOAGENTHANDLERHVM: ami-0f3d02694cc0d1428
+      MFEEPOSERVERHVM: ami-02cc6c05655d88d5b
+      MFEDXLBROKERHVM: ami-056d97353811b0301
+    ap-southeast-1:
+      MFEDXLBROKERHVM: ami-07196037d699ba780
+      MFEEPOAGENTHANDLERHVM: ami-0bebfc476499953dc
+      MFEEPOSERVERHVM: ami-0fce11b5234000bd8
+    ap-southeast-2:
+      MFEDXLBROKERHVM: ami-0d8715289eef88f26
+      MFEEPOSERVERHVM: ami-083358d13d4acfa4f
+      MFEEPOAGENTHANDLERHVM: ami-0cc77030733b8159b
+    us-east-2:
+      MFEEPOSERVERHVM: ami-0c465d07fe69a039b
+      MFEEPOAGENTHANDLERHVM: ami-0f4e3b455c2c2e389
+      MFEDXLBROKERHVM: ami-0966f182fdaff8e33
   NodeTierMap:
     '1-10K': {'Tier': '1'}
     '10K-25K': {'Tier': '2'}
@@ -593,45 +615,45 @@ Mappings:
     'Development': {'1': '1000', '2': '1000', '3': '1000', '4': '1000', '5': '1000',
       '6': '1000', '7': '1000'}
   BuildVersionMap:
-    eu-central-1:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
-      DXL: 4.1.0.214.2
-    ap-southeast-2:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
-      DXL: 4.1.0.214.2
-    us-west-1:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
+    us-west-2:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
       DXL: 4.1.0.214.2
     us-east-1:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
-      DXL: 4.1.0.214.2
-    ap-southeast-1:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
-      DXL: 4.1.0.214.2
-    ca-central-1:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
-      DXL: 4.1.0.214.2
-    us-east-2:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
-      DXL: 4.1.0.214.2
-    ap-northeast-1:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
-      DXL: 4.1.0.214.2
-    us-west-2:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
       DXL: 4.1.0.214.2
     eu-west-2:
-      EPO: 5.10.0.2408.4
-      AH: 5.10.0.2408.4
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
+      DXL: 4.1.0.214.2
+    eu-central-1:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
+      DXL: 4.1.0.214.2
+    us-east-2:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
+      DXL: 4.1.0.214.2
+    us-west-1:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
+      DXL: 4.1.0.214.2
+    ap-northeast-1:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
+      DXL: 4.1.0.214.2
+    ap-southeast-1:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
+      DXL: 4.1.0.214.2
+    ca-central-1:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
+      DXL: 4.1.0.214.2
+    ap-southeast-2:
+      EPO: 5.10.0.2428.1
+      AH: 5.10.0.2428.1
       DXL: 4.1.0.214.2
 
 Conditions:
