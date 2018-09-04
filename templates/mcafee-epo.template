@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: McAfee-ePO Workload stack which deploys McAfee ePO Platform components
-  on AWS (Existing VPC) (qs-1oknn9kad)
+  on AWS (Existing VPC) (qs-1oknn9kai)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
