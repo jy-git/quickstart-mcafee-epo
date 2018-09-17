@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: McAfee-ePO Deploys McAfee Enterprise Security Management Platform on
-  AWS (New VPC) (qs-1oknn9kad)
+  AWS (New VPC)
 Metadata:
   LICENSE: Apache License Version 2.0
   AWS::CloudFormation::Interface:
@@ -175,20 +175,18 @@ Parameters:
     Type: String
   DomainName:
     AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: >-
-      [Optional] AWS Route 53 registered domain name (e.g. mcafee.com).
+    Description: '[Optional] AWS Route 53 registered domain name (e.g. mcafee.com).
       We recommend either to register AWS Route 53 domain name so that public DNS
-      records can be propagated automatically
-      OR add the sub domain Name Server(NS) records into your main domain server.
+      records can be propagated automatically OR add the sub domain Name Server(NS)
+      records into your main domain server.'
     Default: ''
     Type: String
   SubDomainName:
     AllowedPattern: ^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: >-
-      The non-existant sub domain name to be used for managment solution. (e.g. manage.mcafee.com
-      ). We recommend either to register AWS Route 53
-      domain name so that public DNS records can be propagated automatically OR add
-      the sub domain Name Server(NS) records into your main domain server.
+    Description: The non-existant sub domain name to be used for managment solution.
+      (e.g. manage.mcafee.com ). We recommend either to register AWS Route 53 domain
+      name so that public DNS records can be propagated automatically OR add the sub
+      domain Name Server(NS) records into your main domain server.
     MinLength: 1
     MaxLength: 256
     Type: String
@@ -206,9 +204,8 @@ Parameters:
       to instances.
     Type: AWS::EC2::KeyPair::KeyName
   AvailabilityZones:
-    Description: >-
-      Select 2 Availability Zones (AZs) to use for the subnets in the VPC. The logical
-      order is preserved.
+    Description: Select 2 Availability Zones (AZs) to use for the subnets in the VPC.
+      The logical order is preserved.
     Type: List<AWS::EC2::AvailabilityZone::Name>
   VPCCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
@@ -252,34 +249,27 @@ Parameters:
   RemoteAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x.
-    Description: >-
-      CIDR block that's allowed external SSH access to the bastion hosts,
-      e.g., x.x.x.x/16-28. We recommend that you set this value to a trusted
-      CIDR block. For example, you might want to restrict access to your
-      corporate network.
+    Description: CIDR block that's allowed external SSH access to the bastion hosts,
+      e.g., x.x.x.x/16-28. We recommend that you set this value to a trusted CIDR
+      block. For example, you might want to restrict access to your corporate network.
     Type: String
   OnPremiseDomainName:
     AllowedPattern: ^$|^(?!.{256})([a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]\.){1,}([a-zA-Z]{2,8})$
-    Description: >-
-      [Optional] The on-premises domain name that you want to resolve from inside
-      the VPC (e.g. mcafee.com).
-      This is required for DNS resolution between the ePO instance in the VPC and
-      on-premises services like LDAP(ldap.mcafee.com).
+    Description: '[Optional] The on-premises domain name that you want to resolve
+      from inside the VPC (e.g. mcafee.com). This is required for DNS resolution between
+      the ePO instance in the VPC and on-premises services like LDAP(ldap.mcafee.com).
       Note: This is only required if you are planning to use Active Directory and
-      if you are planning to use
-      a domain name instead of an IP address for the LDAP server.
+      if you are planning to use a domain name instead of an IP address for the LDAP
+      server.'
     Default: ''
     Type: String
   OnPremiseServerDNS:
     Default: ''
-    Description: >-
-      [Optional] The on-premises DNS (e.g. 192.168.1.1) that will be used to resolve
-      the domain name queries.
-      This is required for DNS resolution between the ePO instance in VPC and services
-      like LDAP(ldap.mcafee.com).
-      Note: This is only required if you are planning to use Active Directory if you
-      are planning to use
-      a domain name instead of an IP address for the LDAP server.
+    Description: '[Optional] The on-premises DNS (e.g. 192.168.1.1) that will be used
+      to resolve the domain name queries. This is required for DNS resolution between
+      the ePO instance in VPC and services like LDAP(ldap.mcafee.com). Note: This
+      is only required if you are planning to use Active Directory if you are planning
+      to use a domain name instead of an IP address for the LDAP server.'
     MaxLength: 256
     Type: String
   EPOLicenseKey:
@@ -347,23 +337,19 @@ Parameters:
   EPOELBCertificateARN:
     AllowedPattern: ^$|(arn:aws:)([a-z0-9/:-])*([a-z0-9])$
     Default: ''
-    Description: >-
-      [Optional] ARN of the certificate stored in  Amazon Certifcate Manager(ACM)
-      or imported in AWS IAM.
-      Generally the certificate associated with the sub domain needs to be presented.
-      Certificate will be attached with ePO AWS elastic load balancer. e.g., arn:aws:*:us-west-1:*:certificate/*.
-      NOTE: Recommended to attach the certificate with ePO AWS elastic load balancer
-      for production servers.
+    Description: '[Optional] ARN of the certificate stored in  Amazon Certifcate Manager(ACM)
+      or imported in AWS IAM. Generally the certificate associated with the sub domain
+      needs to be presented. Certificate will be attached with ePO AWS elastic load
+      balancer. e.g., arn:aws:*:us-west-1:*:certificate/*. NOTE: Recommended to attach
+      the certificate with ePO AWS elastic load balancer for production servers.'
     MaxLength: 256
     Type: String
   EPOAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Description: >-
-      CIDR block that's allowed external access to the ePO Console.
-      e.g., x.x.x.x/16-28. We recommend that you set this value to a trusted
-      CIDR block. For example, you might want to restrict access to your
-      corporate network.
+    Description: CIDR block that's allowed external access to the ePO Console. e.g.,
+      x.x.x.x/16-28. We recommend that you set this value to a trusted CIDR block.
+      For example, you might want to restrict access to your corporate network.
     Type: String
   DBMasterUsername:
     Description: Create a login ID for the master user for the database, it must contain
@@ -375,10 +361,9 @@ Parameters:
     AllowedPattern: '[^@\/\"]+'
     ConstraintDescription: It can contain any printable ASCII character except "/",
       """, or "@". Must contain from 8 to 255 characters
-    Description: >-
-      Create a password for the master user for the database. This password can contain
-      any printable ASCII character except "/", """, or "@".
-      Must contain from 8 to 255 characters
+    Description: Create a password for the master user for the database. This password
+      can contain any printable ASCII character except "/", """, or "@". Must contain
+      from 8 to 255 characters
     MaxLength: 255
     MinLength: 8
     NoEcho: true
@@ -387,10 +372,9 @@ Parameters:
     AllowedPattern: '[^@\/\"]+'
     ConstraintDescription: It can contain any printable ASCII character except "/",
       """, or "@". Must contain from 8 to 255 characters
-    Description: >-
-      Create a password for the master user for the database. This password can contain
-      any printable ASCII character except "/", """, or "@".
-      Must contain from 8 to 255 characters
+    Description: Create a password for the master user for the database. This password
+      can contain any printable ASCII character except "/", """, or "@". Must contain
+      from 8 to 255 characters
     MaxLength: 255
     MinLength: 8
     NoEcho: true
@@ -438,10 +422,8 @@ Parameters:
   ClientAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
-    Description: >-
-      CIDR block that is allowed to connect from on-premises endpoints to Agent Handler's/DXL
-      Brokers.
-      e.g., x.x.x.x/16-28.
+    Description: CIDR block that is allowed to connect from on-premises endpoints
+      to Agent Handler's/DXL Brokers. e.g., x.x.x.x/16-28.
     Type: String
   EnableAutoUpdate:
     AllowedValues:
@@ -456,12 +438,11 @@ Parameters:
     - 'Automatic'
     - 'Update after Approval'
     Default: 'Automatic'
-    Description: >-
-      Auto or Manual approval to review the change sets on auto updates of stack components.
-      Note: For no auto approval cases(Selected Update After Approval), make sure
-      to provide approver email address so that notifications
+    Description: 'Auto or Manual approval to review the change sets on auto updates
+      of stack components. Note: For no auto approval cases(Selected Update After
+      Approval), make sure to provide approver email address so that notifications
       can be sent for approval or user have to watch the pipeline periodically for
-      approvals.
+      approvals.'
     Type: String
   AdminEmailAddress:
     AllowedPattern: ([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,8}|[0-9]{1,3})(\]?)
@@ -485,30 +466,24 @@ Parameters:
     Type: String
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: >-
-      Quick Start bucket name can include numbers, lowercase letters, uppercase letters,
-      periods (.), and hyphens (-).
-      It cannot start or end with a hyphen (-) or period (.).
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, periods (.), and hyphens (-). It cannot start or
+      end with a hyphen (-) or period (.).
     Default: aws-quickstart
-    Description: >-
-      S3 bucket name for the Quick Start assets. Quick Start bucket name can include
-      numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-).
-      It cannot start or end with a hyphen (-) or period (.).
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, periods (.), and
+      hyphens (-). It cannot start or end with a hyphen (-) or period (.).
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: >-
-      Quick Start key prefix can include numbers, lowercase letters, uppercase letters,
-      hyphens (-), and forward slash (/).
-      Prefix cannot start with a slash but must end with a slash unless it is the
-      empty string.'
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slash (/). Prefix cannot start with
+      a slash but must end with a slash unless it is the empty string.'
     Default: quickstart-mcafee-epo/
-    Description: >-
-      The S3 key name prefix used to simulate a folder for your copy of Quick Start
-      assets,
-      if you decide to customize or extend the Quick Start for your own use.This prefix
-      can include numbers,
-      lowercase letters, uppercase letters, hyphens, and forward slashes.'
+    Description: The S3 key name prefix used to simulate a folder for your copy of
+      Quick Start assets, if you decide to customize or extend the Quick Start for
+      your own use.This prefix can include numbers, lowercase letters, uppercase letters,
+      hyphens, and forward slashes.'
     Type: String
 
 Rules:
@@ -557,26 +532,26 @@ Mappings:
     AMI:
       MFEBASTIONHVM: McAfee Bastion Image
     us-west-2:
-      MFEBASTIONHVM: ami-038c6c9eef821f8c1
+      MFEBASTIONHVM: ami-0e6386e0d75b3b8f4
 
     ap-northeast-1:
-      MFEBASTIONHVM: ami-0117997cd59222a5f
-    eu-west-2:
-      MFEBASTIONHVM: ami-08788aaad719b0c4c
-    us-west-1:
-      MFEBASTIONHVM: ami-05b1d0cfcfbf5be36
-    ca-central-1:
-      MFEBASTIONHVM: ami-0f4b891b0a76a8ac3
+      MFEBASTIONHVM: ami-005b29b0b22abde51
     eu-central-1:
-      MFEBASTIONHVM: ami-07960c8e8662e413c
+      MFEBASTIONHVM: ami-04d2d200e5a3e1c30
     us-east-1:
-      MFEBASTIONHVM: ami-08a48d376b39af2be
-    ap-southeast-1:
-      MFEBASTIONHVM: ami-0e2a42b200397972a
+      MFEBASTIONHVM: ami-01bad6e985b7b3873
     ap-southeast-2:
-      MFEBASTIONHVM: ami-043641459d76e806a
+      MFEBASTIONHVM: ami-01443e5fdc0854a10
+    ap-southeast-1:
+      MFEBASTIONHVM: ami-0e6635aaada7d7ed4
+    eu-west-2:
+      MFEBASTIONHVM: ami-0c4aca105f9b87b42
+    ca-central-1:
+      MFEBASTIONHVM: ami-0a29e72f9c79eb1f3
+    us-west-1:
+      MFEBASTIONHVM: ami-094112a2ad0401a61
     us-east-2:
-      MFEBASTIONHVM: ami-0e5cd3d8fb2f323a1
+      MFEBASTIONHVM: ami-0d8170d08762b80bf
 Resources:
 
   # Network layer stack to create network resources like VPC, Subnets, NAT, & Routing Table
